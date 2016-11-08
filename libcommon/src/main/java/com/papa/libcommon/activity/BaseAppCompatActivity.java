@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -28,16 +27,6 @@ import butterknife.ButterKnife;
  * Created by fangxiao on 15/12/18.
  */
 public abstract class BaseAppCompatActivity extends AppCompatActivity implements OnVaryViewChange {
-    /**
-     * Log tag
-     */
-    protected static String TAG_LOG = null;
-    /**
-     * 屏幕参数
-     */
-    protected int mScreenWidth = 0;
-    protected int mScreenHeight = 0;
-    protected float mScreenDensity = 0.0f;
 
     /**
      * 上下文
@@ -93,15 +82,8 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
             EventBus.getDefault().register(this);
         }
         mContext = this;
-        TAG_LOG = this.getClass().getSimpleName();
+
         BaseAppManager.getInstance().addActivity(this);
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        mScreenDensity = displayMetrics.density;
-        mScreenHeight = displayMetrics.heightPixels;
-        mScreenWidth = displayMetrics.widthPixels;
 
         if (getContentViewLayoutID() != 0) {
             setContentView(getContentViewLayoutID());
