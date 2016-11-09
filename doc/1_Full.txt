@@ -1,0 +1,99 @@
+GET http://120.24.4.26:7788/api/sms/code?cellphone=13418459758 HTTP/1.1
+Content-type: application/json
+Host: 120.24.4.26:7788
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/UNAVAILABLE (java 1.4)
+
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 12
+ETag: W/"c-7cf7567"
+Date: Wed, 09 Nov 2016 13:51:51 GMT
+Connection: keep-alive
+
+{"raw":"ok"}
+
+------------------------------------------------------------------
+
+POST http://120.24.4.26:7788/api/signin/cellphone HTTP/1.1
+Content-type: application/json
+Content-Length: 43
+Host: 120.24.4.26:7788
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/UNAVAILABLE (java 1.4)
+
+{"cellphone":"13418459758","code":"888888"}
+HTTP/1.1 202 Accepted
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 350
+ETag: W/"15e-51e8239e"
+Date: Wed, 09 Nov 2016 13:52:32 GMT
+Connection: keep-alive
+
+{"_id":"57ee0c9c7ad35e4b7673d6da","type":"normal","name":"nick","gender":0,"province":"","city":"","avatar":"","provider":"cellphone","cellphone":"13418459758","token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcm92aWRlciI6ImNlbGxwaG9uZSIsImNlbGxwaG9uZSI6IjEzNDE4NDU5NzU4IiwiaWF0IjoxNDc1MjE4NTg4fQ.niQbukBh1buFPCfFblqO2U0IFa6zmdMGG_Yl4Ky86qE","__v":0}
+
+------------------------------------------------------------------
+
+GET http://120.24.4.26:7788/api/lockers HTTP/1.1
+Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcm92aWRlciI6ImNlbGxwaG9uZSIsImNlbGxwaG9uZSI6IjEzNDE4NDU5NzU4IiwiaWF0IjoxNDc1MjE4NTg4fQ.niQbukBh1buFPCfFblqO2U0IFa6zmdMGG_Yl4Ky86qE
+Content-type: application/json
+Host: 120.24.4.26:7788
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/UNAVAILABLE (java 1.4)
+
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 621
+ETag: W/"26d-d3829c1d"
+Date: Wed, 09 Nov 2016 13:52:32 GMT
+Connection: keep-alive
+
+[{"_id":"57fa4991eaa2a2641b62ec23","parkingLot":{"_id":"57fa4aa6eaa2a2641b62ec25","cityCode":"340","cityName":"\\u6df1\\u5733\\u5e02","name":"\\u4e30\\u6da6\\u82b1\\u56ed","address":"\\u5e7f\\u4e1c\\u7701\\u6df1\\u5733\\u5e02\\u5b9d\\u5b89\\u533a\\u9f99\\u5cf0\\u4e8c\\u8def52\\u53f7"},"owner":"57ee0c9c7ad35e4b7673d6da","sn":"3f20d52036","bluetooth":"88:0F:10:A6:08:C4","bluetoothName":"MI_SCALE","hardware":"7","token":"c67d47a60b6f69c0cf119aeb5e7ddaa4","baseKey":"DVsbdSnAmlzzvejT","key":"IOwBpJmtBMQqGhdt","location":{"type":"Point","coordinates":[114.035878,22.644626]},"address":"101","note":"","isAuto":0,"__v":0}]
+
+------------------------------------------------------------------
+
+GET http://120.24.4.26:7788/api//lockshare/sharedToMe/13418459758 HTTP/1.1
+Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcm92aWRlciI6ImNlbGxwaG9uZSIsImNlbGxwaG9uZSI6IjEzNDE4NDU5NzU4IiwiaWF0IjoxNDc1MjE4NTg4fQ.niQbukBh1buFPCfFblqO2U0IFa6zmdMGG_Yl4Ky86qE
+Content-type: application/json
+Host: 120.24.4.26:7788
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/UNAVAILABLE (java 1.4)
+
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 2
+ETag: W/"2-d4cbb29"
+Date: Wed, 09 Nov 2016 13:52:32 GMT
+Connection: keep-alive
+
+[]
+
+------------------------------------------------------------------
+
+GET http://120.24.4.26:7788/api/lockers HTTP/1.1
+Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcm92aWRlciI6ImNlbGxwaG9uZSIsImNlbGxwaG9uZSI6IjEzNDE4NDU5NzU4IiwiaWF0IjoxNDc1MjE4NTg4fQ.niQbukBh1buFPCfFblqO2U0IFa6zmdMGG_Yl4Ky86qE
+Content-type: application/json
+Host: 120.24.4.26:7788
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/UNAVAILABLE (java 1.4)
+
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 621
+ETag: W/"26d-d3829c1d"
+Date: Wed, 09 Nov 2016 13:52:37 GMT
+Connection: keep-alive
+
+[{"_id":"57fa4991eaa2a2641b62ec23","parkingLot":{"_id":"57fa4aa6eaa2a2641b62ec25","cityCode":"340","cityName":"\\u6df1\\u5733\\u5e02","name":"\\u4e30\\u6da6\\u82b1\\u56ed","address":"\\u5e7f\\u4e1c\\u7701\\u6df1\\u5733\\u5e02\\u5b9d\\u5b89\\u533a\\u9f99\\u5cf0\\u4e8c\\u8def52\\u53f7"},"owner":"57ee0c9c7ad35e4b7673d6da","sn":"3f20d52036","bluetooth":"88:0F:10:A6:08:C4","bluetoothName":"MI_SCALE","hardware":"7","token":"c67d47a60b6f69c0cf119aeb5e7ddaa4","baseKey":"DVsbdSnAmlzzvejT","key":"IOwBpJmtBMQqGhdt","location":{"type":"Point","coordinates":[114.035878,22.644626]},"address":"101","note":"","isAuto":0,"__v":0}]
+
+------------------------------------------------------------------
+

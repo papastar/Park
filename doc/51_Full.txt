@@ -1,0 +1,18 @@
+POST http://120.24.4.26:7788/api/lockers/save HTTP/1.1
+Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcm92aWRlciI6ImNlbGxwaG9uZSIsImNlbGxwaG9uZSI6IjEzNDE4NDU5NzU4IiwiaWF0IjoxNDc1MjE4NTg4fQ.niQbukBh1buFPCfFblqO2U0IFa6zmdMGG_Yl4Ky86qE
+Content-type: application/json
+Content-Length: 487
+Host: 120.24.4.26:7788
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/UNAVAILABLE (java 1.4)
+
+{"lockerToken":"12302d5c1a12908f3d0f211657d0113e","bluetooth":"54:4A:16:35:74:89","bluetoothName":"UBO_544A16357489","note":"??","sn":"a107167f3e","lockLng":"114.03589","lockLat":"22.644602","lockAddress":"\\u560e\\u560e\\u560e","cityCode":"340","cityName":"\\u6df1\\u5733\\u5e02","parkingName":"\\u98ce\\u548c\\u65e5\\u4e3d","parkingAddress":"\\u5e7f\\u4e1c\\u7701\\u6df1\\u5733\\u5e02\\u5b9d\\u5b89\\u533a\\u9f99\\u5cf0\\u4e8c\\u8def52\\u53f7","key":"OflmpphZqLPLIOJq","hardware":"10"}
+HTTP/1.1 201 Created
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 647
+ETag: W/"287-624fb4e9"
+Date: Wed, 09 Nov 2016 13:56:06 GMT
+Connection: keep-alive
+
+{"__v":0,"parkingLot":{"_id":"58232af6caf7dfb53fcb51f8","cityCode":"340","cityName":"\\u6df1\\u5733\\u5e02","name":"\\u98ce\\u548c\\u65e5\\u4e3d","address":"\\u5e7f\\u4e1c\\u7701\\u6df1\\u5733\\u5e02\\u5b9d\\u5b89\\u533a\\u9f99\\u5cf0\\u4e8c\\u8def52\\u53f7"},"owner":"57ee0c9c7ad35e4b7673d6da","sn":"a107167f3e","bluetooth":"54:4A:16:35:74:89","bluetoothName":"UBO_544A16357489","hardware":"10","token":"12302d5c1a12908f3d0f211657d0113e","baseKey":"bvtEkqNqsIGBhOFY","key":"OflmpphZqLPLIOJq","location":{"coordinates":[114.03589,22.644602],"type":"Point"},"address":"\\u560e\\u560e\\u560e","note":"??","isAuto":0,"_id":"58232af6caf7dfb53fcb51f9"}
