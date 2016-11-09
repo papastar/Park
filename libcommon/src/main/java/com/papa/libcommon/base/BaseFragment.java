@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.papa.libcommon.fragment;
+package com.papa.libcommon.base;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +34,7 @@ import java.lang.reflect.Field;
 import butterknife.ButterKnife;
 
 
-public abstract class BaseLazyFragment extends Fragment implements OnVaryViewChange {
+public abstract class BaseFragment extends Fragment implements OnVaryViewChange {
 
 
     /**

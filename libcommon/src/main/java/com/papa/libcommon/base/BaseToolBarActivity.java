@@ -1,4 +1,4 @@
-package com.papa.libcommon.activity;
+package com.papa.libcommon.base;
 
 import android.support.v7.widget.Toolbar;
 import android.view.View;

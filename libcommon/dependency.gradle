@@ -5,8 +5,10 @@ allprojects {
 }
 
  def daggerVersion = "2.0.2"
- def retrofitVersion = "2.0.0-beta4"
+ def retrofitVersion = "2.1.0"
  def supportVersion = "24.2.1"
+ def rxJavaVersion = '1.2.2'
+ def rxAndroidVersion = "1.2.1"
  def rxBindingVersion = '0.4.0'
 
  def leakCanaryVersion = "1.3.1"
@@ -34,8 +36,8 @@ ext {
     libSupportV4 = "com.android.support:support-v4:${supportVersion}"
 
     libButterKnife = "com.jakewharton:butterknife:${butterKnifeVersion}"
-    libRxAndroid = "io.reactivex:rxandroid:1.1.0"
-    libRxJava = "io.reactivex:rxjava:1.1.1"
+    libRxAndroid = "io.reactivex:rxandroid:${rxAndroidVersion}"
+    libRxJava = "io.reactivex:rxjava:${rxJavaVersion}"
     libEventBus = "org.greenrobot:eventbus:3.0.0"
     libJavaxAnnotation = "javax.annotation:jsr250-api:1.0"
     libOkHttp = "com.squareup.okhttp3:okhttp:3.3.1"

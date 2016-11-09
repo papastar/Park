@@ -1,4 +1,4 @@
-package com.papa.libcommon.activity;
+package com.papa.libcommon.base;
 
 import android.os.Bundle;
 import android.view.View;

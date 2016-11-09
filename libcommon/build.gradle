@@ -25,5 +25,7 @@ dependencies {
     compile rootProject.ext.libOkHttp
     compile rootProject.ext.libOkio
     compile rootProject.ext.libGson
+    compile rootProject.ext.libRxJava
+    compile rootProject.ext.libRxAndroid
 
 }

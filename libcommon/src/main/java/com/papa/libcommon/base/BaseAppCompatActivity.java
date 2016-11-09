@@ -1,4 +1,4 @@
-package com.papa.libcommon.activity;
+package com.papa.libcommon.base;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -92,7 +92,6 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -130,12 +129,18 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     /**
      * network connected
      */
-    protected abstract void onNetworkConnected(NetUtils.NetType type);
+    protected void onNetworkConnected(NetUtils.NetType type) {
+
+    }
+
+
 
     /**
      * network disconnected
      */
-    protected abstract void onNetworkDisConnected();
+    protected void onNetworkDisConnected() {
+
+    }
 
 
 
