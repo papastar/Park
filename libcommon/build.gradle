@@ -24,7 +24,6 @@ dependencies {
     compile rootProject.ext.libButterKnife
     compile rootProject.ext.libOkHttp
     compile rootProject.ext.libOkio
-    compile rootProject.ext.libEventBus
     compile rootProject.ext.libGson
 
 }

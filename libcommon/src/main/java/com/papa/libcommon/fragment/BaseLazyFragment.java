@@ -21,21 +21,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.papa.libcommon.control.OnVaryViewChange;
+import com.papa.libcommon.control.VaryViewChangeControll;
 import com.papa.libcommon.widget.loading.VaryViewHelperController;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Field;
 
 import butterknife.ButterKnife;
 
 
-public abstract class BaseLazyFragment extends Fragment {
+public abstract class BaseLazyFragment extends Fragment implements OnVaryViewChange {
 
 
     /**
@@ -43,6 +42,7 @@ public abstract class BaseLazyFragment extends Fragment {
      */
     protected Context mContext = null;
     protected VaryViewHelperController mVaryViewHelperController = null;
+    protected OnVaryViewChange mVaryViewChange;
     protected boolean isPrepared;
 
     private boolean isFirstResume = true;
@@ -58,14 +58,11 @@ public abstract class BaseLazyFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (isBindEventBusHere()) {
-            EventBus.getDefault().register(this);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
-    Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         if (getContentViewLayoutID() != 0) {
             view = inflater.inflate(getContentViewLayoutID(), container, false);
@@ -79,6 +76,7 @@ public abstract class BaseLazyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (null != getLoadingTargetView()) {
             mVaryViewHelperController = new VaryViewHelperController(getLoadingTargetView());
+            mVaryViewChange = new VaryViewChangeControll(mVaryViewHelperController);
         }
         initViewsAndEvents();
     }
@@ -87,9 +85,7 @@ public abstract class BaseLazyFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (isBindEventBusHere()) {
-            EventBus.getDefault().unregister(this);
-        }
+
     }
 
     @Override
@@ -108,20 +104,6 @@ public abstract class BaseLazyFragment extends Fragment {
         }
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        try {
-            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(this, null);
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -219,22 +201,6 @@ public abstract class BaseLazyFragment extends Fragment {
 
 
     /**
-     * is bind eventBus
-     *
-     * @return
-     */
-    protected abstract boolean isBindEventBusHere();
-
-    /**
-     * get the support fragment manager
-     *
-     * @return
-     */
-    protected FragmentManager getSupportFragmentManager() {
-        return getFragmentManager();
-    }
-
-    /**
      * startActivity
      *
      * @param clazz
@@ -284,38 +250,6 @@ public abstract class BaseLazyFragment extends Fragment {
         startActivityForResult(intent, requestCode);
     }
 
-
-
-    // 展示进度框
-
-    public void showProgressDialog() {
-
-    }
-
-    // 关闭进度框
-
-    public void dismissProgressDialog() {
-
-    }
-
-    // 通用错误处理
-//    @Override
-//    public void commonErrorHandle(Exception exception, boolean showToast) {
-//        mInteractorViewHandler.commonErrorHandle(exception, showToast);
-//    }
-
-    // 获取通用错误处理提示信息
-//    @Override
-//    public String getCommonErrorHandleMsg() {
-//        return mInteractorViewHandler.getCommonErrorHandleMsg();
-//    }
-
-
-
-
-
-
-
     /**
      * toggle show loading
      *
@@ -337,10 +271,24 @@ public abstract class BaseLazyFragment extends Fragment {
         toggleShowLoading(toggle, "loading");
     }
 
-    public String getResString(int resId) {
-        if (isAdded())
-            return getString(resId);
-        return "";
+
+    @Override
+    public void showError() {
+        mVaryViewChange.showError();
     }
 
+    @Override
+    public void showEmpty() {
+        mVaryViewChange.showEmpty();
+    }
+
+    @Override
+    public void showLoading() {
+        mVaryViewChange.showLoading();
+    }
+
+    @Override
+    public void restore() {
+        mVaryViewChange.restore();
+    }
 }

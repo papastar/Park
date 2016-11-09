@@ -1,6 +1,5 @@
 package com.papa.libcommon.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -9,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.papa.libcommon.R;
 import com.papa.libcommon.control.OnVaryViewChange;
 import com.papa.libcommon.control.VaryViewChangeControll;
 import com.papa.libcommon.util.BaseAppManager;
@@ -17,8 +15,6 @@ import com.papa.libcommon.util.netstatus.NetChangeObserver;
 import com.papa.libcommon.util.netstatus.NetStateReceiver;
 import com.papa.libcommon.util.netstatus.NetUtils;
 import com.papa.libcommon.widget.loading.VaryViewHelperController;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.ButterKnife;
 
@@ -28,12 +24,6 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseFragmentActivity extends FragmentActivity implements OnVaryViewChange{
 
-
-
-    /**
-     * context
-     */
-    protected Context mContext = null;
 
     /**
      * network status
@@ -47,56 +37,20 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements O
 
     protected OnVaryViewChange mVaryViewChange;
 
-    /**
-     * overridePendingTransition mode
-     */
-    public enum TransitionMode {
-        LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (toggleOverridePendingTransition()) {
-            switch (getOverridePendingTransitionMode()) {
-                case LEFT:
-                    overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    break;
-                case RIGHT:
-                    overridePendingTransition(R.anim.right_in, R.anim.right_out);
-                    break;
-                case TOP:
-                    overridePendingTransition(R.anim.top_in, R.anim.top_out);
-                    break;
-                case BOTTOM:
-                    overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out);
-                    break;
-                case SCALE:
-                    overridePendingTransition(R.anim.scale_in, R.anim.scale_out);
-                    break;
-                case FADE:
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    break;
-            }
-        }
         super.onCreate(savedInstanceState);
-        // base setup
         Bundle extras = getIntent().getExtras();
         if (null != extras) {
             getBundleExtras(extras);
         }
 
-        if (isBindEventBusHere()) {
-            EventBus.getDefault().register(this);
-        }
-        mContext = this;
         BaseAppManager.getInstance().addActivity(this);
 
         if (getContentViewLayoutID() != 0) {
             setContentView(getContentViewLayoutID());
-        } else {
-            throw new IllegalArgumentException("You must return a right contentView layout resource Id");
         }
-
         mNetChangeObserver = new NetChangeObserver() {
             @Override
             public void onNetConnected(NetUtils.NetType type) {
@@ -135,42 +89,14 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements O
         }
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-        BaseAppManager.getInstance().removeActivity(this);
-        if (toggleOverridePendingTransition()) {
-            switch (getOverridePendingTransitionMode()) {
-                case LEFT:
-                    overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    break;
-                case RIGHT:
-                    overridePendingTransition(R.anim.right_in, R.anim.right_out);
-                    break;
-                case TOP:
-                    overridePendingTransition(R.anim.top_in, R.anim.top_out);
-                    break;
-                case BOTTOM:
-                    overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out);
-                    break;
-                case SCALE:
-                    overridePendingTransition(R.anim.scale_in, R.anim.scale_out);
-                    break;
-                case FADE:
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    break;
-            }
-        }
-    }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        BaseAppManager.getInstance().removeActivity(this);
         NetStateReceiver.removeRegisterObserver(mNetChangeObserver);
-        if (isBindEventBusHere()) {
-            EventBus.getDefault().unregister(this);
-        }
     }
 
     /**
@@ -208,24 +134,6 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements O
     protected abstract void onNetworkDisConnected();
 
 
-    /**
-     * is bind eventBus
-     *
-     * @return
-     */
-    protected abstract boolean isBindEventBusHere();
-
-    /**
-     * toggle overridePendingTransition
-     *
-     * @return
-     */
-    protected abstract boolean toggleOverridePendingTransition();
-
-    /**
-     * get the overridePendingTransition mode
-     */
-    protected abstract TransitionMode getOverridePendingTransitionMode();
 
     /**
      * startActivity
