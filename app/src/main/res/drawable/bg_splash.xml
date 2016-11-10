@@ -4,7 +4,7 @@
 
     <item android:drawable="@color/white"/>
     <!-- 黑色背景上的其他图片元素，比如 一个居中显示的 logo 图标-->
-    <item android:top="70dp">
+    <item android:bottom="70dp">
         <bitmap
             android:gravity="center_horizontal|bottom"
             android:src="@mipmap/ic_launcher"/>

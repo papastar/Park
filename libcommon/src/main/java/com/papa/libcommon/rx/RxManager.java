@@ -25,12 +25,12 @@ public class RxManager {
         mObservables.put(eventName, mObservable);
         mCompositeSubscription
                 .add(mObservable.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(action1, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                    }
-                }));
+                        .subscribe(action1, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
+                        }));
     }
 
     public void add(Subscription m) {
@@ -38,7 +38,8 @@ public class RxManager {
     }
 
     public void clear() {
-        mCompositeSubscription.unsubscribe();// 取消订阅
+        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions())
+            mCompositeSubscription.unsubscribe();// 取消订阅
         for (Map.Entry<String, Observable<?>> entry : mObservables.entrySet())
             mRxBus.unregister(entry.getKey(), entry.getValue());// 移除观察
     }

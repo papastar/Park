@@ -16,11 +16,14 @@
 package com.papa.park.api;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.papa.park.BuildConfig;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -35,28 +38,17 @@ public class HttpManager {
 
     private static final int DEFAULT_TIMEOUT = 15000;
     private static final String TAG = "HttpManager";
-    private static final String BASE_URL = "";
-    private static Retrofit retrofit;
+    private static final String BASE_URL = "http://120.24.4.26:7788/api/";
     private static OkHttpClient mOkHttpClient;
-
     private static UserApi mUserApi;
-
-    private static String mToken = "";
-    private static HttpManager mNetworks;
-
-    public static String getToken() {
-        return mToken;
-    }
-
-    public static void setToken(String mToken) {
-        HttpManager.mToken = mToken;
-    }
+    private static HttpManager sManager;
+    private static Retrofit.Builder mBuilder;
 
     public static HttpManager getInstance() {
-        if (mNetworks == null) {
-            mNetworks = new HttpManager();
+        if (sManager == null) {
+            sManager = new HttpManager();
         }
-        return mNetworks;
+        return sManager;
     }
 
     public static void init(Context context) {
@@ -72,18 +64,26 @@ public class HttpManager {
         mOkHttpClient = builder.build();
     }
 
-
-    public UserApi getUserApi() {
-        return mUserApi == null ? configRetrofit(UserApi.class, false) : mUserApi;
+    public static void setToken(String token) {
+        if (mOkHttpClient != null && !TextUtils.isDigitsOnly(token)) {
+            Map<String, String> map = new HashMap<>();
+            map.put("Authorization", token);
+            mBuilder.client(mOkHttpClient.newBuilder().addInterceptor(new HttpHeadInterceptor
+                    (map)).build());
+        }
     }
 
-    private <T> T configRetrofit(Class<T> service, boolean isGetToken) {
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(mOkHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        return retrofit.create(service);
+    public UserApi getUserApi() {
+        return mUserApi == null ? configRetrofit(UserApi.class) : mUserApi;
+    }
+
+    private <T> T configRetrofit(Class<T> service) {
+        if (mBuilder == null)
+            mBuilder = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .client(mOkHttpClient)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+        return mBuilder.build().create(service);
     }
 }

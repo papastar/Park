@@ -15,24 +15,22 @@
  */
 package com.papa.park.api;
 
-import com.papa.park.entity.TokenEntity;
+import com.papa.park.entity.bean.CodeBean;
+import com.papa.park.entity.bean.UserInfo;
+import com.papa.park.entity.body.LoginBody;
 
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
-/**
- * Created by Jun on 2016/4/16.
- */
+
 public interface UserApi {
 
-    @FormUrlEncoded
-    @POST("oauth/access_token")
-    Observable<TokenEntity> getToken(@Field("grant_type") String authType,
-                                     @Field("client_id") String clientId,
-                                     @Field("client_secret") String clientSecret,
-                                     @Field("username") String username,
-                                     @Field("login_token") String loginToken);
+    @GET("sms/code")
+    Observable<CodeBean> getCode(@Query("cellphone") String cellphone);
 
+    @POST("signin/cellphone")
+    Observable<UserInfo> login(@Body LoginBody body);
 }

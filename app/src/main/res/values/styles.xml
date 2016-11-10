@@ -4,8 +4,10 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="navIcon">@mipmap/ic_actionbar_menu</item>
+        <item name="navBackIcon">@mipmap/ic_action_return</item>
     </style>
 
 
@@ -13,6 +15,16 @@
         <item name="android:windowBackground">@drawable/bg_splash</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
+    </style>
+
+
+    <style name="Theme.ToolBar.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textSize">@dimen/size_32</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <style name="Custom.Theme.ToolBar" parent="Theme.AppCompat.Light.NoActionBar">
+       <!-- <item name="android:actionOverflowButtonStyle">@style/ActionButton.Overflow</item>-->
     </style>
 
 </resources>

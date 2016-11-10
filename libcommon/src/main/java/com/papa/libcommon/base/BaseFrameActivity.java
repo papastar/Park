@@ -6,6 +6,7 @@ import com.papa.libcommon.mvp.BaseModel;
 import com.papa.libcommon.mvp.BasePresenter;
 import com.papa.libcommon.mvp.BaseView;
 import com.papa.libcommon.util.TUtil;
+import com.papa.libcommon.util.ToastUtils;
 
 
 /**
@@ -31,7 +32,8 @@ public abstract class BaseFrameActivity<P extends BasePresenter, M extends BaseM
 
     @Override
     protected void onDestroy() {
-        if (mPresenter != null) mPresenter.onDestroy();
+        if (mPresenter != null)
+            mPresenter.onDestroy();
         super.onDestroy();
     }
 
@@ -42,7 +44,25 @@ public abstract class BaseFrameActivity<P extends BasePresenter, M extends BaseM
 
     @Override
     public void onRequestError(String msg) {
-//        showShortToast(msg);
+        ToastUtils.getInstance().showToast(msg);
 
+    }
+
+    @Override
+    public void onRequestStart() {
+        if (mVaryViewChange != null) {
+            mVaryViewChange.showLoading();
+        } else {
+            ProgressDialogFragment.showProgress(getSupportFragmentManager());
+        }
+    }
+
+    @Override
+    public void onRequestEnd() {
+        if (mVaryViewChange != null) {
+            mVaryViewChange.restore();
+        } else {
+            ProgressDialogFragment.dismissProgress(getSupportFragmentManager());
+        }
     }
 }

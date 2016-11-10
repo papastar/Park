@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="color_divide">#e2e2e2</color>
+    <color name="color_bg">#f0f0f0</color>
+
+
+    <!--   color -->
+    <color name="color_ee6c2d">#EE6C2D</color><!--//小面积使用,用于特别需要强调和突出的文字,按钮和icon,如价格,购买提交按钮-->
+    <color name="color_ef7e48">#EF7E48</color><!--同上，加了40%透明度-->
+    <color name="color_fd8a8a">#FD8A8A</color>
+    <color name="color_333333">#333333</color><!--//用于重要级文字信息,内页标题信息;如导航名称,大板块标题,类目名称等-->
+    <color name="color_66333333">#66333333</color><!--同上，加了40%透明度-->
+    <color name="color_666666">#666666</color><!--//用于普通级段落信息-->
+    <color name="color_66666666">#66666666</color><!--同上，加了40%透明度-->
+    <color name="color_888888">#888888</color><!--//用于辅助次要的文字信息-->
+    <color name="color_dddddd">#dddddd</color><!--//用于提示类信息;如输入框填写提示以及其他较弱文字提示信息-->
+
+    <!--   size   -->
+    <dimen name="size_88">44sp</dimen>
+    <dimen name="size_86">43sp</dimen>
+    <dimen name="size_74">37sp</dimen>
+    <dimen name="size_52">26sp</dimen>
+    <dimen name="size_44">22sp</dimen>
+    <dimen name="size_40">20sp</dimen>
+    <dimen name="size_36">18sp</dimen>
+    <dimen name="size_34">17sp</dimen>
+    <dimen name="size_32">16sp</dimen>
+    <dimen name="size_30">15sp</dimen>
+    <dimen name="size_28">14sp</dimen>
+    <dimen name="size_26">13sp</dimen>
+    <dimen name="size_24">12sp</dimen>
+    <dimen name="size_22">11sp</dimen>
+    <dimen name="size_20">10sp</dimen>
+    <dimen name="size_18">9sp</dimen>
+
+    <dimen name="divide_height">0.5dp</dimen>
+</resources>

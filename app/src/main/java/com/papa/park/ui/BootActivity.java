@@ -6,6 +6,7 @@ import android.view.View;
 import com.papa.libcommon.base.BaseAppCompatActivity;
 import com.papa.libcommon.util.AppUtils;
 import com.papa.park.R;
+import com.papa.park.data.UserInfoManager;
 
 public class BootActivity extends BaseAppCompatActivity {
 
@@ -13,7 +14,12 @@ public class BootActivity extends BaseAppCompatActivity {
     Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            readyGo(MainActivity.class);
+            if (UserInfoManager.getInstance().isValid()) {
+                readyGo(MainActivity.class);
+            } else {
+                readyGo(LoginActivity.class);
+            }
+            finish();
         }
     };
 
