@@ -8,4 +8,5 @@
     <string name="login">一键登录</string>
     <string name="login_in">登录</string>
     <string name="second_of">还剩%s秒</string>
+    <string name="my_order">我的订单</string>
 </resources>
