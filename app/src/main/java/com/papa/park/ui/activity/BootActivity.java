@@ -1,4 +1,4 @@
-package com.papa.park.ui;
+package com.papa.park.ui.activity;
 
 import android.os.Bundle;
 import android.view.View;

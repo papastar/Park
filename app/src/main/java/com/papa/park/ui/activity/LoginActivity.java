@@ -1,4 +1,4 @@
-package com.papa.park.ui;
+package com.papa.park.ui.activity;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -183,6 +183,7 @@ public class LoginActivity extends BaseFrameActivity<LoginPresenter, LoginModel>
         if (userInfoEntity != null && !TextUtils.isEmpty(userInfoEntity._id)) {
             UserInfoManager.getInstance().saveUser(userInfoEntity);
             HttpManager.setToken(userInfoEntity.token);
+            readyGo(MainActivity.class);
         }
     }
 

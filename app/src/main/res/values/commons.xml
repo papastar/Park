@@ -35,5 +35,5 @@
     <dimen name="size_20">10sp</dimen>
     <dimen name="size_18">9sp</dimen>
 
-    <dimen name="divide_height">0.5dp</dimen>
+    <dimen name="divide_height">1dp</dimen>
 </resources>

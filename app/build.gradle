@@ -24,6 +24,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':libcommon')
     compile rootProject.ext.libSupportAppcompat
+    compile rootProject.ext.libSupportV4
     compile rootProject.ext.libRetrofit
     compile rootProject.ext.libRetrofitConverterGson
     compile rootProject.ext.libRetrofitAdapterRxJava
@@ -31,4 +32,6 @@ dependencies {
     compile rootProject.ext.libOkio
     compile rootProject.ext.libStetho
     compile rootProject.ext.libStethoOkHttp
+    compile rootProject.ext.libBaseAdapter
+    compile "com.polidea.rxandroidble:rxandroidble:1.0.2"
 }

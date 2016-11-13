@@ -22,12 +22,12 @@ public abstract class BaseFrameFragment<P extends BasePresenter, M extends BaseM
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         mPresenter = TUtil.getT(this, 0);
         mModel = TUtil.getT(this, 1);
         if (mPresenter != null) {
             mPresenter.setVM(this, mModel);
         }
+        super.onCreate(savedInstanceState);
 
     }
 
@@ -46,6 +46,25 @@ public abstract class BaseFrameFragment<P extends BasePresenter, M extends BaseM
     public void onRequestError(String msg) {
 //        showShortToast(msg);
 
+    }
+
+
+    @Override
+    public void onRequestStart() {
+        if (mVaryViewChange != null) {
+            mVaryViewChange.showLoading();
+        } else {
+            ProgressDialogFragment.showProgress(getFragmentManager());
+        }
+    }
+
+    @Override
+    public void onRequestEnd() {
+        if (mVaryViewChange != null) {
+            mVaryViewChange.restore();
+        } else {
+            ProgressDialogFragment.dismissProgress(getFragmentManager());
+        }
     }
 
 }

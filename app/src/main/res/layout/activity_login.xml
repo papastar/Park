@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/color_bg"
     android:orientation="vertical"
-    tools:context="com.papa.park.ui.LoginActivity">
+    tools:context="com.papa.park.ui.activity.LoginActivity">
 
     <include layout="@layout/common_toolbar"/>
 

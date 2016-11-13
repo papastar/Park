@@ -1,0 +1,134 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.papa.park.ui.fragment.MainLockFragment">
+
+
+    <RelativeLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_36"
+            tools:text="UBO_F4B85EE4BD39"/>
+
+        <TextView
+            android:id="@+id/status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/name_tv"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_28"
+            tools:text="未连接"/>
+
+
+        <TextView
+            android:id="@+id/battery_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/status_tv"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_28"
+            tools:text="95%"/>
+
+
+        <ImageView
+            android:id="@+id/lock_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/lock_up_selector"/>
+
+        <TextView
+            android:id="@+id/lock_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lock_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/img_lock_status_down"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_36"
+            tools:text="车锁已降下"/>
+
+        <TextView
+            android:id="@+id/address_tv"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lock_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_32"
+            tools:text="广东省深圳市龙华新区风和日丽"/>
+
+
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/bottom_view"
+        android:layout_below="@id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_lock_bottom"/>
+
+
+    <LinearLayout
+
+        android:id="@+id/operation_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/lock_bell_btn"
+            android:layout_width="120dp"
+            android:layout_height="50dip"
+            android:scaleType="fitXY"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_bell_selector"
+            android:gravity="right|center_vertical"
+            android:paddingRight="30dp"
+            android:textSize="16sp"
+            android:textColor="#967032"
+            android:text="寻锁" />
+
+        <Button
+            android:id="@+id/lock_list_btn"
+            android:layout_width="120dp"
+            android:layout_height="50dip"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/btn_list_selector"
+            android:gravity="right|center_vertical"
+            android:paddingRight="30dp"
+            android:textSize="16sp"
+            android:textColor="#967032"
+            android:text="列表" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

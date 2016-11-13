@@ -1,6 +1,8 @@
 package com.papa.libcommon.base;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.papa.libcommon.mvp.BaseModel;
 import com.papa.libcommon.mvp.BasePresenter;
@@ -22,12 +24,12 @@ public abstract class BaseFrameActivity<P extends BasePresenter, M extends BaseM
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         mPresenter = TUtil.getT(this, 0);
         mModel = TUtil.getT(this, 1);
         if (mPresenter != null) {
             mPresenter.setVM(this, mModel);
         }
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -63,6 +65,21 @@ public abstract class BaseFrameActivity<P extends BasePresenter, M extends BaseM
             mVaryViewChange.restore();
         } else {
             ProgressDialogFragment.dismissProgress(getSupportFragmentManager());
+        }
+    }
+
+    protected void setToolbar(Toolbar toolbar,String title) {
+        if (toolbar != null) {
+            toolbar.setTitle(title);
+            setSupportActionBar(toolbar);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
+            if (getSupportActionBar() != null)
+                getSupportActionBar().setHomeButtonEnabled(true);//决定左上角的图标是否可以点击
         }
     }
 }
