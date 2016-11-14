@@ -1,6 +1,7 @@
 package com.papa.park.ui.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.papa.park.R;
 import com.papa.park.mvp.MainFragmentContract;
 import com.papa.park.mvp.model.MainFragmentModel;
 import com.papa.park.mvp.presenter.MainFragmentPresenter;
+import com.papa.park.utils.KeyConstant;
 
 import butterknife.Bind;
 
@@ -73,6 +75,10 @@ public class MainLockFragment extends BaseFrameFragment<MainFragmentPresenter, M
         batteryTv.setText("");
         lockTv.setText("还未绑定车锁");
         addressTv.setText("停车场地址");
+    }
+
+    public void updateLockInfo(Intent intent){
+        nameTv.setText(intent.getStringExtra(KeyConstant.KEY_NAME));
     }
 
     @Override

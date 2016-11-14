@@ -27,7 +27,8 @@ public class MainActivity extends BaseFrameActivity<MainPresenter, MainModel> im
         MainContract.View, Toolbar.OnMenuItemClickListener, View.OnClickListener {
 
     private static final int REQUEST_CODE_SEARCH_LOCK = 1;
-
+    private static final int REQUEST_CODE_ADD_LOCK = 2;
+    protected Fragment mCurrFragment;
     @Bind(toolBar)
     Toolbar mToolBar;
     @Bind(container)
@@ -36,8 +37,6 @@ public class MainActivity extends BaseFrameActivity<MainPresenter, MainModel> im
     LinearLayout mNavigationView;
     @Bind(R.id.drawerLayout)
     DrawerLayout mDrawerLayout;
-
-    protected Fragment mCurrFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,11 +101,42 @@ public class MainActivity extends BaseFrameActivity<MainPresenter, MainModel> im
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_CODE_SEARCH_LOCK:
-                    break;
+                case REQUEST_CODE_SEARCH_LOCK: {
+                    if (data == null)
+                        return;
+                    updateLockInfo(data);
+                    data.setClass(this, AddLockActivity.class);
+                    data.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(data, REQUEST_CODE_ADD_LOCK);
+                }
+                break;
+                case REQUEST_CODE_ADD_LOCK: {
+
+                }
+                break;
             }
         }
     }
+
+    private void updateLockInfo(Intent data) {
+        if (data == null)
+            return;
+        MainLockFragment mainLockFragment = getMainLockFragment();
+        if (mainLockFragment != null) {
+            mainLockFragment.updateLockInfo(data);
+        }
+    }
+
+
+    private MainLockFragment getMainLockFragment() {
+        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(MainLockFragment
+                .class.getName());
+        if (fragmentByTag instanceof MainLockFragment) {
+            return (MainLockFragment) fragmentByTag;
+        }
+        return null;
+    }
+
 
     protected void toFragment(Fragment toFragment) {
         if (mCurrFragment == null) {
@@ -124,7 +154,8 @@ public class MainActivity extends BaseFrameActivity<MainPresenter, MainModel> im
                     .show(toFragment).commit();
         } else {
             getSupportFragmentManager().beginTransaction().hide(mCurrFragment)
-                    .add(R.id.container, toFragment).show(toFragment)
+                    .add(R.id.container, toFragment, toFragment.getClass().getName()).show
+                    (toFragment)
                     .commit();
         }
         mCurrFragment = toFragment;

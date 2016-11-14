@@ -16,7 +16,7 @@
     <color name="color_66666666">#66666666</color><!--同上，加了40%透明度-->
     <color name="color_888888">#888888</color><!--//用于辅助次要的文字信息-->
     <color name="color_dddddd">#dddddd</color><!--//用于提示类信息;如输入框填写提示以及其他较弱文字提示信息-->
-
+    <color name="color_black">#000000</color>
     <!--   size   -->
     <dimen name="size_88">44sp</dimen>
     <dimen name="size_86">43sp</dimen>

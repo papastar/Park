@@ -10,7 +10,7 @@
     <string name="second_of">还剩%s秒</string>
     <string name="my_order">我的订单</string>
     <string name="action_share">分享</string>
-
+    <string name="action_save">保存</string>
     <string name="search_lock">搜索车锁</string>
     <string name="search_result">搜索结果</string>
 </resources>
