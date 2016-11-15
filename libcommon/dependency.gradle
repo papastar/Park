@@ -46,7 +46,7 @@ ext {
     libBaseAdapter = "com.joanzapata.android:base-adapter-helper:1.1.11"
     libBaseRecyclerAdapter = 'com.zhy:base-rvadapter:3.0.3'
 
-    libGson = "com.google.code.gson:gson:2.4"
+    libGson = "com.google.code.gson:gson:2.8.0"
     libRetrofit = "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     libRetrofitConverterGson = "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     libRetrofitAdapterRxJava = "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"

@@ -4,7 +4,6 @@ package com.papa.park.mvp;
 import com.papa.libcommon.mvp.BaseModel;
 import com.papa.libcommon.mvp.BasePresenter;
 import com.papa.libcommon.mvp.BaseView;
-import com.papa.park.entity.bean.CodeBean;
 
 import rx.Observable;
 
@@ -16,15 +15,15 @@ import rx.Observable;
 public interface AddLockContract {
 
     interface Model extends BaseModel {
-        Observable<CodeBean> checkLockState(String bleAddress, String bleName);
+        public Observable<String> checkLockState(String bleAddress, String bleName);
     }
 
     interface View extends BaseView {
-
+        public void onGetLockState(String state);
     }
 
 
-    abstract class Presenter extends BasePresenter<MainContract.Model, MainContract.View> {
+    abstract class Presenter extends BasePresenter<Model, View> {
 
         public abstract void checkLockState(String bleAddress, String bleName);
 

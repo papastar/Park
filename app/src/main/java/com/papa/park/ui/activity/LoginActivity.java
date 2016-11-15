@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.papa.libcommon.base.BaseFrameActivity;
 import com.papa.park.R;
-import com.papa.park.api.HttpManager;
 import com.papa.park.data.UserInfoManager;
 import com.papa.park.entity.bean.CodeBean;
 import com.papa.park.entity.bean.UserInfo;
@@ -182,7 +181,6 @@ public class LoginActivity extends BaseFrameActivity<LoginPresenter, LoginModel>
     public void onLoginSuccess(UserInfo userInfoEntity) {
         if (userInfoEntity != null && !TextUtils.isEmpty(userInfoEntity._id)) {
             UserInfoManager.getInstance().saveUser(userInfoEntity);
-            HttpManager.setToken(userInfoEntity.token);
             readyGo(MainActivity.class);
         }
     }

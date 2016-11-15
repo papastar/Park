@@ -53,8 +53,12 @@ public class UserInfoManager {
             Gson gson = new Gson();
             mPreferences.edit().putString("data", gson.toJson(userInfo)).apply();
         }
+    }
 
-
+    public String getToken() {
+        if (mUserInfo != null)
+            return mUserInfo.token;
+        return null;
     }
 
     public boolean isValid() {

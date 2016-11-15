@@ -33,6 +33,7 @@ dependencies {
     compile rootProject.ext.libSupportV4
     compile rootProject.ext.libRetrofit
     compile rootProject.ext.libRetrofitConverterGson
+    compile rootProject.ext.libGson
     compile rootProject.ext.libRetrofitAdapterRxJava
     compile rootProject.ext.libOkHttp
     compile rootProject.ext.libOkio

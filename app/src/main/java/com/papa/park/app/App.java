@@ -6,7 +6,6 @@ import android.content.Context;
 import com.papa.libcommon.util.AppUtils;
 import com.papa.libcommon.util.SharedPreferencesUtil;
 import com.papa.libcommon.util.ToastUtils;
-import com.papa.park.api.HttpManager;
 
 /**
  * User: PAPA
@@ -26,7 +25,7 @@ public class App extends Application {
         AppUtils.init(this);
         ToastUtils.init(this);
         SharedPreferencesUtil.init(this, getPackageName(), Context.MODE_PRIVATE);
-        HttpManager.init(this);
+
     }
 
 

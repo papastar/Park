@@ -35,6 +35,5 @@ public interface UserApi {
     @POST("signin/cellphone")
     Observable<UserInfo> login(@Body LoginBody body);
 
-    @POST("lockers/activate")
-    Observable<CodeBean> checkLocker(@Body LockBody body);
+
 }

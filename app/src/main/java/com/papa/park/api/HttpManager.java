@@ -16,11 +16,13 @@
 package com.papa.park.api;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.google.gson.Gson;
+import com.papa.libcommon.util.AppUtils;
 import com.papa.park.BuildConfig;
+import com.papa.park.data.UserInfoManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,51 +41,54 @@ public class HttpManager {
     private static final int DEFAULT_TIMEOUT = 15000;
     private static final String TAG = "HttpManager";
     private static final String BASE_URL = "http://120.24.4.26:7788/api/";
-    private static OkHttpClient mOkHttpClient;
-    private static UserApi mUserApi;
     private static HttpManager sManager;
-    private static Retrofit.Builder mBuilder;
+    private OkHttpClient.Builder mOkHttpBuilder;
+    private Retrofit.Builder mBuilder;
+    private UserApi mUserApi;
+    private LockerApi mLockerApi;
 
     public static HttpManager getInstance() {
         if (sManager == null) {
-            sManager = new HttpManager();
+            sManager = new HttpManager(AppUtils.getAppContext());
         }
         return sManager;
     }
 
-    public static void init(Context context) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+    private HttpManager(Context context) {
+        mOkHttpBuilder = new OkHttpClient.Builder();
         if (BuildConfig.DEV_MODE) {
             Stetho.initializeWithDefaults(context);
-            builder.addNetworkInterceptor(new StethoInterceptor());
-            builder.addInterceptor(new LoggerInterceptor(TAG, true));
+            mOkHttpBuilder.addNetworkInterceptor(new StethoInterceptor());
+            mOkHttpBuilder.addInterceptor(new LoggerInterceptor(TAG, true));
         }
-        builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
+        mOkHttpBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
-
-        mOkHttpClient = builder.build();
     }
 
-    public static void setToken(String token) {
-        if (mOkHttpClient != null && !TextUtils.isDigitsOnly(token)) {
-            Map<String, String> map = new HashMap<>();
-            map.put("Authorization", token);
-            mBuilder.client(mOkHttpClient.newBuilder().addInterceptor(new HttpHeadInterceptor
-                    (map)).build());
-        }
-    }
 
     public UserApi getUserApi() {
-        return mUserApi == null ? configRetrofit(UserApi.class) : mUserApi;
+        return mUserApi == null ? configRetrofit(UserApi.class, false) : mUserApi;
     }
 
-    private <T> T configRetrofit(Class<T> service) {
-        if (mBuilder == null)
+    public LockerApi getLockerApi() {
+        return mLockerApi == null ? configRetrofit(LockerApi.class, true) : mLockerApi;
+    }
+
+    private <T> T configRetrofit(Class<T> service, boolean withToken) {
+
+        if (mBuilder == null) {
             mBuilder = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .client(mOkHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(new Gson()))
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+        }
+
+        if (withToken) {
+            Map<String, String> head = new HashMap<>();
+            head.put("Authorization", UserInfoManager.getInstance().getToken());
+            mOkHttpBuilder.addInterceptor(new HttpHeadInterceptor(head));
+        }
+        mBuilder.client(mOkHttpBuilder.build());
         return mBuilder.build().create(service);
     }
 }

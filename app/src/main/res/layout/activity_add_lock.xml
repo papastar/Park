@@ -105,6 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
+                    android:background="@null"
                     android:textColorHint="@color/color_dddddd"
                     android:hint="请输入停车场名称"
                     android:inputType="textPostalAddress"
@@ -139,6 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
+                    android:background="@null"
                     android:textColorHint="@color/color_dddddd"
                     android:hint="请输入车位编号"
                     android:inputType="text"
@@ -172,6 +174,7 @@
                     android:gravity="right"
                     android:textColorHint="@color/color_dddddd"
                     android:hint="备注"
+                    android:background="@null"
                     android:inputType="text"
                     android:textColor="@color/color_black"
                     android:textSize="@dimen/size_32"/>

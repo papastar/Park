@@ -12,9 +12,9 @@ import com.papa.park.R;
 import com.papa.park.mvp.AddLockContract;
 import com.papa.park.mvp.model.AddLockModel;
 import com.papa.park.mvp.presenter.AddLockPresenter;
+import com.papa.park.utils.KeyConstant;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLockModel> implements
         AddLockContract.View, Toolbar.OnMenuItemClickListener {
@@ -33,6 +33,8 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
     @Bind(R.id.note_edit)
     EditText mNoteEdit;
 
+    private String mBleAddress;
+    private String mBleName;
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -47,6 +49,8 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
     @Override
     protected void initViewsAndEvents() {
         initToolBar();
+        initIntent();
+        mPresenter.checkLockState(mBleAddress, mBleName);
     }
 
     private void initToolBar() {
@@ -54,6 +58,14 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
         mToolBar.inflateMenu(R.menu.menu_add_lock);
         mToolBar.setOnMenuItemClickListener(this);
     }
+
+
+    private void initIntent() {
+        mBleAddress = getIntent().getStringExtra(KeyConstant.KEY_MAC_ADDRESS);
+        mBleName = getIntent().getStringExtra(KeyConstant.KEY_NAME);
+        mLockNameTv.setText(mBleName);
+    }
+
 
     @Override
     protected View getLoadingTargetView() {
@@ -65,6 +77,7 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
+                save();
                 return true;
         }
         return false;
@@ -74,10 +87,9 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
 
     }
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    public void onGetLockState(String state) {
+
     }
 }

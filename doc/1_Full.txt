@@ -116,3 +116,6 @@ Cache-Control: no-cache, must-revalidate
 Timestamp: 22:16:52.661
 
 [Fiddler] The connection to '120.24.4.26' failed. <br />Error: ConnectionRefused (0x274d). <br />System.Net.Sockets.SocketException 由于目标计算机积极拒绝，无法连接。 120.24.4.26:7788
+
+
+{"owner":"57ee0c9c7ad35e4b7673d6da","sn":"a107167f3e","bluetooth":"54:4A:16:35:74:89","bluetoothName":"UBO_544A16357489","token":"12302d5c1a12908f3d0f211657d0113e","key":"EbozdIyMFOApokVp","_id":"582b1c7556271a4e22ee8764"}
