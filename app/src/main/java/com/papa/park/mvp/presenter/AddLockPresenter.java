@@ -8,4 +8,8 @@ import com.papa.park.mvp.AddLockContract;
  */
 
 public class AddLockPresenter extends AddLockContract.Presenter{
+    @Override
+    public void checkLockState(String bleAddress, String bleName) {
+
+    }
 }

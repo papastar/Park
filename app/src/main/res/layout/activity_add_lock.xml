@@ -25,12 +25,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:layout_marginTop="15dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <TextView
                     android:layout_width="100dp"
@@ -38,13 +38,141 @@
                     android:text="车锁名称"
                     android:textColor="@color/color_666666"
                     android:textSize="@dimen/size_32"/>
+
                 <TextView
                     android:id="@+id/lock_name_tv"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
+                    android:textColor="@color/color_black"
+                    android:textSize="@dimen/size_32"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="车锁名称"
+                    android:text="当前地址"
+                    android:textColor="@color/color_666666"
+                    android:textSize="@dimen/size_32"/>
+
+                <TextView
+                    android:id="@+id/address_name_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/color_black"
+                    android:textSize="@dimen/size_32"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divide_height"
+                android:background="@color/color_divide"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="停车场"
+                    android:textColor="@color/color_666666"
+                    android:textSize="@dimen/size_32"/>
+
+                <EditText
+
+                    android:id="@+id/parking_name_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColorHint="@color/color_dddddd"
+                    android:hint="请输入停车场名称"
+                    android:inputType="textPostalAddress"
+                    android:textColor="@color/color_black"
+                    android:textSize="@dimen/size_32"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divide_height"
+                android:background="@color/color_divide"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="车位编号"
+                    android:textColor="@color/color_666666"
+                    android:textSize="@dimen/size_32"/>
+
+                <EditText
+                    android:id="@+id/parking_no_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColorHint="@color/color_dddddd"
+                    android:hint="请输入车位编号"
+                    android:inputType="text"
+                    android:textColor="@color/color_black"
+                    android:textSize="@dimen/size_32"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="备注"
+                    android:textColor="@color/color_666666"
+                    android:textSize="@dimen/size_32"/>
+
+                <EditText
+                    android:id="@+id/note_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColorHint="@color/color_dddddd"
+                    android:hint="备注"
+                    android:inputType="text"
                     android:textColor="@color/color_black"
                     android:textSize="@dimen/size_32"/>
             </LinearLayout>

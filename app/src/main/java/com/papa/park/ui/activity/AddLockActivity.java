@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.papa.libcommon.base.BaseFrameActivity;
 import com.papa.park.R;
@@ -12,6 +14,7 @@ import com.papa.park.mvp.model.AddLockModel;
 import com.papa.park.mvp.presenter.AddLockPresenter;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLockModel> implements
         AddLockContract.View, Toolbar.OnMenuItemClickListener {
@@ -19,6 +22,17 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
 
     @Bind(R.id.toolBar)
     Toolbar mToolBar;
+    @Bind(R.id.lock_name_tv)
+    TextView mLockNameTv;
+    @Bind(R.id.address_name_tv)
+    TextView mAddressNameTv;
+    @Bind(R.id.parking_name_edit)
+    EditText mParkingNameEdit;
+    @Bind(R.id.parking_no_edit)
+    EditText mParkingNoEdit;
+    @Bind(R.id.note_edit)
+    EditText mNoteEdit;
+
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -60,4 +74,10 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
 
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

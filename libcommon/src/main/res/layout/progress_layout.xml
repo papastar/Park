@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/progress_layout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:gravity="center" >
+<LinearLayout android:id="@+id/progress_layout"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:orientation="horizontal">
 
     <ProgressBar
         android:id="@+id/progress"
         style="?android:progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"/>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/content_tv"
+        android:text="加载中..."
+        android:textSize="18sp"
+        android:textColor="#333333"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

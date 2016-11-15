@@ -17,6 +17,7 @@ package com.papa.park.api;
 
 import com.papa.park.entity.bean.CodeBean;
 import com.papa.park.entity.bean.UserInfo;
+import com.papa.park.entity.body.LockBody;
 import com.papa.park.entity.body.LoginBody;
 
 import retrofit2.http.Body;
@@ -33,4 +34,7 @@ public interface UserApi {
 
     @POST("signin/cellphone")
     Observable<UserInfo> login(@Body LoginBody body);
+
+    @POST("lockers/activate")
+    Observable<CodeBean> checkLocker(@Body LockBody body);
 }
