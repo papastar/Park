@@ -27,5 +27,8 @@ public interface AddLockContract {
 
         public abstract void checkLockState(String bleAddress, String bleName);
 
+        public abstract void save(String token, String bluetooth, String blueName, String
+                lockAddress, String parkingName, String note);
+
     }
 }

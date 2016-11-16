@@ -19,16 +19,21 @@ public interface LoginContract {
         Observable<CodeBean> getCode(String cellphone);
 
         Observable<UserInfo> login(String cellphone, String code);
+
+        Observable<Integer> getAndSaveLock();
     }
 
     interface View extends BaseView {
         void onGetCodeSuccess(CodeBean response);
         void onLoginSuccess(UserInfo userInfoEntity);
+        void onGetAndSaveLockComplete();
     }
 
     abstract class Presenter extends BasePresenter<Model, View> {
         public abstract void login(String cellPhone, String code);
         public abstract void getCode(String cellPhone);
+        public abstract void getAndSaveLock();
+
     }
 
 }

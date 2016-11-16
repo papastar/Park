@@ -181,8 +181,13 @@ public class LoginActivity extends BaseFrameActivity<LoginPresenter, LoginModel>
     public void onLoginSuccess(UserInfo userInfoEntity) {
         if (userInfoEntity != null && !TextUtils.isEmpty(userInfoEntity._id)) {
             UserInfoManager.getInstance().saveUser(userInfoEntity);
-            readyGo(MainActivity.class);
+            mPresenter.getAndSaveLock();
         }
+    }
+
+    @Override
+    public void onGetAndSaveLockComplete() {
+        readyGo(MainActivity.class);
     }
 
 

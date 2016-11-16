@@ -32,4 +32,14 @@ public class LoginPresenter extends LoginContract.Presenter {
             }
         }));
     }
+
+    @Override
+    public void getAndSaveLock() {
+        addSubscription(mModel.getAndSaveLock(), new SubscriberCallBack<>(new BaseViewApiCallback<Integer>(mView) {
+            @Override
+            public void onSuccess(Integer data) {
+                mView.onGetAndSaveLockComplete();
+            }
+        }));
+    }
 }

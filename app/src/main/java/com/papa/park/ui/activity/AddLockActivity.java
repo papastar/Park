@@ -2,6 +2,7 @@ package com.papa.park.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -14,10 +15,14 @@ import com.papa.park.data.LocationManager;
 import com.papa.park.mvp.AddLockContract;
 import com.papa.park.mvp.model.AddLockModel;
 import com.papa.park.mvp.presenter.AddLockPresenter;
+import com.papa.park.utils.JSONUtils;
 import com.papa.park.utils.KeyConstant;
 
 import butterknife.Bind;
 
+/**
+ *
+ */
 public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLockModel> implements
         AddLockContract.View, Toolbar.OnMenuItemClickListener {
 
@@ -100,9 +105,20 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
 
     }
 
-
+    /**
+     * {"owner":"57ee0c9c7ad35e4b7673d6da","sn":"a107167f3e","bluetooth":"54:4A:16:35:74:89",
+     * "bluetoothName":"UBO_544A16357489","token":"12302d5c1a12908f3d0f211657d0113e",
+     * "key":"EbozdIyMFOApokVp","_id":"582b1c7556271a4e22ee8764"}
+     */
     @Override
     public void onGetLockState(String state) {
+        String token = JSONUtils.getString(state, "token", "");
 
+        if (!TextUtils.isEmpty(token)) {
+
+        } else {
+            //车锁已经被绑定
+            setResult(RESULT_OK);
+        }
     }
 }

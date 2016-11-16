@@ -20,4 +20,10 @@ public class AddLockPresenter extends AddLockContract.Presenter {
             }
         }));
     }
+
+    @Override
+    public void save(String token, String bluetooth, String blueName, String lockAddress, String
+            parkingName, String note) {
+
+    }
 }

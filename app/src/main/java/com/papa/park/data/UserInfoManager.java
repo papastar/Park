@@ -61,6 +61,12 @@ public class UserInfoManager {
         return null;
     }
 
+    public String getCellPhone() {
+        if (mUserInfo != null)
+            return mUserInfo.cellphone;
+        return "";
+    }
+
     public boolean isValid() {
         return mUserInfo != null && !TextUtils.isEmpty(mUserInfo._id);
     }
