@@ -4,8 +4,6 @@
       tools:context=".ui.activity.AddLockActivity">
     <item
         android:id="@+id/action_save"
-        app:showAsAction="ifRoom"
-        android:title="@string/action_save" />
-
-
+        android:title="@string/action_save"
+        app:showAsAction="withText|ifRoom"/>
 </menu>

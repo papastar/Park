@@ -6,12 +6,11 @@
                                    android:layout_height="?attr/actionBarSize"
                                    android:background="@color/colorPrimary"
                                    android:orientation="vertical"
-                                   android:theme="@style/Custom.Theme.ToolBar"
                                    app:contentInsetStartWithNavigation="0dp"
                                    app:navigationIcon="?attr/navBackIcon"
-                                   app:popupTheme="@style/Theme.ToolBar.Base"
-                                   app:title="@string/app_name"
-                                   app:titleTextColor="@color/white">
+                                   app:popupTheme="@style/ToolbarPopupTheme"
+                                   app:theme="@style/ToolbarTheme"
+                                   app:titleTextAppearance="@style/ToolbarTitle">
 
 
 </android.support.v7.widget.Toolbar>

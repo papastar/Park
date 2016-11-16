@@ -16,22 +16,25 @@
 package com.papa.park.api;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.google.gson.Gson;
 import com.papa.libcommon.util.AppUtils;
 import com.papa.park.BuildConfig;
 import com.papa.park.data.UserInfoManager;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by Jun on 2016/7/27.
@@ -43,16 +46,8 @@ public class HttpManager {
     private static final String BASE_URL = "http://120.24.4.26:7788/api/";
     private static HttpManager sManager;
     private OkHttpClient.Builder mOkHttpBuilder;
-    private Retrofit.Builder mBuilder;
     private UserApi mUserApi;
     private LockerApi mLockerApi;
-
-    public static HttpManager getInstance() {
-        if (sManager == null) {
-            sManager = new HttpManager(AppUtils.getAppContext());
-        }
-        return sManager;
-    }
 
     private HttpManager(Context context) {
         mOkHttpBuilder = new OkHttpClient.Builder();
@@ -61,34 +56,52 @@ public class HttpManager {
             mOkHttpBuilder.addNetworkInterceptor(new StethoInterceptor());
             mOkHttpBuilder.addInterceptor(new LoggerInterceptor(TAG, true));
         }
+        mOkHttpBuilder.addNetworkInterceptor(getAuthHeadInterceptor());
         mOkHttpBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
+    public static HttpManager getInstance() {
+        if (sManager == null) {
+            sManager = new HttpManager(AppUtils.getAppContext());
+        }
+        return sManager;
+    }
 
     public UserApi getUserApi() {
-        return mUserApi == null ? configRetrofit(UserApi.class, false) : mUserApi;
+        return mUserApi == null ? configRetrofit(UserApi.class) : mUserApi;
     }
 
     public LockerApi getLockerApi() {
-        return mLockerApi == null ? configRetrofit(LockerApi.class, true) : mLockerApi;
+        return mLockerApi == null ? configRetrofit(LockerApi.class) : mLockerApi;
     }
 
-    private <T> T configRetrofit(Class<T> service, boolean withToken) {
 
-        if (mBuilder == null) {
-            mBuilder = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(new Gson()))
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
-        }
+    private Interceptor getAuthHeadInterceptor() {
+        return new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request originalRequest = chain.request();
+                String token = UserInfoManager.getInstance().getToken();
+                if (TextUtils.isEmpty(token))
+                    return chain.proceed(originalRequest);
+                Request.Builder builder = originalRequest.newBuilder();
+                builder.addHeader("Authorization", token);
+                return chain.proceed(builder.build());
+            }
+        };
+    }
 
-        if (withToken) {
-            Map<String, String> head = new HashMap<>();
-            head.put("Authorization", UserInfoManager.getInstance().getToken());
-            mOkHttpBuilder.addInterceptor(new HttpHeadInterceptor(head));
-        }
-        mBuilder.client(mOkHttpBuilder.build());
-        return mBuilder.build().create(service);
+
+    private <T> T configRetrofit(Class<T> service) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(mOkHttpBuilder.build())
+                //增加返回值为String的支持
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        return retrofit.create(service);
     }
 }

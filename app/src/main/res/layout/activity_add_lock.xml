@@ -33,7 +33,7 @@
                 android:paddingRight="10dp">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:text="车锁名称"
                     android:textColor="@color/color_666666"
@@ -61,7 +61,7 @@
                 android:paddingRight="10dp">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:text="当前地址"
                     android:textColor="@color/color_666666"
@@ -92,7 +92,7 @@
                 android:paddingRight="10dp">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:text="停车场"
                     android:textColor="@color/color_666666"
@@ -128,7 +128,7 @@
                 android:paddingRight="10dp">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:text="车位编号"
                     android:textColor="@color/color_666666"
@@ -160,7 +160,7 @@
                 android:paddingRight="10dp">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:text="备注"
                     android:textColor="@color/color_666666"

@@ -50,6 +50,7 @@ ext {
     libRetrofit = "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     libRetrofitConverterGson = "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     libRetrofitAdapterRxJava = "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
+    libRetrofitConverterScalars = "com.squareup.retrofit2:converter-scalars:${retrofitVersion}"
     libOkHttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:3.0.0-RC1"
 
     libDagger = "com.google.dagger:dagger:${daggerVersion}"

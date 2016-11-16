@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.papa.libcommon.base.BaseFrameActivity;
 import com.papa.park.R;
+import com.papa.park.data.LocationInfo;
+import com.papa.park.data.LocationManager;
 import com.papa.park.mvp.AddLockContract;
 import com.papa.park.mvp.model.AddLockModel;
 import com.papa.park.mvp.presenter.AddLockPresenter;
@@ -50,13 +52,24 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
     protected void initViewsAndEvents() {
         initToolBar();
         initIntent();
+        LocationInfo locationInfo = LocationManager.getInstance().getLocationInfo();
+        if (locationInfo != null) {
+            mAddressNameTv.setText(locationInfo.getAddressInfo());
+        }
         mPresenter.checkLockState(mBleAddress, mBleName);
     }
 
     private void initToolBar() {
-        setToolbar(mToolBar, "添加车锁信息");
+        mToolBar.setTitle("添加车锁信息");
         mToolBar.inflateMenu(R.menu.menu_add_lock);
         mToolBar.setOnMenuItemClickListener(this);
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
     }
 
 

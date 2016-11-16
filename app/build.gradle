@@ -33,6 +33,7 @@ dependencies {
     compile rootProject.ext.libSupportV4
     compile rootProject.ext.libRetrofit
     compile rootProject.ext.libRetrofitConverterGson
+    compile rootProject.ext.libRetrofitConverterScalars
     compile rootProject.ext.libGson
     compile rootProject.ext.libRetrofitAdapterRxJava
     compile rootProject.ext.libOkHttp
@@ -40,5 +41,6 @@ dependencies {
     compile rootProject.ext.libStetho
     compile rootProject.ext.libStethoOkHttp
     compile rootProject.ext.libBaseAdapter
-    compile "com.polidea.rxandroidble:rxandroidble:1.0.2"
+    compile 'com.polidea.rxandroidble:rxandroidble:1.0.2'
+
 }

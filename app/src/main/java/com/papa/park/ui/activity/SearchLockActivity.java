@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.joanzapata.android.BaseAdapterHelper;
 import com.joanzapata.android.QuickAdapter;
 import com.papa.libcommon.base.BaseFrameActivity;
+import com.papa.libcommon.util.AppUtils;
 import com.papa.park.R;
 import com.papa.park.ble.BleUtil;
 import com.papa.park.ble.iBeaconClass;
@@ -63,6 +64,21 @@ public class SearchLockActivity extends BaseFrameActivity<SearchLockPresenter, S
         scanView.setWillNotDraw(false);
         scanView.setSearching(true);
         mPresenter.startScan();
+
+        test();
+    }
+
+    private void test() {
+        AppUtils.runOnUIDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent data = new Intent();
+                data.putExtra(KeyConstant.KEY_MAC_ADDRESS, "54:4A:16:35:74:89");
+                data.putExtra(KeyConstant.KEY_NAME, "UBO_544A16357489");
+                setResult(RESULT_OK, data);
+                finish();
+            }
+        }, 3000);
     }
 
 
