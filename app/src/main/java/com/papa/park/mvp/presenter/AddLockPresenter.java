@@ -2,6 +2,8 @@ package com.papa.park.mvp.presenter;
 
 import com.papa.park.api.BaseViewApiCallback;
 import com.papa.park.api.SubscriberCallBack;
+import com.papa.park.data.DbManager;
+import com.papa.park.entity.body.SaveBody;
 import com.papa.park.mvp.AddLockContract;
 
 /**
@@ -22,8 +24,18 @@ public class AddLockPresenter extends AddLockContract.Presenter {
     }
 
     @Override
-    public void save(String token, String bluetooth, String blueName, String lockAddress, String
-            parkingName, String note) {
+    public void save(SaveBody body) {
+        boolean isOwner = DbManager.getInstance().isOwnerUse(body.bluetooth);
+        if (isOwner) {
 
+        } else {
+            addSubscription(mModel.saveLock(body), new
+                    SubscriberCallBack<>(new BaseViewApiCallback<Integer>(mView) {
+                @Override
+                public void onSuccess(Integer data) {
+                    mView.onSaveLockResult(data);
+                }
+            }));
+        }
     }
 }

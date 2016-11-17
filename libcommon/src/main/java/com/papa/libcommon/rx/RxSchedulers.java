@@ -21,7 +21,6 @@ public class RxSchedulers {
         return new Observable.Transformer<T, T>() {
             @Override
             public Observable<T> call(Observable<T> tObservable) {
-
                 return tObservable
                         //生产线程
                         .subscribeOn(Schedulers.io())

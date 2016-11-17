@@ -3,6 +3,7 @@ package com.papa.park.data;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
 import com.papa.libcommon.util.AppUtils;
+import com.papa.park.BuildConfig;
 import com.papa.park.entity.bean.LockerBean;
 import com.papa.park.entity.database.BleData;
 
@@ -20,6 +21,8 @@ public class DbManager {
 
     private DbManager() {
         mLiteOrm = LiteOrm.newSingleInstance(AppUtils.getAppContext(), DB_NAME);
+        if (BuildConfig.DEV_MODE)
+            mLiteOrm.setDebugged(true);
     }
 
     public static DbManager getInstance() {
@@ -40,8 +43,8 @@ public class DbManager {
         return mLiteOrm.save(list);
     }
 
-    public void saveBleData(BleData item) {
-        mLiteOrm.save(item);
+    public int saveBleData(BleData item) {
+        return (int) mLiteOrm.save(item);
     }
 
     public BleData covertLockBean(LockerBean lockerBean) {
@@ -69,7 +72,8 @@ public class DbManager {
 
     public boolean isOwnerUse(String blueAddress) {
         QueryBuilder queryBuilder = new QueryBuilder<BleData>(BleData.class);
-        queryBuilder.where("blueAddress = ", blueAddress).whereAppendAnd().where("isOwner = ", "1");
+        queryBuilder.whereEquals("blueAddress", blueAddress).whereAppendAnd().whereEquals
+                ("isOwner", "1");
         return mLiteOrm.queryCount(queryBuilder) > 0;
     }
 

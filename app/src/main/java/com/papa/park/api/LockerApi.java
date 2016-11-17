@@ -2,6 +2,7 @@ package com.papa.park.api;
 
 import com.papa.park.entity.bean.LockerBean;
 import com.papa.park.entity.body.LockBody;
+import com.papa.park.entity.body.SaveBody;
 
 import java.util.List;
 
@@ -20,4 +21,7 @@ public interface LockerApi {
 
     @POST("lockers")
     Observable<List<LockerBean>> getLocker();
+
+    @POST("lockers/save")
+    Observable<String> saveLock(@Body SaveBody body);
 }

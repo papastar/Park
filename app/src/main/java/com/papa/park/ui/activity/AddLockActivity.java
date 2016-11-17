@@ -1,5 +1,6 @@
 package com.papa.park.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import com.papa.libcommon.base.BaseFrameActivity;
 import com.papa.park.R;
 import com.papa.park.data.LocationInfo;
 import com.papa.park.data.LocationManager;
+import com.papa.park.entity.body.SaveBody;
 import com.papa.park.mvp.AddLockContract;
 import com.papa.park.mvp.model.AddLockModel;
 import com.papa.park.mvp.presenter.AddLockPresenter;
@@ -42,6 +44,9 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
 
     private String mBleAddress;
     private String mBleName;
+    private String mHardware = "";
+
+    private String mToken, mSn, mKey;
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -81,6 +86,7 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
     private void initIntent() {
         mBleAddress = getIntent().getStringExtra(KeyConstant.KEY_MAC_ADDRESS);
         mBleName = getIntent().getStringExtra(KeyConstant.KEY_NAME);
+//        mHardware = Integer.parseInt(getIntent().getStringExtra("hardware"), 16) + "";
         mLockNameTv.setText(mBleName);
     }
 
@@ -102,7 +108,7 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
     }
 
     private void save() {
-
+        mPresenter.save(createSaveBody(mToken, mSn, mKey));
     }
 
     /**
@@ -112,13 +118,44 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
      */
     @Override
     public void onGetLockState(String state) {
-        String token = JSONUtils.getString(state, "token", "");
-
-        if (!TextUtils.isEmpty(token)) {
-
-        } else {
-            //车锁已经被绑定
+        mToken = JSONUtils.getString(state, "token", "");
+        mSn = JSONUtils.getString(state, "sn", "");
+        mKey = JSONUtils.getString(state, "key", "");
+        if (TextUtils.isEmpty(mToken)) {
+            if (TextUtils.equals(state, "There")) {
+                showToast("车锁已绑定");
+            } else {
+                showToast("操作失败");
+            }
+            Intent intent = new Intent();
+            intent.putExtra(KeyConstant.KEY_DATA, Integer.valueOf(0));
             setResult(RESULT_OK);
         }
     }
+
+    @Override
+    public void onSaveLockResult(Integer result) {
+
+    }
+
+    private SaveBody createSaveBody(String token, String sn, String key) {
+        LocationInfo locationInfo = LocationManager.getInstance().getLocationInfo();
+        SaveBody body = new SaveBody();
+        body.lockerToken = token;
+        body.bluetooth = mBleAddress;
+        body.bluetoothName = mBleName;
+        body.note = mNoteEdit.getEditableText().toString();
+        body.sn = sn;
+        body.lockLat = String.valueOf(locationInfo.getLatitude());
+        body.lockLng = String.valueOf(locationInfo.getLongitude());
+        body.lockAddress = mParkingNoEdit.getEditableText().toString();
+        body.cityCode = locationInfo.getCityCode();
+        body.cityName = locationInfo.getCityName();
+        body.parkingName = mParkingNameEdit.getEditableText().toString();
+        body.parkingAddress = locationInfo.getAddressInfo();
+        body.key = key;
+        body.hardware = mHardware;
+        return body;
+    }
+
 }

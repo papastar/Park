@@ -4,6 +4,7 @@ package com.papa.park.mvp;
 import com.papa.libcommon.mvp.BaseModel;
 import com.papa.libcommon.mvp.BasePresenter;
 import com.papa.libcommon.mvp.BaseView;
+import com.papa.park.entity.body.SaveBody;
 
 import rx.Observable;
 
@@ -16,10 +17,14 @@ public interface AddLockContract {
 
     interface Model extends BaseModel {
         public Observable<String> checkLockState(String bleAddress, String bleName);
+
+        public Observable<Integer> saveLock(SaveBody body);
     }
 
     interface View extends BaseView {
         public void onGetLockState(String state);
+
+        public void onSaveLockResult(Integer result);
     }
 
 
@@ -27,8 +32,7 @@ public interface AddLockContract {
 
         public abstract void checkLockState(String bleAddress, String bleName);
 
-        public abstract void save(String token, String bluetooth, String blueName, String
-                lockAddress, String parkingName, String note);
+        public abstract void save(SaveBody body);
 
     }
 }

@@ -82,6 +82,8 @@ public class LocationManager {
                     .TypeOffLineLocation) {
                 mLocationInfo = new LocationInfo(location.getAddrStr(), location.getLatitude(),
                         location.getLongitude());
+                mLocationInfo.setCityCode(location.getCityCode());
+                mLocationInfo.setCityName(location.getCity());
             }
 
 

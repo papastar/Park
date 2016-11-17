@@ -3,10 +3,11 @@ package com.papa.libcommon.mvp;
 import android.content.Context;
 
 import com.papa.libcommon.rx.RxManager;
-import com.papa.libcommon.rx.RxSchedulers;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -24,8 +25,9 @@ public abstract class BasePresenter<M, V> {
     }
 
 
-    protected <T> void addSubscription(Observable<T> observable, Subscriber subscriber) {
-        mRxManager.add(observable.compose(RxSchedulers.io_main()).subscribe(subscriber));
+    protected <T> void addSubscription(Observable<T> observable, Subscriber<T> subscriber) {
+        mRxManager.add(observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber));
     }
 
 
