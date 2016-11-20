@@ -7,6 +7,7 @@ import com.papa.park.BuildConfig;
 import com.papa.park.entity.bean.LockerBean;
 import com.papa.park.entity.database.BleData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,6 +76,13 @@ public class DbManager {
         queryBuilder.whereEquals("blueAddress", blueAddress).whereAppendAnd().whereEquals
                 ("isOwner", "1");
         return mLiteOrm.queryCount(queryBuilder) > 0;
+    }
+
+    public ArrayList<BleData> getBleData(String openId) {
+        QueryBuilder<BleData> queryBuilder = new QueryBuilder<>(BleData.class);
+        queryBuilder.whereEquals("openId", openId).whereAppendAnd().whereEquals
+                ("isOwner", "1");
+        return mLiteOrm.query(queryBuilder);
     }
 
 }

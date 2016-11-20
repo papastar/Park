@@ -44,6 +44,11 @@ public class RxManager {
             mRxBus.unregister(entry.getKey(), entry.getValue());// 移除观察
     }
 
+    public void unsubscrible(){
+        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions())
+            mCompositeSubscription.unsubscribe();// 取消订阅
+    }
+
     public void post(Object tag, Object content) {
         mRxBus.post(tag, content);
     }

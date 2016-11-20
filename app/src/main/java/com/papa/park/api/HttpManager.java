@@ -21,7 +21,6 @@ import android.text.TextUtils;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.papa.libcommon.util.AppUtils;
-import com.papa.park.BuildConfig;
 import com.papa.park.data.UserInfoManager;
 
 import java.io.IOException;
@@ -31,6 +30,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -51,11 +51,13 @@ public class HttpManager {
 
     private HttpManager(Context context) {
         mOkHttpBuilder = new OkHttpClient.Builder();
-        if (BuildConfig.DEV_MODE) {
+        //if (BuildConfig.DEV_MODE) {
             Stetho.initializeWithDefaults(context);
             mOkHttpBuilder.addNetworkInterceptor(new StethoInterceptor());
-            mOkHttpBuilder.addInterceptor(new LoggerInterceptor(TAG, true));
-        }
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            mOkHttpBuilder.addInterceptor(new HttpLoggingInterceptor());
+       // }
         mOkHttpBuilder.addNetworkInterceptor(getAuthHeadInterceptor());
         mOkHttpBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);

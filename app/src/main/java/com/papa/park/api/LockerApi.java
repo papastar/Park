@@ -7,6 +7,7 @@ import com.papa.park.entity.body.SaveBody;
 import java.util.List;
 
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -19,7 +20,7 @@ public interface LockerApi {
     @POST("lockers/activate")
     Observable<String> checkLocker(@Body LockBody body);
 
-    @POST("lockers")
+    @GET("lockers")
     Observable<List<LockerBean>> getLocker();
 
     @POST("lockers/save")

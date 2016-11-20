@@ -27,11 +27,16 @@ import android.view.ViewGroup;
 
 import com.papa.libcommon.control.OnVaryViewChange;
 import com.papa.libcommon.control.VaryViewChangeControll;
+import com.papa.libcommon.rx.RxManager;
 import com.papa.libcommon.widget.loading.VaryViewHelperController;
 
 import java.lang.reflect.Field;
 
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public abstract class BaseFragment extends Fragment implements OnVaryViewChange {
@@ -48,6 +53,7 @@ public abstract class BaseFragment extends Fragment implements OnVaryViewChange 
     private boolean isFirstResume = true;
     private boolean isFirstVisible = true;
     private boolean isFirstInvisible = true;
+    protected RxManager rxManager;
 
     @Override
     public void onAttach(Context context) {
@@ -58,6 +64,7 @@ public abstract class BaseFragment extends Fragment implements OnVaryViewChange 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        rxManager = new RxManager();
     }
 
     @Override
@@ -82,10 +89,15 @@ public abstract class BaseFragment extends Fragment implements OnVaryViewChange 
     }
 
 
+    protected <T> void addSubscription(Observable<T> observable, Subscriber<T> subscriber) {
+        rxManager.add(observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber));
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        rxManager.clear();
     }
 
     @Override

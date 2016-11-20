@@ -135,7 +135,14 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
 
     @Override
     public void onSaveLockResult(Integer result) {
-
+        Intent intent = new Intent();
+        if (result > 0) {
+            showToast("添加成功");
+            setResult(RESULT_OK, intent);
+        } else {
+            showToast("添加失败");
+            setResult(RESULT_OK, intent);
+        }
     }
 
     private SaveBody createSaveBody(String token, String sn, String key) {

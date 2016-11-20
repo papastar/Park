@@ -26,8 +26,8 @@ import static com.papa.park.R.id.toolBar;
 public class MainActivity extends BaseFrameActivity<MainPresenter, MainModel> implements
         MainContract.View, Toolbar.OnMenuItemClickListener, View.OnClickListener {
 
-    private static final int REQUEST_CODE_SEARCH_LOCK = 1;
-    private static final int REQUEST_CODE_ADD_LOCK = 2;
+    public static final int REQUEST_CODE_SEARCH_LOCK = 1;
+    public static final int REQUEST_CODE_ADD_LOCK = 2;
     protected Fragment mCurrFragment;
     @Bind(toolBar)
     Toolbar mToolBar;
@@ -58,7 +58,7 @@ public class MainActivity extends BaseFrameActivity<MainPresenter, MainModel> im
         initToolbar();
         initFragment();
 
-        readyGoForResult(SearchLockActivity.class, REQUEST_CODE_SEARCH_LOCK);
+//        readyGoForResult(SearchLockActivity.class, REQUEST_CODE_SEARCH_LOCK);
     }
 
     private void initFragment() {

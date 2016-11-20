@@ -54,7 +54,7 @@ public class AddLockModel implements AddLockContract.Model {
                     bleData.parkingAddress = body.parkingAddress;
                     bleData.cityCode = body.cityCode;
                     bleData.betocellphone = UserInfoManager.getInstance().getCellPhone();
-                    return (int) DbManager.getInstance().saveBleData(bleData);
+                    return DbManager.getInstance().saveBleData(bleData);
                 }
                 return 0;
             }
