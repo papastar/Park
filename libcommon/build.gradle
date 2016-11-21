@@ -27,5 +27,7 @@ dependencies {
     compile rootProject.ext.libGson
     compile rootProject.ext.libRxJava
     compile rootProject.ext.libRxAndroid
+    compile 'com.pnikosis:materialish-progress:1.7'
+    compile 'com.umeng.analytics:analytics:latest.integration'
 
 }

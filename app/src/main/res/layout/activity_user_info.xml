@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_user_info"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_bg"
+    android:orientation="vertical"
+    tools:context="com.papa.park.ui.activity.UserInfoActivity">
+
+    <include layout="@layout/common_toolbar"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/bg_common"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:id="@+id/head_img"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/img_head"/>
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/head_img"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="Papa"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_common"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="钱包"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"/>
+
+        <TextView
+            android:id="@+id/wallet_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/ic_arrow"
+            android:gravity="center"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="0.00元"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/locker_tv"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_bottom_side"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/ic_arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="地锁管理"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/size_32"/>
+
+
+    <TextView
+        android:id="@+id/rent_record_tv"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_common"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/ic_arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="租用管理"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/size_32"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_common"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="版本升级"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"/>
+
+        <TextView
+            android:id="@+id/version_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/ic_arrow"
+            android:gravity="center"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="当前版本:V1.0.0"/>
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/about_tv"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_bottom_side"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/ic_arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="关于U停车"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/size_32"/>
+
+    <TextView
+        android:id="@+id/driver_tv"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_bottom_side"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/ic_arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="车主服务"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/size_32"/>
+
+    <TextView
+        android:id="@+id/life_tv"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_bottom_side"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/ic_arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="U生活"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/size_32"/>
+
+</LinearLayout>

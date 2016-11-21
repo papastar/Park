@@ -9,13 +9,13 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.papa.libcommon.base.BaseFrameActivity;
 import com.papa.park.R;
 import com.papa.park.mvp.MainContract;
 import com.papa.park.mvp.model.MainModel;
 import com.papa.park.mvp.presenter.MainPresenter;
+import com.papa.park.ui.fragment.LeftMenuFragment;
 import com.papa.park.ui.fragment.MainLockFragment;
 
 import butterknife.Bind;
@@ -33,10 +33,10 @@ public class MainActivity extends BaseFrameActivity<MainPresenter, MainModel> im
     Toolbar mToolBar;
     @Bind(container)
     FrameLayout mContainer;
-    @Bind(R.id.navigation_view)
-    LinearLayout mNavigationView;
     @Bind(R.id.drawerLayout)
     DrawerLayout mDrawerLayout;
+
+    LeftMenuFragment mLeftMenuFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,9 @@ public class MainActivity extends BaseFrameActivity<MainPresenter, MainModel> im
     }
 
     private void initFragment() {
+        mLeftMenuFragment = (LeftMenuFragment) getSupportFragmentManager().findFragmentByTag
+                ("LeftMenuFragment");
+
         Fragment fragment = MainLockFragment.newInstance();
         setCurrFragment(fragment);
         toFragment(fragment);

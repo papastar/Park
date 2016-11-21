@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -12,10 +16,68 @@ android {
 
         buildConfigField "boolean", "DEV_MODE", "true"
     }
-    buildTypes {
+
+
+    signingConfigs {
+        debug {
+        }
         release {
+            def signingFile = file("../libcommon/signing.properties")
+            if (signingFile.canRead()) {
+                def Properties properties = new Properties()
+                properties.load(new FileInputStream(signingFile))
+
+                try {
+                    storeFile file(properties['STORE_FILE'])
+                    storePassword properties['STORE_PASSWORD']
+                    keyAlias properties['KEY_ALIAS']
+                    keyPassword properties['KEY_PASSWORD']
+                    println "RELEASE_BUILD: Signing..."
+                } catch (e) {
+                    throw new InvalidUserDataException("You should define STORE_FILE and STORE_PASSWORD and KEY_ALIAS and KEY_PASSWORD in signing.properties.")
+                }
+
+            } else {
+                println "RELEASE_BUILD: signing.properties not found"
+            }
+        }
+    }
+
+
+    buildTypes {
+        debug {
             minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+
+            buildConfigField "boolean", "DEV_MODE", "true"
+        }
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            //不显示 Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            //移除无用的 Resource
+            shrinkResources true
+            //资源文件按4字节对齐
+            zipAlignEnabled true
+            //关闭调试
+            debuggable false
+
+            // 多渠道打包
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为Elephant_v1.0_2016-10-11_fir.apk
+                        //def fileName = "UPark_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+                        def fileName = "UPark_v${defaultConfig.versionName}_${releaseTime()}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
         }
     }
 
@@ -24,6 +86,13 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+    //忽略 lint 错误
+    lintOptions {
+        abortOnError false
+    }
+
+
 }
 
 dependencies {

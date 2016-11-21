@@ -24,5 +24,8 @@ public interface LockerApi {
     Observable<List<LockerBean>> getLocker();
 
     @POST("lockers/save")
-    Observable<String> saveLock(@Body SaveBody body);
+    Observable<String>saveLock(@Body SaveBody body);
+
+    @POST("lockers/sn/{username}")
+    Observable<String>updateLock(@Body SaveBody body);
 }

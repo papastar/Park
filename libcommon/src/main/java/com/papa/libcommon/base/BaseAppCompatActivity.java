@@ -3,6 +3,7 @@ package com.papa.libcommon.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.papa.libcommon.util.netstatus.NetChangeObserver;
 import com.papa.libcommon.util.netstatus.NetStateReceiver;
 import com.papa.libcommon.util.netstatus.NetUtils;
 import com.papa.libcommon.widget.loading.VaryViewHelperController;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 
@@ -91,6 +93,18 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
         }
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onDestroy() {
@@ -253,5 +267,19 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
         mVaryViewChange.restore();
     }
 
+    protected void setToolbar(Toolbar toolbar, String title) {
+        if (toolbar != null) {
+            toolbar.setTitle(title);
+            setSupportActionBar(toolbar);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
+            if (getSupportActionBar() != null)
+                getSupportActionBar().setHomeButtonEnabled(true);//决定左上角的图标是否可以点击
+        }
+    }
 
 }

@@ -32,6 +32,7 @@ import com.polidea.rxandroidble.RxBleConnection;
 import com.polidea.rxandroidble.RxBleDevice;
 import com.polidea.rxandroidble.RxBleDeviceServices;
 import com.polidea.rxandroidble.RxBleScanResult;
+import com.polidea.rxandroidble.utils.ConnectionSharingAdapter;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -40,9 +41,8 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import rx.subjects.PublishSubject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,17 +74,14 @@ public class MainLockFragment extends BaseFragment {
     @Bind(R.id.operation_container)
     LinearLayout operationContainer;
 
+
+    private RxBleDevice mRxBleDevice;
+    private BleData mBleData;
     private RxBleClient mRxBleClient;
-
+    private PublishSubject<Void> disconnectTriggerSubject = PublishSubject.create();
     private boolean hasCollect = true;
-
-    RxBleDevice mRxBleDevice;
-
     private Observable<RxBleConnection> mConnectionObservable;
-
     private UUID mUUID;
-
-    BleData mBleData;
 
     public static MainLockFragment newInstance() {
         return new MainLockFragment();
@@ -177,7 +174,7 @@ public class MainLockFragment extends BaseFragment {
 //                            16);
 //                    connectionBlue();
 //                }
-                connectionBlue(data);
+                connect(data);
 
             } else if (dataBlue.length() >= 60
                     && (dataBlue.substring(10, 18)).equals("4a4f594f")) {
@@ -195,18 +192,23 @@ public class MainLockFragment extends BaseFragment {
 //                Message msg = new Message();
 //                msg.what = batteryInt;
 //                handler.sendMessage(msg);
-                connectionBlue(data);
+                connect(data);
             }
         }
         return false;
     }
 
-    private void connectionBlue(RxBleScanResult data) {
-        lockTv.setText("正在连接车锁");
-
+    private void connect(RxBleScanResult data) {
         mRxBleDevice = mRxBleClient.getBleDevice(data.getBleDevice().getMacAddress());
-        mConnectionObservable = mRxBleDevice
-                .establishConnection(getContext(), false);
+        mConnectionObservable = getConnectionObservable(mRxBleDevice);
+        setConnectStateChange(mRxBleDevice);
+
+        connectionBlue();
+    }
+
+
+    private void connectionBlue() {
+        lockTv.setText("正在连接车锁");
         addSubscription(mConnectionObservable, new SubscriberCallBack
                 <>(new ApiCallback<RxBleConnection>() {
             @Override
@@ -226,6 +228,36 @@ public class MainLockFragment extends BaseFragment {
                 discovery();
             }
         }));
+    }
+
+
+    private Observable<RxBleConnection> getConnectionObservable(RxBleDevice rxBleDevice) {
+        return rxBleDevice
+                .establishConnection(getContext(), false)
+                .takeUntil(disconnectTriggerSubject)
+//                .doOnUnsubscribe(this::clearSubscription)
+                .compose(new ConnectionSharingAdapter());
+    }
+
+    private void setConnectStateChange(RxBleDevice rxBleDevice) {
+        addSubscription(rxBleDevice.observeConnectionStateChanges(), new
+                Subscriber<RxBleConnection.RxBleConnectionState>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(RxBleConnection.RxBleConnectionState rxBleConnectionState) {
+
+                    }
+                });
+
     }
 
 
@@ -308,32 +340,31 @@ public class MainLockFragment extends BaseFragment {
 
 
     private void discovery() {
-        mConnectionObservable.flatMap(new Func1<RxBleConnection, Observable<RxBleDeviceServices>>
+        addSubscription(mConnectionObservable.flatMap(new Func1<RxBleConnection,
+                Observable<RxBleDeviceServices>>
                 () {
             @Override
             public Observable<RxBleDeviceServices> call(RxBleConnection rxBleConnection) {
                 return rxBleConnection.discoverServices();
             }
-        }).first().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<RxBleDeviceServices>() {
-                    @Override
-                    public void onCompleted() {
+        }).first(), new Subscriber<RxBleDeviceServices>() {
+            @Override
+            public void onCompleted() {
 
-                    }
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
 
-                    }
+            }
 
-                    @Override
-                    public void onNext(RxBleDeviceServices rxBleDeviceServices) {
-                        for (BluetoothGattService service : rxBleDeviceServices.getBluetoothGattServices()) {
-                            mUUID = service.getUuid();
-                        }
-                    }
-                });
+            @Override
+            public void onNext(RxBleDeviceServices rxBleDeviceServices) {
+                for (BluetoothGattService service : rxBleDeviceServices
+                        .getBluetoothGattServices()) {
+                    mUUID = service.getUuid();
+                }
+            }
+        });
     }
-
-
 }

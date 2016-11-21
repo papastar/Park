@@ -55,6 +55,10 @@ public class UserInfoManager {
         }
     }
 
+    public UserInfo getUserInfo() {
+        return mUserInfo;
+    }
+
     public String getToken() {
         if (mUserInfo != null)
             return mUserInfo.token;

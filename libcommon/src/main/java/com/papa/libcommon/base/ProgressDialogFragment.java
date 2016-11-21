@@ -65,7 +65,6 @@ public class ProgressDialogFragment extends DialogFragment {
 
     @Override
     public void onStart() {
-
         super.onStart();
     }
 

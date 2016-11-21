@@ -1,165 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/navigation_view"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_gravity="start|top"
-              android:background="@android:color/white"
-              android:clickable="true"
-              android:fitsSystemWindows="true"
-              android:orientation="vertical">
+<FrameLayout android:id="@+id/navigation_view"
+             xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_gravity="start|top"
+             android:background="@android:color/white"
+             android:clickable="true"
+             android:fitsSystemWindows="true">
 
-
-    <RelativeLayout
+    <fragment
+        class="com.papa.park.ui.fragment.LeftMenuFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="15dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="15dp">
-
-        <ImageView
-            android:id="@+id/head_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:src="@mipmap/ic_launcher"/>
-
-        <TextView
-            android:id="@+id/name_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_marginTop="12dp"
-            android:layout_toRightOf="@+id/head_img"
-            android:textColor="@color/color_333333"
-            android:textSize="@dimen/size_30"
-            tools:text="爬爬"/>
-
-        <TextView
-            android:id="@+id/phone_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/name_tv"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/head_img"
-            android:textColor="@color/color_333333"
-            android:textSize="@dimen/size_26"
-            tools:text="13400001111"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:tag="LeftMenuFragment"/>
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@drawable/shadow"/>
-
-    
-    <TextView
-        android:id="@+id/order_tv"
-        android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="@dimen/size_30"
-        android:text="@string/my_order"
-        android:textColor="@color/color_333333"
-        android:layout_height="50dp"/>
-
-    <TextView
-        android:id="@+id/wallet_tv"
-        android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="@dimen/size_30"
-        android:text="我的钱包"
-        android:textColor="@color/color_333333"
-        android:layout_height="50dp"/>
-
-    <TextView
-        android:id="@+id/my_lock_tv"
-        android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="@dimen/size_30"
-        android:text="我的地锁"
-        android:textColor="@color/color_333333"
-        android:layout_height="50dp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@drawable/shadow"/>
-
-
-    <TextView
-        android:id="@+id/lock_manager_tv"
-        android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="@dimen/size_30"
-        android:text="车锁管理"
-        android:textColor="@color/color_333333"
-        android:layout_height="50dp"/>
-
-    <TextView
-        android:id="@+id/release_park_tv"
-        android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="@dimen/size_30"
-        android:text="发布车位"
-        android:textColor="@color/color_333333"
-        android:layout_height="50dp"/>
-
-    <TextView
-        android:id="@+id/find_park_tv"
-        android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="@dimen/size_30"
-        android:text="寻找车位"
-        android:textColor="@color/color_333333"
-        android:layout_height="50dp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@drawable/shadow"/>
-
-    <TextView
-        android:id="@+id/message_center_tv"
-        android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="@dimen/size_30"
-        android:text="消息中心"
-        android:textColor="@color/color_333333"
-        android:layout_height="50dp"/>
-
-    <TextView
-        android:id="@+id/share_park_tv"
-        android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="@dimen/size_30"
-        android:text="车位分享"
-        android:textColor="@color/color_333333"
-        android:layout_height="50dp"/>
-
-</LinearLayout>
+</FrameLayout>
