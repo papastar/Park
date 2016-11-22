@@ -111,6 +111,7 @@ dependencies {
     compile rootProject.ext.libStethoOkHttp
     compile rootProject.ext.libBaseAdapter
     compile rootProject.ext.libOkHttpLoggingInterceptor
+    compile rootProject.ext.libTabLayout
     compile 'com.polidea.rxandroidble:rxandroidble:1.0.2'
 
 }

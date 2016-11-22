@@ -64,7 +64,8 @@ ext {
     libRxBindingDesign = "com.jakewharton.rxbinding:rxbinding-design:${rxBindingVersion}"
     libRxBindingRecyclerview = "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:${rxBindingVersion}"
 
-
+    libTabLayout = "com.flyco.tablayout:FlycoTabLayout_Lib:2.1.0@aar"
+    libLog = "com.elvishew:xlog:1.1.0"
 
 
     debugDependencies = [
