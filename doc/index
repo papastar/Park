@@ -9,3 +9,8 @@ CREATE TABLE BlueData(id int identity(1,1) primary key NOT NULL,bluename nvarche
         CREATE TABLE HardWare(id int identity(1,1) primary key NOT NULL,hardwarecode nvarcher(10) NULL,hardwaresoftcode nvarchar(10) NULL,openid nvarcher(100) NULL,sn nvarchar(15) NULL)
 
 
+http://doc.oschina.net/utc2016
+
+
+15818777540
+Wangfei2016

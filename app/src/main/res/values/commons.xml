@@ -36,4 +36,8 @@
     <dimen name="size_18">9sp</dimen>
 
     <dimen name="divide_height">1dp</dimen>
+
+    <dimen name="tab_layout_height">50dp</dimen>
+    <dimen name="tab_indicate_height">3dp</dimen>
+
 </resources>

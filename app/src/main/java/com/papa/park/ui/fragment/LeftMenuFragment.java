@@ -10,6 +10,7 @@ import com.papa.libcommon.base.BaseFragment;
 import com.papa.park.R;
 import com.papa.park.data.UserInfoManager;
 import com.papa.park.entity.bean.UserInfo;
+import com.papa.park.ui.activity.LockersActivity;
 import com.papa.park.ui.activity.UserInfoActivity;
 import com.papa.park.utils.CircleImageTransformation;
 import com.squareup.picasso.Picasso;
@@ -93,6 +94,11 @@ public class LeftMenuFragment extends BaseFragment {
     @OnClick(R.id.user_info_layout)
     void onUserClick() {
         readyGo(UserInfoActivity.class);
+    }
+
+    @OnClick(R.id.lock_manager_tv)
+    void onManagerLocker() {
+        readyGo(LockersActivity.class);
     }
 
 }

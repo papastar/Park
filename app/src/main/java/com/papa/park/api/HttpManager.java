@@ -21,11 +21,15 @@ import android.text.TextUtils;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.papa.libcommon.util.AppUtils;
+import com.papa.libcommon.util.netstatus.NetUtils;
 import com.papa.park.data.UserInfoManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
+import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,31 +40,30 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-/**
- * Created by Jun on 2016/7/27.
- */
+
 public class HttpManager {
 
     private static final int DEFAULT_TIMEOUT = 15000;
-    private static final String TAG = "HttpManager";
     private static final String BASE_URL = "http://120.24.4.26:7788/api/";
+    private static final String LBS_URL = "http://api.map.baidu.com/";
     private static HttpManager sManager;
     private OkHttpClient.Builder mOkHttpBuilder;
     private UserApi mUserApi;
     private LockerApi mLockerApi;
+    private BaiduLBSApi mBaiduLBSApi;
 
     private HttpManager(Context context) {
         mOkHttpBuilder = new OkHttpClient.Builder();
-        //if (BuildConfig.DEV_MODE) {
-            Stetho.initializeWithDefaults(context);
-            mOkHttpBuilder.addNetworkInterceptor(new StethoInterceptor());
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            mOkHttpBuilder.addInterceptor(new HttpLoggingInterceptor());
-       // }
-        mOkHttpBuilder.addNetworkInterceptor(getAuthHeadInterceptor());
-        mOkHttpBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
-                .readTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
+        buildStethoInterceptor(context, mOkHttpBuilder);
+        buildHttpLogInterceptor(mOkHttpBuilder);
+        buildAuthHeadInterceptor(mOkHttpBuilder);
+
+        //设置超时
+        mOkHttpBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        mOkHttpBuilder.readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        mOkHttpBuilder.writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        //错误重连
+        //mOkHttpBuilder.retryOnConnectionFailure(true);
     }
 
     public static HttpManager getInstance() {
@@ -71,16 +74,32 @@ public class HttpManager {
     }
 
     public UserApi getUserApi() {
-        return mUserApi == null ? configRetrofit(UserApi.class) : mUserApi;
+        return mUserApi == null ? configRetrofit(UserApi.class, BASE_URL) : mUserApi;
     }
 
     public LockerApi getLockerApi() {
-        return mLockerApi == null ? configRetrofit(LockerApi.class) : mLockerApi;
+        return mLockerApi == null ? configRetrofit(LockerApi.class, BASE_URL) : mLockerApi;
+    }
+
+    public BaiduLBSApi getBaiduLBSApi() {
+        return mBaiduLBSApi == null ? configRetrofit(BaiduLBSApi.class, LBS_URL) : mBaiduLBSApi;
     }
 
 
-    private Interceptor getAuthHeadInterceptor() {
-        return new Interceptor() {
+    private void buildStethoInterceptor(Context context, OkHttpClient.Builder builder) {
+        Stetho.initializeWithDefaults(context);
+        builder.addNetworkInterceptor(new StethoInterceptor());
+    }
+
+    private void buildHttpLogInterceptor(OkHttpClient.Builder builder) {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addInterceptor(loggingInterceptor);
+    }
+
+
+    private void buildAuthHeadInterceptor(OkHttpClient.Builder builder) {
+        Interceptor interceptor = new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request originalRequest = chain.request();
@@ -92,12 +111,48 @@ public class HttpManager {
                 return chain.proceed(builder.build());
             }
         };
+        builder.addInterceptor(interceptor);
+    }
+
+    private void buildCacheInterceptor(final Context context, OkHttpClient.Builder builder) {
+        File cacheFile = new File(context.getExternalCacheDir(), "cache");
+        Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);
+        Interceptor cacheInterceptor = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request request = chain.request();
+                if (!NetUtils.isNetworkAvailable(context)) {
+                    request = request.newBuilder()
+                            .cacheControl(CacheControl.FORCE_CACHE)
+                            .build();
+                }
+                Response response = chain.proceed(request);
+                if (!NetUtils.isNetworkAvailable(context)) {
+                    int maxAge = 0;
+                    // 有网络时 设置缓存超时时间0个小时
+                    response.newBuilder()
+                            .header("Cache-Control", "public, max-age=" + maxAge)
+                            .removeHeader("WuXiaolong")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
+                            .build();
+                } else {
+                    // 无网络时，设置超时为4周
+                    int maxStale = 60 * 60 * 24 * 28;
+                    response.newBuilder()
+                            .header("Cache-Control", "public, only-if-cached, max-stale=" +
+                                    maxStale)
+                            .removeHeader("nyn")
+                            .build();
+                }
+                return response;
+            }
+        };
+        builder.cache(cache).addInterceptor(cacheInterceptor);
     }
 
 
-    private <T> T configRetrofit(Class<T> service) {
+    private <T> T configRetrofit(Class<T> service, String url) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(url)
                 .client(mOkHttpBuilder.build())
                 //增加返回值为String的支持
                 .addConverterFactory(ScalarsConverterFactory.create())

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.papa.libcommon.control.OnVaryViewChange;
 import com.papa.libcommon.control.VaryViewChangeControll;
+import com.papa.libcommon.rx.RxManager;
 import com.papa.libcommon.util.BaseAppManager;
 import com.papa.libcommon.util.netstatus.NetChangeObserver;
 import com.papa.libcommon.util.netstatus.NetStateReceiver;
@@ -19,6 +20,10 @@ import com.papa.libcommon.widget.loading.VaryViewHelperController;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -34,8 +39,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
 
 
     protected OnVaryViewChange mVaryViewChange;
-
-
+    protected RxManager mRxManager;
     /**
      * loading view controller
      */
@@ -44,6 +48,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mRxManager = new RxManager();
         // base setup
         Bundle extras = getIntent().getExtras();
         if (null != extras) {
@@ -109,6 +114,9 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mRxManager != null) {
+            mRxManager.clear();
+        }
         BaseAppManager.getInstance().removeActivity(this);
         ButterKnife.unbind(this);
         NetStateReceiver.removeRegisterObserver(mNetChangeObserver);
@@ -148,14 +156,12 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     }
 
 
-
     /**
      * network disconnected
      */
     protected void onNetworkDisConnected() {
 
     }
-
 
 
     /**
@@ -280,6 +286,12 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
             if (getSupportActionBar() != null)
                 getSupportActionBar().setHomeButtonEnabled(true);//决定左上角的图标是否可以点击
         }
+    }
+
+
+    protected <T> void addSubscription(Observable<T> observable, Subscriber<T> subscriber) {
+        mRxManager.add(observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber));
     }
 
 }

@@ -46,7 +46,9 @@
 
             <Button
                 android:id="@+id/code_btn"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
