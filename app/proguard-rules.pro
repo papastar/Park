@@ -114,3 +114,9 @@
 #
 # Note: Doesn't include Javascript console lines. See https://github.com/facebook/stetho/tree/master/stetho-js-rhino#proguard
 -keep class com.facebook.stetho.** { *; }
+
+
+# baidu map
+-keep class com.baidu.** {*;}
+-keep class vi.com.** {*;}
+-dontwarn com.baidu.**

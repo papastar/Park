@@ -3,6 +3,7 @@ package com.papa.park.app;
 import android.app.Application;
 import android.content.Context;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.papa.libcommon.util.AppUtils;
 import com.papa.libcommon.util.Logger;
 import com.papa.libcommon.util.SharedPreferencesUtil;
@@ -28,7 +29,7 @@ public class App extends Application {
         ToastUtils.init(this);
         Logger.init("park", BuildConfig.DEV_MODE);
         SharedPreferencesUtil.init(this, getPackageName(), Context.MODE_PRIVATE);
-
+        SDKInitializer.initialize(getApplicationContext());
     }
 
 
