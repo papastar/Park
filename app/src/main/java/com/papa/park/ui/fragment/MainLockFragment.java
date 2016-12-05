@@ -97,7 +97,7 @@ public class MainLockFragment extends BaseFragment {
     @Override
     protected void initViewsAndEvents() {
         setUnbindInfo();
-        queryLockers();
+      //  queryLockers();
     }
 
     private void queryLockers() {

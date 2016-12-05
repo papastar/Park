@@ -7,6 +7,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.papa.libcommon.util.AppUtils;
+import com.papa.libcommon.util.Logger;
 
 /**
  * User: PAPA
@@ -72,7 +73,7 @@ public class LocationManager {
         locationClient.setLocOption(option);
     }
 
-    class LocationListener implements BDLocationListener {
+    private class LocationListener implements BDLocationListener {
 
         @Override
         public void onReceiveLocation(BDLocation location) {

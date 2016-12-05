@@ -10,6 +10,7 @@ import com.papa.libcommon.base.BaseFragment;
 import com.papa.park.R;
 import com.papa.park.data.UserInfoManager;
 import com.papa.park.entity.bean.UserInfo;
+import com.papa.park.ui.activity.LockerMapActivity;
 import com.papa.park.ui.activity.LockersActivity;
 import com.papa.park.ui.activity.UserInfoActivity;
 import com.papa.park.utils.CircleImageTransformation;
@@ -99,6 +100,11 @@ public class LeftMenuFragment extends BaseFragment {
     @OnClick(R.id.lock_manager_tv)
     void onManagerLocker() {
         readyGo(LockersActivity.class);
+    }
+
+    @OnClick(R.id.find_park_tv)
+    void onFindLockerTv() {
+        readyGo(LockerMapActivity.class);
     }
 
 }

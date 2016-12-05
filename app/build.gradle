@@ -113,5 +113,5 @@ dependencies {
     compile rootProject.ext.libOkHttpLoggingInterceptor
     compile rootProject.ext.libTabLayout
     compile 'com.polidea.rxandroidble:rxandroidble:1.0.2'
-
+    compile files('libs/locSDK_6.13.jar')
 }
