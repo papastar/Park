@@ -31,6 +31,11 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="ldQKuLCd8DMRTjbk1IMAGUFfkHAAAfyj"/>
+        <!--
+            <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="keb4LGtsu2QG8XCN2LnDUsXUDmvPU2Fc"/>
+        -->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5832bc53cae7e761370000a6"/>
@@ -67,6 +72,15 @@
         <activity android:name=".ui.activity.LockersActivity">
         </activity>
         <activity android:name=".ui.activity.LockerMapActivity">
+        </activity>
+        <activity
+            android:name=".ui.activity.ReserveLockerActivity"
+            android:label="@string/title_activity_reserve_locker"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity android:name=".ui.activity.RechargeActivity">
+        </activity>
+        <activity android:name=".ui.activity.RentConfirmActivity">
         </activity>
     </application>
 

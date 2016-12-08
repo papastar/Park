@@ -16,15 +16,13 @@ public final class BaiduConfig {
     public static final String GEOTABLE_ID = "158209";
 
 
-    public static Map<String,String> getCommonParam(){
-        Map<String,String> param = new HashMap<>();
-        param.put("ak",SERVER_AK);
-        param.put("geotable_id",GEOTABLE_ID);
+    public static Map<String, String> getCommonParam() {
+        Map<String, String> param = new HashMap<>();
+        param.put("ak", SERVER_AK);
+        param.put("geotable_id", GEOTABLE_ID);
+        param.put("page_size", String.valueOf(20));
         return param;
     }
-
-
-
 
 
 }

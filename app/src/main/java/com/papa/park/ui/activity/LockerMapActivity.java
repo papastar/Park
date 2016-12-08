@@ -1,8 +1,11 @@
 package com.papa.park.ui.activity;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -35,10 +38,13 @@ import com.papa.park.R;
 import com.papa.park.api.BaiduConfig;
 import com.papa.park.data.LocationInfo;
 import com.papa.park.data.LocationManager;
+import com.papa.park.entity.adapter.LockerPagerAdapter;
 import com.papa.park.ui.view.MapInfoView;
+import com.papa.park.ui.view.ZoomOutPageTransformer;
 import com.papa.park.utils.StringUtil;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -54,9 +60,14 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
     LocationClient mLocClient;
     BitmapDescriptor mCurrentMarker;
     boolean isFirstLoc = true; // 是否首次定位
+    @Bind(R.id.pager_layout)
+    FrameLayout mPagerLayout;
+
+    @Bind(R.id.view_pager)
+    ViewPager mViewPager;
+    LockerPagerAdapter mLockerPagerAdapter;
     private BaiduMap mBaiduMap;
     private LocationListener mListener = new LocationListener();
-
     private LinkedHashMap<Marker, CloudPoiInfo> mPoiInfoLinkedHashMap = new LinkedHashMap<>();
 
     @Override
@@ -70,6 +81,7 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
         info.ak = BaiduConfig.SERVER_AK;
         info.geoTableId = StringUtil.parseInt(BaiduConfig.GEOTABLE_ID);
         info.tags = "";
+        info.filter = "lockerPhone:13418459758";
         info.region = LocationManager.getInstance().getLocationInfo().getCityName();
         CloudManager.getInstance().localSearch(info);
     }
@@ -93,7 +105,7 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
 
     @Override
     protected void initViewsAndEvents() {
-        setToolbar(mToolBar,"寻找车位");
+        setToolbar(mToolBar, "寻找车位");
         initMap();
         CloudManager.getInstance().init(this);
         loadLBS();
@@ -179,6 +191,8 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
             LatLngBounds bounds = builder.build();
             MapStatusUpdate u = MapStatusUpdateFactory.newLatLngBounds(bounds);
             mBaiduMap.animateMapStatus(u);
+
+            bindViewPager(result.poiList);
         }
     }
 
@@ -190,6 +204,34 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
     @Override
     public void onGetCloudRgcResult(CloudRgcResult cloudRgcResult, int i) {
 
+    }
+
+    private void bindViewPager(List<CloudPoiInfo> infoList) {
+        mLockerPagerAdapter = new LockerPagerAdapter(this, infoList);
+        mViewPager.setAdapter(mLockerPagerAdapter);
+        mViewPager.setPageTransformer(false, new ZoomOutPageTransformer());
+        mViewPager.setOffscreenPageLimit(infoList.size());
+        mViewPager.setPageMargin(TypedValue.complexToDimensionPixelSize(20, getResources()
+                .getDisplayMetrics()));
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int
+                    positionOffsetPixels) {
+                if (mPagerLayout != null) {
+                    mPagerLayout.invalidate();
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override

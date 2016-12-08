@@ -9,21 +9,57 @@
         android:id="@+id/name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:textColor="@color/color_333333"
         android:textSize="@dimen/size_32"
         tools:text="风和日丽"/>
 
     <TextView
-        android:id="@+id/status_tv"
-        android:layout_width="80dp"
+        android:id="@+id/state_tv"
+        android:gravity="center"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/name_tv"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        android:background="@color/colorPrimary"
+        android:padding="5dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size_24"
+        tools:text="出租"/>
+
+    <View
+        android:id="@+id/divide_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divide_height"
+        android:layout_below="@+id/name_tv"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/color_divide"/>
+
+
+    <TextView
+        android:id="@+id/info_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divide_view"
+        android:minLines="3"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/size_30"
+        tools:text="详情"/>
+
+
+    <TextView
+        android:id="@+id/operate_tv"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_tv"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_board"
         android:gravity="center"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:textSize="@dimen/size_30"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/size_32"
         tools:text="出租"/>
+
 
 </RelativeLayout>

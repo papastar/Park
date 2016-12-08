@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_rent_confirm"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.papa.park.ui.activity.RentConfirmActivity">
+
+    <include layout="@layout/common_toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_common"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="联系人：爬爬"/>
+
+        <TextView
+            android:id="@+id/phone_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:background="@drawable/bg_bottom_side"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="联系人：爬爬"/>
+
+
+        <TextView
+            android:id="@+id/park_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_common"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="联系人：爬爬"/>
+
+        <TextView
+            android:id="@+id/address_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_bottom_side"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="联系人：爬爬"/>
+
+
+        <TextView
+            android:id="@+id/first_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_common"
+            android:drawableRight="@drawable/ic_arrow"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="联系人：爬爬"/>
+
+        <TextView
+            android:id="@+id/second_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_bottom_side"
+            android:drawableRight="@drawable/ic_arrow"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="联系人：爬爬"/>
+
+        <Button
+            android:id="@+id/confirm_btn"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bg_btn_selector"
+            android:text="确认发布"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

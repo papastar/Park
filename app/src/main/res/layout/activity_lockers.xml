@@ -2,7 +2,6 @@
 <LinearLayout
     android:id="@+id/activity_lockers"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tl="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,11 +10,12 @@
 
     <include layout="@layout/common_toolbar"/>
 
-    <ListView
-        android:id="@+id/list_view"
+
+    <fragment
+        class="com.papa.park.ui.fragment.LockerFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"/>
+        android:tag="com.papa.park.ui.fragment.LockerFragment"/>
 
 
 </LinearLayout>

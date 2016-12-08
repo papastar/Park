@@ -81,10 +81,13 @@ public class LocationManager {
             if (location.getLocType() == BDLocation.TypeGpsLocation || location.getLocType() ==
                     BDLocation.TypeNetWorkLocation || location.getLocType() == BDLocation
                     .TypeOffLineLocation) {
+                Logger.d("BDLocation Success");
                 mLocationInfo = new LocationInfo(location.getAddrStr(), location.getLatitude(),
                         location.getLongitude());
                 mLocationInfo.setCityCode(location.getCityCode());
                 mLocationInfo.setCityName(location.getCity());
+            }else{
+                Logger.d("BDLocation Error");
             }
 
 

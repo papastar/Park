@@ -27,7 +27,7 @@ public class App extends Application {
     private void init() {
         AppUtils.init(this);
         ToastUtils.init(this);
-        Logger.init("park", BuildConfig.DEV_MODE);
+        Logger.init("Park", BuildConfig.DEV_MODE);
         SharedPreferencesUtil.init(this, getPackageName(), Context.MODE_PRIVATE);
         SDKInitializer.initialize(getApplicationContext());
     }

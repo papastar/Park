@@ -1,7 +1,8 @@
 package com.papa.park.api;
 
 import com.papa.park.entity.bean.BaseBean;
-import com.papa.park.entity.bean.LockerLBSBean;
+import com.papa.park.entity.bean.LockerLBSListResponse;
+import com.papa.park.entity.bean.LockerLBSResponse;
 
 import java.util.Map;
 
@@ -20,11 +21,14 @@ import rx.Observable;
 public interface BaiduLBSApi {
 
 
-    @GET("geosearch/v3/local")
-    Observable<LockerLBSBean> getLocker(@QueryMap Map<String, String> map);
+    @GET("geodata/v3/poi/list")
+    Observable<LockerLBSListResponse> getLocker(@QueryMap Map<String, String> map);
 
     @FormUrlEncoded
     @POST("geodata/v3/poi/update")
     Observable<BaseBean> updatePoi(@FieldMap Map<String,String> map);
+
+    @GET("/geodata/v3/poi/detail")
+    Observable<LockerLBSResponse> getDetail(@QueryMap Map<String, String> map);
 
 }

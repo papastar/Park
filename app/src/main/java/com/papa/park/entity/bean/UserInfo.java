@@ -17,5 +17,6 @@ public class UserInfo {
     public String cellphone;
     public String token;
     public int _v;
+    public String balance;
 
 }

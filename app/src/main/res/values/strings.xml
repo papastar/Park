@@ -13,4 +13,9 @@
     <string name="action_save">保存</string>
     <string name="search_lock">搜索车锁</string>
     <string name="search_result">搜索结果</string>
+    <string name="price_of">价格:%s元/小时</string>
+    <string name="title_activity_reserve_locker">ReserveLockerActivity</string>
+    <string name="pay_type_wechat">微信</string>
+    <string name="pay_type_alipay">支付宝</string>
+    <string name="rent_price_of">首停一小时%1$s元，之后每小时%2$s元</string>
 </resources>
