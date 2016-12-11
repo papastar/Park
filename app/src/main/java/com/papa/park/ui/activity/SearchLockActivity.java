@@ -1,20 +1,24 @@
 package com.papa.park.ui.activity;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.joanzapata.android.BaseAdapterHelper;
 import com.joanzapata.android.QuickAdapter;
+import com.litesuits.bluetooth.LiteBluetooth;
 import com.papa.libcommon.base.BaseFrameActivity;
+import com.papa.libcommon.util.ToastUtils;
 import com.papa.park.R;
 import com.papa.park.ble.BleUtil;
 import com.papa.park.ble.iBeaconClass;
+import com.papa.park.data.BleManager;
+import com.papa.park.entity.bean.BleBean;
 import com.papa.park.mvp.SearchLockContract;
 import com.papa.park.mvp.model.SearchLockModel;
 import com.papa.park.mvp.presenter.SearchLockPresenter;
@@ -35,7 +39,7 @@ public class SearchLockActivity extends BaseFrameActivity<SearchLockPresenter, S
     ListView listView;
 
 
-    QuickAdapter<RxBleScanResult> mAdapter;
+    QuickAdapter<BleBean> mAdapter;
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -50,11 +54,11 @@ public class SearchLockActivity extends BaseFrameActivity<SearchLockPresenter, S
     @Override
     protected void initViewsAndEvents() {
         setToolbar(toolbar, "搜索车锁");
-        mAdapter = new QuickAdapter<RxBleScanResult>(this, R.layout.scan_result_list_item) {
+        mAdapter = new QuickAdapter<BleBean>(this, R.layout.scan_result_list_item) {
             @Override
-            protected void convert(BaseAdapterHelper helper, RxBleScanResult item) {
-                helper.setText(R.id.name_tv, TextUtils.isEmpty(item.getBleDevice().getName()) ?
-                        "未知设备" : item.getBleDevice().getName());
+            protected void convert(BaseAdapterHelper helper, BleBean item) {
+                helper.setText(R.id.name_tv, TextUtils.isEmpty(item.getDevice().getName()) ?
+                        "未知设备" : item.getDevice().getName());
                 helper.setText(R.id.rssi_tv, String.valueOf(item.getRssi()));
             }
         };
@@ -62,10 +66,20 @@ public class SearchLockActivity extends BaseFrameActivity<SearchLockPresenter, S
         listView.setOnItemClickListener(this);
         scanView.setWillNotDraw(false);
         scanView.setSearching(true);
-        mPresenter.startScan();
 
+
+        startScan();
+    }
+
+    private void startScan() {
+        LiteBluetooth liteBluetooth = BleManager.getInstance().getLiteBluetooth();
+        if (!liteBluetooth.getBluetoothAdapter().isEnabled())
+            liteBluetooth.enableBluetooth(this, 1);
+        else
+            mPresenter.startLiteScan();
 
     }
+
 
     @Override
     protected View getLoadingTargetView() {
@@ -75,23 +89,47 @@ public class SearchLockActivity extends BaseFrameActivity<SearchLockPresenter, S
 
     @Override
     public void onGetScanResult(RxBleScanResult data) {
-        if (data == null)
+//        if (data == null)
+//            return;
+//        iBeaconClass.iBeacon iBeacon = BleUtil.covert(data);
+//        if (!BleUtil.filter(iBeacon))
+//            return;
+//
+//        boolean contain = false;
+//        for (int index = 0; index < mAdapter.getCount(); index++) {
+//            if (TextUtils.equals(data.getBleDevice().getMacAddress(), mAdapter.getItem(index)
+//                    .getBleDevice().getMacAddress())) {
+//                mAdapter.set(index, data);
+//                contain = true;
+//            }
+//        }
+//        if (!contain)
+//            mAdapter.add(data);
+    }
+
+    @Override
+    public void onGetScanResult(BluetoothDevice device, int rssi, byte[] scanRecord) {
+        if (device == null)
             return;
-        Log.d("RxBleScanResult", data.getBleDevice().getName());
-        iBeaconClass.iBeacon iBeacon = BleUtil.covert(data);
+        iBeaconClass.iBeacon iBeacon = BleUtil.covert(device, rssi, scanRecord);
         if (!BleUtil.filter(iBeacon))
             return;
-
+        BleBean bleBean = new BleBean(device, rssi, scanRecord);
         boolean contain = false;
         for (int index = 0; index < mAdapter.getCount(); index++) {
-            if (TextUtils.equals(data.getBleDevice().getMacAddress(), mAdapter.getItem(index)
-                    .getBleDevice().getMacAddress())) {
-                mAdapter.set(index, data);
+            if (TextUtils.equals(device.getAddress(), mAdapter.getItem(index).getDevice()
+                    .getAddress())) {
+                mAdapter.set(index, bleBean);
                 contain = true;
             }
         }
         if (!contain)
-            mAdapter.add(data);
+            mAdapter.add(bleBean);
+    }
+
+    @Override
+    public void onScanTimeOut() {
+        ToastUtils.getInstance().showToast("扫描超时");
     }
 
     @Override
@@ -111,5 +149,19 @@ public class SearchLockActivity extends BaseFrameActivity<SearchLockPresenter, S
             setResult(RESULT_OK, data);
             finish();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            mPresenter.startLiteScan();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.stopLiteScan();
     }
 }

@@ -15,10 +15,22 @@ import android.widget.TextView;
 import com.joanzapata.android.BaseAdapterHelper;
 import com.joanzapata.android.QuickAdapter;
 import com.papa.libcommon.base.BaseAppCompatActivity;
+import com.papa.libcommon.base.ProgressDialogFragment;
+import com.papa.park.BuildConfig;
 import com.papa.park.R;
+import com.papa.park.api.ApiCallback;
+import com.papa.park.api.HttpManager;
+import com.papa.park.api.PayApi;
+import com.papa.park.api.SubscriberCallBack;
+import com.papa.park.data.UserInfoManager;
+import com.papa.park.data.WechatPay;
+import com.papa.park.utils.JSONUtils;
+import com.papa.park.utils.KeyConstant;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -127,8 +139,50 @@ public class RechargeActivity extends BaseAppCompatActivity {
     }
 
     @OnClick(R.id.recharge_btn)
-    void onRechargeClick(){
+    void onRechargeClick() {
+        if (mTypeIndex == 0)
+            payByAliPay();
+        else
+            payByWechatPay();
+    }
 
+
+    private void payByAliPay() {
+
+    }
+
+
+    private void payByWechatPay() {
+        Map<String, String> map = new HashMap<>();
+        map.put("payType", "wxpay");
+        //map.put("cashnum", mRechargeValueAdapter.getItem(mValueIndex).replace("元", ""));
+        map.put("cashnum", BuildConfig.DEBUG ? "0.1" : mRechargeValueAdapter.getItem(mValueIndex)
+                .replace("元", ""));
+        map.put("test", BuildConfig.DEBUG ? "true" : "false");
+        map.put("userId", UserInfoManager.getInstance().getUserInfo()._id);
+
+        PayApi api = HttpManager.getInstance().getApi(PayApi.class, HttpManager.PAY_URL);
+        ProgressDialogFragment.showProgress(getSupportFragmentManager());
+        addSubscription(api.getPayInfo(map), new SubscriberCallBack<>(new ApiCallback<String>() {
+
+            @Override
+            public void onCompleted() {
+                ProgressDialogFragment.dismissProgress(getSupportFragmentManager());
+            }
+
+            @Override
+            public void onFailure(int code, String message, Exception e) {
+                showToast(message);
+            }
+
+            @Override
+            public void onSuccess(String data) {
+                JSONUtils.getString(data, KeyConstant.KEY_DATA, "");
+                if (!TextUtils.isEmpty(data)) {
+                    WechatPay.startWechatPay(RechargeActivity.this, data);
+                }
+            }
+        }));
     }
 
 }

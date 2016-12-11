@@ -31,6 +31,18 @@ public class LockerPagerAdapter extends PagerAdapter {
         mInfoList = infoList;
     }
 
+    public List<CloudPoiInfo> getCloudPoiInfoList() {
+        return mInfoList;
+    }
+
+    public int getPosition(CloudPoiInfo info) {
+        if (mInfoList != null)
+            return mInfoList.indexOf(info);
+        return 0;
+
+    }
+
+
     @Override
     public int getCount() {
         return mInfoList != null ? mInfoList.size() : 0;
@@ -64,9 +76,11 @@ public class LockerPagerAdapter extends PagerAdapter {
         nameTv.setText(cloudPoiInfo.title);
         TextView infoTv = (TextView) view.findViewById(R.id.info_tv);
         Map<String, Object> extras = cloudPoiInfo.extras;
-        if (extras != null && extras.containsKey("firstStopPrice")) {
-            Object firstStopPrice = extras.get("firstStopPrice");
-            infoTv.setText(mContext.getString(R.string.price_of, firstStopPrice));
+        if (extras != null) {
+            String rentFirstHourPrice = (String) extras.get("rentFirstHourPrice");
+            String rentPerHourPrice = (String) extras.get("rentPerHourPrice");
+            infoTv.setText(mContext.getString(R.string.rent_price_of,
+                    rentFirstHourPrice, rentPerHourPrice));
         }
 
         container.addView(view);

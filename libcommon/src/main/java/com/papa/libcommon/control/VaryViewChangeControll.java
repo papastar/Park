@@ -29,7 +29,7 @@ public class VaryViewChangeControll implements OnVaryViewChange {
 
     @Override
     public void showEmpty() {
-        mVaryViewHelperController.showEmpty("empty", new View.OnClickListener() {
+        mVaryViewHelperController.showEmpty("暂无数据", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

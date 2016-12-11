@@ -17,7 +17,6 @@ package com.papa.park.api;
 
 import com.papa.park.entity.bean.CodeBean;
 import com.papa.park.entity.bean.UserInfo;
-import com.papa.park.entity.body.LockBody;
 import com.papa.park.entity.body.LoginBody;
 
 import retrofit2.http.Body;

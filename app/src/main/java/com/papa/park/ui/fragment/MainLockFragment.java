@@ -15,8 +15,6 @@ import android.widget.TextView;
 
 import com.papa.libcommon.base.BaseFragment;
 import com.papa.park.R;
-import com.papa.park.api.ApiCallback;
-import com.papa.park.api.SubscriberCallBack;
 import com.papa.park.ble.BleUtil;
 import com.papa.park.ble.SimpleCrypto;
 import com.papa.park.ble.iBeaconClass;
@@ -97,7 +95,7 @@ public class MainLockFragment extends BaseFragment {
     @Override
     protected void initViewsAndEvents() {
         setUnbindInfo();
-      //  queryLockers();
+        queryLockers();
     }
 
     private void queryLockers() {
@@ -114,27 +112,27 @@ public class MainLockFragment extends BaseFragment {
     private void startScan(final ArrayList<BleData> list) {
         lockTv.setText("正在扫描设备");
 
-        addSubscription(mRxBleClient.scanBleDevices(), new
-                SubscriberCallBack<>(new ApiCallback<RxBleScanResult>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onFailure(int code, String message) {
-
-            }
-
-            @Override
-            public void onSuccess(RxBleScanResult data) {
-                int index = checkLock(list, data.getBleDevice().getMacAddress());
-                if (index >= 0) {
-                    mBleData = list.get(index);
-                    checkBeacon(data);
-                }
-            }
-        }));
+//        addSubscription(mRxBleClient.scanBleDevices(), new
+//                SubscriberCallBack<>(new ApiCallback<RxBleScanResult>() {
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(int code, String message) {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(RxBleScanResult data) {
+//                int index = checkLock(list, data.getBleDevice().getMacAddress());
+//                if (index >= 0) {
+//                    mBleData = list.get(index);
+//                    checkBeacon(data);
+//                }
+//            }
+//        }));
 
     }
 
@@ -209,25 +207,25 @@ public class MainLockFragment extends BaseFragment {
 
     private void connectionBlue() {
         lockTv.setText("正在连接车锁");
-        addSubscription(mConnectionObservable, new SubscriberCallBack
-                <>(new ApiCallback<RxBleConnection>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onFailure(int code, String message) {
-
-            }
-
-            @Override
-            public void onSuccess(RxBleConnection data) {
-                lockTv.setText("车锁已连接");
-                hasCollect = true;
-                discovery();
-            }
-        }));
+//        addSubscription(mConnectionObservable, new SubscriberCallBack
+//                <>(new ApiCallback<RxBleConnection>() {
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(int code, String message) {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(RxBleConnection data) {
+//                lockTv.setText("车锁已连接");
+//                hasCollect = true;
+//                discovery();
+//            }
+//        }));
     }
 
 
@@ -313,28 +311,28 @@ public class MainLockFragment extends BaseFragment {
             return;
         String action = BleUtil.getCharAction("02", "F0", mBleData.key);
         final byte[] data = SimpleCrypto.hexStringToBytes(action);
-        addSubscription(mConnectionObservable.flatMap(new Func1<RxBleConnection,
-                Observable<byte[]>>() {
-            @Override
-            public Observable<byte[]> call(RxBleConnection rxBleConnection) {
-                return rxBleConnection.writeCharacteristic(mUUID, data);
-            }
-        }), new SubscriberCallBack<>(new ApiCallback<byte[]>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onFailure(int code, String message) {
-
-            }
-
-            @Override
-            public void onSuccess(byte[] data) {
-
-            }
-        }));
+//        addSubscription(mConnectionObservable.flatMap(new Func1<RxBleConnection,
+//                Observable<byte[]>>() {
+//            @Override
+//            public Observable<byte[]> call(RxBleConnection rxBleConnection) {
+//                return rxBleConnection.writeCharacteristic(mUUID, data);
+//            }
+//        }), new SubscriberCallBack<>(new ApiCallback<byte[]>() {
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(int code, String message) {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(byte[] data) {
+//
+//            }
+//        }));
 
     }
 

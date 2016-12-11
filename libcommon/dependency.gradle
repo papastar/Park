@@ -6,7 +6,7 @@ allprojects {
 
 def daggerVersion = "2.0.2"
 def retrofitVersion = "2.1.0"
-def supportVersion = "24.2.1"
+def supportVersion = "23.2.1"
 def rxJavaVersion = '1.2.2'
 def rxAndroidVersion = "1.2.1"
 def rxBindingVersion = '0.4.0'

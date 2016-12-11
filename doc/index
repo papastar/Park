@@ -9,11 +9,25 @@ CREATE TABLE BlueData(id int identity(1,1) primary key NOT NULL,bluename nvarche
         CREATE TABLE HardWare(id int identity(1,1) primary key NOT NULL,hardwarecode nvarcher(10) NULL,hardwaresoftcode nvarchar(10) NULL,openid nvarcher(100) NULL,sn nvarchar(15) NULL)
 
 
+15818777540
+Wangfei2016
 http://doc.oschina.net/utc2016
 
+write up: 02 00 01 00 00 24 BB BB BB BB 03 72 80 c1 2c c4 1b f1 43
+    down: 02 00 01 00 00 24 BB BB BB BB 62 01 02 22 41 3f 29 82 01
+
+
+    02 00 01 00 00 24 BB BB BB BB 5f 27 c0 0b f6 30 65 e4 d3
+
+    WuZuoXbPcLuojejI
 
 15818777540
 Wangfei2016
 
 
 http://lbsyun.baidu.com/index.php?title=androidsdk/guide/basicmap
+
+
+wxpay.conf.app_id=wx2d6b9ac0c2ced49c
+wxpay.conf.mch_id=1416474802
+wxpay.conf.api_secret=654991884ca18d4f253542848814968c

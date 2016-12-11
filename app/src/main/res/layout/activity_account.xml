@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_account"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.papa.park.ui.activity.AccountActivity">
+
+    <include layout="@layout/common_toolbar"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:background="@drawable/bg_common"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="用户名"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"/>
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/ic_arrow"
+            android:gravity="center"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="0.00元"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:background="@drawable/bg_bottom_side"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="手机"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"/>
+
+        <TextView
+            android:id="@+id/phone_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/ic_arrow"
+            android:gravity="center"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/size_32"
+            tools:text="0.00元"/>
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/login_out_btn"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_btn_selector"
+        android:text="退出登陆"/>
+
+
+</LinearLayout>

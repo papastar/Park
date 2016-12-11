@@ -85,7 +85,7 @@ public class RentConfirmActivity extends BaseAppCompatActivity {
             }
 
             @Override
-            public void onFailure(int code, String message) {
+            public void onFailure(int code, String message,Exception e) {
                 showError();
             }
 
@@ -149,7 +149,7 @@ public class RentConfirmActivity extends BaseAppCompatActivity {
             }
 
             @Override
-            public void onFailure(int code, String message) {
+            public void onFailure(int code, String message,Exception e) {
                 ProgressDialogFragment.dismissProgress(getSupportFragmentManager());
                 showToast(message);
             }

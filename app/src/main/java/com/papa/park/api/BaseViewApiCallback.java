@@ -22,7 +22,7 @@ public abstract class BaseViewApiCallback<T> implements ApiCallback<T> {
     }
 
     @Override
-    public void onFailure(int code, String message) {
+    public void onFailure(int code, String message, Exception e) {
         mBaseView.onRequestError(message);
     }
 

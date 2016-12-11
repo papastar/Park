@@ -188,6 +188,7 @@ public class LoginActivity extends BaseFrameActivity<LoginPresenter, LoginModel>
     @Override
     public void onGetAndSaveLockComplete() {
         readyGo(MainActivity.class);
+        finish();
     }
 
 

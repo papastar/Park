@@ -31,4 +31,8 @@ public interface BaiduLBSApi {
     @GET("/geodata/v3/poi/detail")
     Observable<LockerLBSResponse> getDetail(@QueryMap Map<String, String> map);
 
+    @FormUrlEncoded
+    @POST("geodata/v3/poi/create")
+    Observable<BaseBean> creatPoi(@FieldMap Map<String,String> map);
+
 }

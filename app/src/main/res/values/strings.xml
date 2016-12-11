@@ -18,4 +18,7 @@
     <string name="pay_type_wechat">微信</string>
     <string name="pay_type_alipay">支付宝</string>
     <string name="rent_price_of">首停一小时%1$s元，之后每小时%2$s元</string>
+    <string name="yuan_of">%s元</string>
+
+    <string name="rent_price_of_divide">首停一小时%1$s元\n之后每小时%2$s元</string>
 </resources>

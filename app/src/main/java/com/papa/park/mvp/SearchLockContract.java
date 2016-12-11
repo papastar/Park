@@ -1,5 +1,8 @@
 package com.papa.park.mvp;
 
+import android.bluetooth.BluetoothDevice;
+
+import com.litesuits.bluetooth.scan.PeriodScanCallback;
 import com.papa.libcommon.mvp.BaseModel;
 import com.papa.libcommon.mvp.BasePresenter;
 import com.papa.libcommon.mvp.BaseView;
@@ -16,14 +19,22 @@ public interface SearchLockContract {
     interface Model extends BaseModel {
         public Observable<RxBleScanResult> scanDevices();
 
+        public void scanDevices(PeriodScanCallback callback);
+
+        public void stopScan(PeriodScanCallback callback);
+
     }
 
     interface View extends BaseView {
         void onGetScanResult(RxBleScanResult iBeacon);
+        void onGetScanResult(BluetoothDevice device, int rssi, byte[] scanRecord);
+        void onScanTimeOut();
     }
 
 
     abstract class Presenter extends BasePresenter<Model, View> {
         public abstract void startScan();
+        public abstract void startLiteScan();
+        public abstract void stopLiteScan();
     }
 }

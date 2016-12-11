@@ -62,9 +62,9 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
     boolean isFirstLoc = true; // 是否首次定位
     @Bind(R.id.pager_layout)
     FrameLayout mPagerLayout;
-
     @Bind(R.id.view_pager)
     ViewPager mViewPager;
+
     LockerPagerAdapter mLockerPagerAdapter;
     private BaiduMap mBaiduMap;
     private LocationListener mListener = new LocationListener();
@@ -73,7 +73,6 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     private void loadLBS() {
@@ -81,7 +80,6 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
         info.ak = BaiduConfig.SERVER_AK;
         info.geoTableId = StringUtil.parseInt(BaiduConfig.GEOTABLE_ID);
         info.tags = "";
-        info.filter = "lockerPhone:13418459758";
         info.region = LocationManager.getInstance().getLocationInfo().getCityName();
         CloudManager.getInstance().localSearch(info);
     }
@@ -154,8 +152,6 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
             mMapView.onDestroy();
             mMapView = null;
         }
-
-
         CloudManager.getInstance().destroy();
     }
 
@@ -224,7 +220,7 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
 
             @Override
             public void onPageSelected(int position) {
-
+                updateMapPoint(mLockerPagerAdapter.getCloudPoiInfoList().get(position));
             }
 
             @Override
@@ -234,15 +230,20 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
         });
     }
 
+    private void updateMapPoint(CloudPoiInfo info) {
+        LatLng latLng = new LatLng(info.latitude, info.longitude);
+        MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
+        mBaiduMap.animateMapStatus(u);
+    }
+
+
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (mPoiInfoLinkedHashMap.containsKey(marker)) {
             CloudPoiInfo cloudPoiInfo = mPoiInfoLinkedHashMap.get(marker);
             if (cloudPoiInfo != null) {
-                MapInfoView view = new MapInfoView(this);
-                view.setData(cloudPoiInfo.title);
-                InfoWindow infoWindow = new InfoWindow(view, marker.getPosition(), -47);
-                mBaiduMap.showInfoWindow(infoWindow);
+                showInfoWindow(cloudPoiInfo);
+                scrollPosition(cloudPoiInfo);
                 return true;
             }
         }
@@ -250,6 +251,19 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
         return false;
     }
 
+
+    private void showInfoWindow(CloudPoiInfo cloudPoiInfo) {
+        MapInfoView view = new MapInfoView(this);
+        view.setData(cloudPoiInfo);
+        InfoWindow infoWindow = new InfoWindow(view, new LatLng(cloudPoiInfo.latitude,
+                cloudPoiInfo.longitude), -47);
+        mBaiduMap.showInfoWindow(infoWindow);
+    }
+
+
+    private void scrollPosition(CloudPoiInfo cloudPoiInfo) {
+        mViewPager.setCurrentItem(mLockerPagerAdapter.getPosition(cloudPoiInfo), true);
+    }
 
     /**
      * 定位SDK监听函数

@@ -46,7 +46,7 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
     private String mBleName;
     private String mHardware = "";
 
-    private String mToken, mSn, mKey;
+    private String mInfo;
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -108,7 +108,7 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
     }
 
     private void save() {
-        mPresenter.save(createSaveBody(mToken, mSn, mKey));
+        mPresenter.save(createSaveBody(mInfo));
     }
 
     /**
@@ -118,10 +118,9 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
      */
     @Override
     public void onGetLockState(String state) {
-        mToken = JSONUtils.getString(state, "token", "");
-        mSn = JSONUtils.getString(state, "sn", "");
-        mKey = JSONUtils.getString(state, "key", "");
-        if (TextUtils.isEmpty(mToken)) {
+        mInfo = state;
+        String token = JSONUtils.getString(state, "token", "");
+        if (TextUtils.isEmpty(token)) {
             if (TextUtils.equals(state, "There")) {
                 showToast("车锁已绑定");
             } else {
@@ -130,13 +129,14 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
             Intent intent = new Intent();
             intent.putExtra(KeyConstant.KEY_DATA, Integer.valueOf(0));
             setResult(RESULT_OK);
+            finish();
         }
     }
 
     @Override
     public void onSaveLockResult(Integer result) {
         Intent intent = new Intent();
-        if (result > 0) {
+        if (result == 0) {
             showToast("添加成功");
             setResult(RESULT_OK, intent);
         } else {
@@ -145,14 +145,20 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
         }
     }
 
-    private SaveBody createSaveBody(String token, String sn, String key) {
+    /**
+     * {"owner":"57ee0c9c7ad35e4b7673d6da","sn":"a107167f3e","bluetooth":"54:4A:16:35:74:89",
+     * "bluetoothName":"UBO_544A16357489","token":"12302d5c1a12908f3d0f211657d0113e",
+     * "key":"EbozdIyMFOApokVp","_id":"582b1c7556271a4e22ee8764"}
+     */
+    private SaveBody createSaveBody(String info) {
         LocationInfo locationInfo = LocationManager.getInstance().getLocationInfo();
         SaveBody body = new SaveBody();
-        body.lockerToken = token;
-        body.bluetooth = mBleAddress;
-        body.bluetoothName = mBleName;
+        body.id = JSONUtils.getString(info,"_id","");
+        body.lockerToken = JSONUtils.getString(info,"token","");
+        body.bluetooth = JSONUtils.getString(info,"bluetooth","");
+        body.bluetoothName =  JSONUtils.getString(info,"bluetoothName","");
         body.note = mNoteEdit.getEditableText().toString();
-        body.sn = sn;
+        body.sn = JSONUtils.getString(info,"sn","");
         body.lockLat = String.valueOf(locationInfo.getLatitude());
         body.lockLng = String.valueOf(locationInfo.getLongitude());
         body.lockAddress = mParkingNoEdit.getEditableText().toString();
@@ -160,7 +166,7 @@ public class AddLockActivity extends BaseFrameActivity<AddLockPresenter, AddLock
         body.cityName = locationInfo.getCityName();
         body.parkingName = mParkingNameEdit.getEditableText().toString();
         body.parkingAddress = locationInfo.getAddressInfo();
-        body.key = key;
+        body.key =  JSONUtils.getString(info,"key","");
         body.hardware = mHardware;
         return body;
     }

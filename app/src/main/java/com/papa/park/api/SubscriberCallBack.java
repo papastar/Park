@@ -32,9 +32,9 @@ public class SubscriberCallBack<T> extends Subscriber<T> {
             if (code == 504) {
                 msg = "网络不给力";
             }
-            mCallback.onFailure(code, msg);
+            mCallback.onFailure(code, msg, (Exception) e);
         } else {
-            mCallback.onFailure(0, e.getMessage());
+            mCallback.onFailure(0, e.getMessage(), (Exception) e);
         }
         mCallback.onCompleted();
     }

@@ -1,9 +1,9 @@
 package com.papa.park.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.papa.libcommon.base.BaseAppCompatActivity;
@@ -14,31 +14,15 @@ import com.papa.park.entity.bean.UserInfo;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-import static com.papa.park.R.id.wallet_tv;
-
-public class UserInfoActivity extends BaseAppCompatActivity {
+public class AccountActivity extends BaseAppCompatActivity {
 
 
     @Bind(R.id.toolBar)
     Toolbar mToolBar;
-    @Bind(R.id.head_img)
-    ImageView mHeadImg;
     @Bind(R.id.name_tv)
     TextView mNameTv;
-    @Bind(wallet_tv)
-    TextView mWalletTv;
-    @Bind(R.id.locker_tv)
-    TextView mLockerTv;
-    @Bind(R.id.rent_record_tv)
-    TextView mRentRecordTv;
-    @Bind(R.id.version_tv)
-    TextView mVersionTv;
-    @Bind(R.id.about_tv)
-    TextView mAboutTv;
-    @Bind(R.id.driver_tv)
-    TextView mDriverTv;
-    @Bind(R.id.life_tv)
-    TextView mLifeTv;
+    @Bind(R.id.phone_tv)
+    TextView mPhoneTv;
 
     UserInfo mUserInfo;
 
@@ -49,16 +33,16 @@ public class UserInfoActivity extends BaseAppCompatActivity {
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.activity_user_info;
+        return R.layout.activity_account;
     }
 
     @Override
     protected void initViewsAndEvents() {
-        setToolbar(mToolBar, "用户中心");
+        setToolbar(mToolBar, "账号管理");
         mUserInfo = UserInfoManager.getInstance().getUserInfo();
         if (mUserInfo != null) {
             mNameTv.setText(mUserInfo.name);
-            mWalletTv.setText(getString(R.string.yuan_of, mUserInfo.balance));
+            mPhoneTv.setText(mUserInfo.cellphone);
         }
     }
 
@@ -67,9 +51,14 @@ public class UserInfoActivity extends BaseAppCompatActivity {
         return null;
     }
 
-    @OnClick(R.id.account_layout)
-    void onAccountClick() {
-        readyGo(AccountActivity.class);
-    }
+    @OnClick(R.id.login_out_btn)
+    void onLoginOutClick(){
+        UserInfoManager.getInstance().clearUser();
+        Intent[] intents = new Intent[2];
+        intents[0] = new Intent(this,MainActivity.class);
+        intents[0].addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intents[1] = new Intent(this,LoginActivity.class);
+        startActivities(intents);
+     }
 
 }

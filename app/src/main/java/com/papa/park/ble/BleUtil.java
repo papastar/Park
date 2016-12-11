@@ -1,7 +1,9 @@
 package com.papa.park.ble;
 
+import android.bluetooth.BluetoothDevice;
 import android.text.TextUtils;
 
+import com.papa.park.entity.bean.BleBean;
 import com.polidea.rxandroidble.RxBleScanResult;
 
 import java.text.SimpleDateFormat;
@@ -38,11 +40,18 @@ public class BleUtil {
     }
 
     public static iBeaconClass.iBeacon covert(RxBleScanResult rxBleScanResult) {
-        iBeaconClass.iBeacon iBeacon = iBeaconClass.fromScanData(rxBleScanResult.getBleDevice()
+        return iBeaconClass.fromScanData(rxBleScanResult.getBleDevice()
                 .getBluetoothDevice(), rxBleScanResult.getRssi(), rxBleScanResult.getScanRecord());
-        return iBeacon;
     }
 
+    public static iBeaconClass.iBeacon covert(BluetoothDevice device, int rssi, byte[] scanRecord) {
+        return iBeaconClass.fromScanData(device, rssi, scanRecord);
+    }
+
+
+    public static iBeaconClass.iBeacon covert(BleBean bean) {
+        return iBeaconClass.fromScanData(bean.getDevice(), bean.getRssi(), bean.getScanRecord());
+    }
 
     public static String getCharAction(String Type, String Action, String Key) {
 

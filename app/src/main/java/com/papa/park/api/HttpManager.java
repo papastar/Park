@@ -46,6 +46,7 @@ public class HttpManager {
     private static final int DEFAULT_TIMEOUT = 15000;
     private static final String BASE_URL = "http://120.24.4.26:7788/api/";
     private static final String LBS_URL = "http://api.map.baidu.com/";
+    public static final String PAY_URL = "http://api.ansaikeji.com:7001";
     private static HttpManager sManager;
     private OkHttpClient.Builder mOkHttpBuilder;
     private UserApi mUserApi;
@@ -85,6 +86,10 @@ public class HttpManager {
         return mBaiduLBSApi == null ? configRetrofit(BaiduLBSApi.class, LBS_URL) : mBaiduLBSApi;
     }
 
+
+    public <T> T getApi(Class<T> service, String url) {
+        return configRetrofit(service, url);
+    }
 
     private void buildStethoInterceptor(Context context, OkHttpClient.Builder builder) {
         Stetho.initializeWithDefaults(context);

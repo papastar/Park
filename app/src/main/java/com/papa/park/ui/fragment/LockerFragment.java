@@ -166,7 +166,7 @@ public class LockerFragment extends BaseFragment {
             commonParam.put("ownerPhone", userInfo.cellphone);
         Observable<LockerLBSListResponse> locker = HttpManager.getInstance().getBaiduLBSApi()
                 .getLocker
-                (commonParam);
+                        (commonParam);
         addSubscription(locker, new SubscriberCallBack<>(new ApiCallback<LockerLBSListResponse>() {
             @Override
             public void onCompleted() {
@@ -174,14 +174,17 @@ public class LockerFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(int code, String message) {
+            public void onFailure(int code, String message, Exception e) {
                 showError();
             }
 
             @Override
             public void onSuccess(LockerLBSListResponse data) {
-                if (data != null) {
+                if (data != null && data.getPois() != null) {
                     mAdapter.setNewData(data.getPois());
+                }
+                if(mAdapter.getData().isEmpty()){
+                    showEmpty();
                 }
             }
         }));
@@ -203,16 +206,17 @@ public class LockerFragment extends BaseFragment {
         commonParam.put("state", String.valueOf(state));
         Observable<LockerLBSListResponse> observable = HttpManager.getInstance().getBaiduLBSApi()
                 .updatePoi
-                (commonParam).flatMap(new Func1<BaseBean, Observable<LockerLBSListResponse>>() {
-            @Override
-            public Observable<LockerLBSListResponse> call(BaseBean baseBean) {
-                if (baseBean.status == 0) {
-                    return HttpManager.getInstance().getBaiduLBSApi().getLocker
-                            (BaiduConfig.getCommonParam());
-                }
-                return Observable.error(new ApiException(baseBean.message));
-            }
-        });
+                        (commonParam).flatMap(new Func1<BaseBean,
+                        Observable<LockerLBSListResponse>>() {
+                    @Override
+                    public Observable<LockerLBSListResponse> call(BaseBean baseBean) {
+                        if (baseBean.status == 0) {
+                            return HttpManager.getInstance().getBaiduLBSApi().getLocker
+                                    (BaiduConfig.getCommonParam());
+                        }
+                        return Observable.error(new ApiException(baseBean.message));
+                    }
+                });
 
     }
 }
