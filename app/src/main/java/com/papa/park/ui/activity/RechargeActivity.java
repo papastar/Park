@@ -1,5 +1,6 @@
 package com.papa.park.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,8 @@ import com.papa.park.api.PayApi;
 import com.papa.park.api.SubscriberCallBack;
 import com.papa.park.data.UserInfoManager;
 import com.papa.park.data.WechatPay;
+import com.papa.park.entity.bean.UserInfo;
+import com.papa.park.entity.event.RechargeEvent;
 import com.papa.park.utils.JSONUtils;
 import com.papa.park.utils.KeyConstant;
 
@@ -34,7 +37,11 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import rx.functions.Action1;
 
+/**
+ *
+ */
 public class RechargeActivity extends BaseAppCompatActivity {
 
     @Bind(R.id.toolBar)
@@ -54,6 +61,12 @@ public class RechargeActivity extends BaseAppCompatActivity {
     private int mValueIndex = 0;
     private int mTypeIndex = 0;
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        onRechargeEvent();
+    }
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -133,14 +146,15 @@ public class RechargeActivity extends BaseAppCompatActivity {
 
     private List<String> getRechargeTypeList() {
         List<String> list = new ArrayList<>();
-        list.add(getString(R.string.pay_type_alipay));
         list.add(getString(R.string.pay_type_wechat));
+        list.add(getString(R.string.pay_type_alipay));
         return list;
     }
 
     @OnClick(R.id.recharge_btn)
     void onRechargeClick() {
-        if (mTypeIndex == 0)
+        String payType = mRechargeTypeAdapter.getItem(mTypeIndex);
+        if (TextUtils.equals(payType, getString(R.string.pay_type_alipay)))
             payByAliPay();
         else
             payByWechatPay();
@@ -156,7 +170,7 @@ public class RechargeActivity extends BaseAppCompatActivity {
         Map<String, String> map = new HashMap<>();
         map.put("payType", "wxpay");
         //map.put("cashnum", mRechargeValueAdapter.getItem(mValueIndex).replace("元", ""));
-        map.put("cashnum", BuildConfig.DEBUG ? "0.1" : mRechargeValueAdapter.getItem(mValueIndex)
+        map.put("cashnum", mRechargeValueAdapter.getItem(mValueIndex)
                 .replace("元", ""));
         map.put("test", BuildConfig.DEBUG ? "true" : "false");
         map.put("userId", UserInfoManager.getInstance().getUserInfo()._id);
@@ -177,12 +191,56 @@ public class RechargeActivity extends BaseAppCompatActivity {
 
             @Override
             public void onSuccess(String data) {
-                JSONUtils.getString(data, KeyConstant.KEY_DATA, "");
-                if (!TextUtils.isEmpty(data)) {
-                    WechatPay.startWechatPay(RechargeActivity.this, data);
+                String content = JSONUtils.getString(data, KeyConstant.KEY_DATA, "");
+                if (!TextUtils.isEmpty(content)) {
+                    WechatPay.startWechatPay(RechargeActivity.this, content);
                 }
             }
         }));
+    }
+
+
+    private void onRechargeEvent() {
+        mRxManager.onEvent(RechargeEvent.class, new Action1<RechargeEvent>() {
+            @Override
+            public void call(RechargeEvent rechargeEvent) {
+                updateUserInfo();
+            }
+        });
+    }
+
+
+    private void updateUserInfo() {
+        UserInfo userInfo = UserInfoManager.getInstance().getUserInfo();
+        addSubscription(HttpManager.getInstance().getUserApi().getUserInfo(userInfo.cellphone),
+                new SubscriberCallBack<>(new ApiCallback<UserInfo>() {
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onFailure(int code, String message, Exception e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(UserInfo data) {
+                        if (data != null) {
+                            UserInfoManager.getInstance().saveUser(data);
+                        }
+                        setRechargeResult(0);
+                    }
+                }));
+    }
+
+
+    private void setRechargeResult(int result) {
+        Intent intent = new Intent();
+        intent.putExtra(KeyConstant.KEY_DATA, result);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
 }

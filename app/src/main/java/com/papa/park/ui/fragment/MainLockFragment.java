@@ -152,7 +152,7 @@ public class MainLockFragment extends BaseFragment {
                         .getBluetoothDevice(), data.getRssi(),
                 data.getScanRecord());
         if (ibeacon != null) {
-//            rxManager.unsubscrible();
+//            rxManager.unSubscribe();
             String dataBlue = ibeacon.proximityUuid;
             if (dataBlue.length() >= 56
                     && dataBlue.substring(8, 24).equals(

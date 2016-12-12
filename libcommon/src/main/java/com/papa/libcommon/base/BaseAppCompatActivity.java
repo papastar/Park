@@ -115,7 +115,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         if (mRxManager != null) {
-            mRxManager.clear();
+            mRxManager.unSubscribe();
         }
         BaseAppManager.getInstance().removeActivity(this);
         ButterKnife.unbind(this);
@@ -138,7 +138,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     protected abstract int getContentViewLayoutID();
 
     /**
-     * init all views and add events
+     * init all views and addSubscription events
      */
     protected abstract void initViewsAndEvents();
 
@@ -290,7 +290,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
 
 
     protected <T> void addSubscription(Observable<T> observable, Subscriber<T> subscriber) {
-        mRxManager.add(observable.subscribeOn(Schedulers.io())
+        mRxManager.addSubscription(observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber));
     }
 

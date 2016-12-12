@@ -26,12 +26,12 @@ public abstract class BasePresenter<M, V> {
 
 
     protected <T> void addSubscription(Observable<T> observable, Subscriber<T> subscriber) {
-        mRxManager.add(observable.subscribeOn(Schedulers.io())
+        mRxManager.addSubscription(observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber));
     }
 
 
     public void onDestroy() {
-        mRxManager.clear();
+        mRxManager.unSubscribe();
     }
 }

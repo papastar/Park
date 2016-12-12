@@ -135,7 +135,7 @@ public class ReserveLockerActivity extends BaseAppCompatActivity {
                 .OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                showConfirmDialog();
             }
         }, new View.OnClickListener() {
             @Override
@@ -168,7 +168,7 @@ public class ReserveLockerActivity extends BaseAppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == 1) {
             if (data != null) {
                 int payResult = data.getIntExtra(KeyConstant.KEY_DATA, 0);
-                if (payResult == 1) {
+                if (payResult == 0) {
 
                 }
             }

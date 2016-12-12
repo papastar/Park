@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.papa.libcommon.rx.RxBus;
 import com.papa.libcommon.util.ToastUtils;
 import com.papa.park.app.Config;
+import com.papa.park.entity.event.RechargeEvent;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -46,9 +48,12 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             if (resp.errCode == 0) {
                 ToastUtils.getInstance().showToast("支付成功");
+                RxBus.getInstance().post(new RechargeEvent(0));
             } else {
                 ToastUtils.getInstance().showToast("支付失败");
+                RxBus.getInstance().post(new RechargeEvent(-1));
             }
         }
+        finish();
     }
 }

@@ -90,14 +90,14 @@ public abstract class BaseFragment extends Fragment implements OnVaryViewChange 
 
 
     protected <T> void addSubscription(Observable<T> observable, Subscriber<T> subscriber) {
-        rxManager.add(observable.subscribeOn(Schedulers.io())
+        rxManager.addSubscription(observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        rxManager.clear();
+        rxManager.unSubscribe();
     }
 
     @Override
@@ -172,7 +172,7 @@ public abstract class BaseFragment extends Fragment implements OnVaryViewChange 
     }
 
     /**
-     * init all views and add events
+     * init all views and addSubscription events
      */
     protected abstract void initViewsAndEvents();
 

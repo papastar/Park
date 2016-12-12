@@ -1,124 +1,62 @@
 package com.papa.libcommon.rx;
 
-import android.support.annotation.NonNull;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.subjects.PublishSubject;
+import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
 
 /**
  * 用RxJava实现的EventBus
  */
 public class RxBus {
-    private static RxBus instance;
+    private static volatile RxBus mInstance;
 
-    public static synchronized RxBus $() {
-        if (null == instance) {
-            instance = new RxBus();
-        }
-        return instance;
-    }
+    private final Subject bus;
 
     private RxBus() {
+        bus = new SerializedSubject<>(PublishSubject.create());
     }
 
-    @SuppressWarnings("rawtypes")
-    private ConcurrentHashMap<Object, List<Subject>> subjectMapper = new ConcurrentHashMap<Object, List<Subject>>();
-
     /**
-     * 订阅事件源
+     * 单例模式RxBus
      *
-     * @param mObservable
-     * @param mAction1
      * @return
      */
-    public RxBus OnEvent(Observable<?> mObservable, Action1<Object> mAction1) {
-        mObservable.observeOn(AndroidSchedulers.mainThread()).subscribe(mAction1, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                throwable.printStackTrace();
+    public static RxBus getInstance() {
+
+        RxBus rxBus2 = mInstance;
+        if (mInstance == null) {
+            synchronized (RxBus.class) {
+                rxBus2 = mInstance;
+                if (mInstance == null) {
+                    rxBus2 = new RxBus();
+                    mInstance = rxBus2;
+                }
             }
-        });
-        return $();
+        }
+        return rxBus2;
+    }
+
+
+    /**
+     * 发送消息
+     *
+     * @param object
+     */
+    public void post(Object object) {
+
+        bus.onNext(object);
+
     }
 
     /**
-     * 注册事件源
+     * 接收消息
      *
-     * @param tag
+     * @param eventType
+     * @param <T>
      * @return
      */
-    @SuppressWarnings({"rawtypes"})
-    public <T> Observable<T> register(@NonNull Object tag) {
-        List<Subject> subjectList = subjectMapper.get(tag);
-        if (null == subjectList) {
-            subjectList = new ArrayList<Subject>();
-            subjectMapper.put(tag, subjectList);
-        }
-        Subject<T, T> subject;
-        subjectList.add(subject = PublishSubject.create());
-        return subject;
-    }
-
-    @SuppressWarnings("rawtypes")
-    public void unregister(@NonNull Object tag) {
-        List<Subject> subjects = subjectMapper.get(tag);
-        if (null != subjects) {
-            subjectMapper.remove(tag);
-        }
-    }
-
-    /**
-     * 取消监听
-     *
-     * @param tag
-     * @param observable
-     * @return
-     */
-    @SuppressWarnings("rawtypes")
-    public RxBus unregister(@NonNull Object tag,
-                            @NonNull Observable<?> observable) {
-        if (null == observable)
-            return $();
-        List<Subject> subjects = subjectMapper.get(tag);
-        if (null != subjects) {
-            subjects.remove((Subject<?, ?>) observable);
-            if (isEmpty(subjects)) {
-                subjectMapper.remove(tag);
-            }
-        }
-        return $();
-    }
-
-    public void post(@NonNull Object content) {
-        post(content.getClass().getName(), content);
-    }
-
-    /**
-     * 触发事件
-     *
-     * @param content
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public void post(@NonNull Object tag, @NonNull Object content) {
-        List<Subject> subjectList = subjectMapper.get(tag);
-        if (!isEmpty(subjectList)) {
-            for (Subject subject : subjectList) {
-                subject.onNext(content);
-
-            }
-        }
-    }
-
-    @SuppressWarnings("rawtypes")
-    public static boolean isEmpty(Collection<Subject> collection) {
-        return null == collection || collection.isEmpty();
+    public <T> Observable<T> toObserverable(Class<T> eventType) {
+        return bus.ofType(eventType);
     }
 }

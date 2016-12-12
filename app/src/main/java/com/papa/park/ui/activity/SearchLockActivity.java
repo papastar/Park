@@ -104,7 +104,7 @@ public class SearchLockActivity extends BaseFrameActivity<SearchLockPresenter, S
 //            }
 //        }
 //        if (!contain)
-//            mAdapter.add(data);
+//            mAdapter.addSubscription(data);
     }
 
     @Override

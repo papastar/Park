@@ -119,7 +119,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements O
     protected abstract View getLoadingTargetView();
 
     /**
-     * init all views and add events
+     * init all views and addSubscription events
      */
     protected abstract void initViewsAndEvents();
 
