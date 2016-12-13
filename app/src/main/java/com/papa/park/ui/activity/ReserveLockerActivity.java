@@ -3,6 +3,7 @@ package com.papa.park.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -11,14 +12,20 @@ import android.widget.TextView;
 import com.papa.libcommon.base.BaseAppCompatActivity;
 import com.papa.park.R;
 import com.papa.park.api.ApiCallback;
+import com.papa.park.api.ApiException;
 import com.papa.park.api.BaiduConfig;
 import com.papa.park.api.HttpManager;
+import com.papa.park.api.RentState;
 import com.papa.park.api.SubscriberCallBack;
 import com.papa.park.data.UserInfoManager;
+import com.papa.park.entity.bean.BaseBean;
 import com.papa.park.entity.bean.LockerLBSListResponse;
 import com.papa.park.entity.bean.LockerLBSResponse;
 import com.papa.park.entity.bean.UserInfo;
+import com.papa.park.entity.body.PoiBody;
+import com.papa.park.utils.BdKeyConstant;
 import com.papa.park.utils.DialogUtil;
+import com.papa.park.utils.JSONUtils;
 import com.papa.park.utils.KeyConstant;
 import com.papa.park.utils.StringUtil;
 
@@ -28,6 +35,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.OnClick;
 import rx.Observable;
+import rx.functions.Func1;
 
 public class ReserveLockerActivity extends BaseAppCompatActivity {
 
@@ -52,6 +60,8 @@ public class ReserveLockerActivity extends BaseAppCompatActivity {
     Button mReserveBtn;
     @Bind(R.id.activity_reserve_locker)
     LinearLayout mActivityReserveLocker;
+
+    LockerLBSListResponse.PoisBean mPoisBean;
 
 
     @Override
@@ -95,7 +105,8 @@ public class ReserveLockerActivity extends BaseAppCompatActivity {
             public void onSuccess(LockerLBSResponse data) {
                 restore();
                 if (data != null && data.getPoi() != null) {
-                    bindInfo(data.getPoi());
+                    mPoisBean = data.getPoi();
+                    bindInfo(mPoisBean);
                 }
             }
         }));
@@ -121,13 +132,17 @@ public class ReserveLockerActivity extends BaseAppCompatActivity {
 
     @OnClick(R.id.reserve_btn)
     void onReserveClick() {
-        UserInfo userInfo = UserInfoManager.getInstance().getUserInfo();
-        if (StringUtil.parseBigDecimal(userInfo.balance).compareTo(BigDecimal.valueOf(50)) > 0) {
-
+        if (TextUtils.equals(mReserveBtn.getText(), "确认租用")) {
+            showConfirmRentDialog();
         } else {
-            showRechargeDialog();
+            UserInfo userInfo = UserInfoManager.getInstance().getUserInfo();
+            if (StringUtil.parseBigDecimal(userInfo.balance).compareTo(BigDecimal.valueOf(10)) >
+                    0) {
+                showConfirmReserveDialog();
+            } else {
+                showRechargeDialog();
+            }
         }
-
     }
 
     private void showRechargeDialog() {
@@ -135,7 +150,7 @@ public class ReserveLockerActivity extends BaseAppCompatActivity {
                 .OnClickListener() {
             @Override
             public void onClick(View v) {
-                showConfirmDialog();
+
             }
         }, new View.OnClickListener() {
             @Override
@@ -146,8 +161,8 @@ public class ReserveLockerActivity extends BaseAppCompatActivity {
     }
 
 
-    private void showConfirmDialog() {
-        DialogUtil.showNormalDialog(this, "请确认是否开始租用，租用后开始计费", "取消", "确定", new View
+    private void showConfirmReserveDialog() {
+        DialogUtil.showNormalDialog(this, "请确认是否预定，预定为您保留10分钟", "取消", "确定", new View
                 .OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,9 +171,132 @@ public class ReserveLockerActivity extends BaseAppCompatActivity {
         }, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                reserveLocker();
             }
         });
+    }
+
+
+    private void showConfirmRentDialog() {
+        DialogUtil.showNormalDialog(this, "请确认是否租用，租用开始计费", "取消", "确定", new View
+                .OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reserveLocker();
+            }
+        });
+    }
+
+    private void reserveLocker() {
+        if (mPoisBean == null)
+            return;
+        PoiBody body = new PoiBody(mPoisBean.getLockerId(), mPoisBean.getOwnerId());
+        Observable<BaseBean> observable = HttpManager.getInstance().getUserApi().reserveLocker
+                (body).flatMap(new Func1<String, Observable<BaseBean>>() {
+            @Override
+            public Observable<BaseBean> call(String s) {
+                String lockerId = JSONUtils.getString(s, "_id", "");
+                if (!TextUtils.isEmpty(lockerId)) {
+                    Map<String, String> commonParam = BaiduConfig.getCommonParam();
+                    commonParam.put(BdKeyConstant.KEY_ID, String.valueOf(mPoisBean.getId()));
+                    commonParam.put(BdKeyConstant.KEY_RENT_STATE, String.valueOf(RentState
+                            .RENT_RESERVE));
+                    commonParam.put(BdKeyConstant.KEY_RENT_STATE, String.valueOf(RentState
+                            .RENT_RESERVE));
+                    commonParam.put(BdKeyConstant.KEY_RESERVE_START_TIME, String.valueOf(System
+                            .currentTimeMillis()));
+                    UserInfo userInfo = UserInfoManager.getInstance().getUserInfo();
+                    if (userInfo != null) {
+                        commonParam.put(BdKeyConstant.KEY_TENANT_ID, userInfo._id);
+                        commonParam.put(BdKeyConstant.KEY_TENANT_PHONE, userInfo.cellphone);
+                        commonParam.put(BdKeyConstant.KEY_TENANT_NAME, userInfo.name);
+                    }
+                    return HttpManager.getInstance().getBaiduLBSApi().updatePoi(commonParam);
+                }
+                return Observable.error(new ApiException("预定失败"));
+            }
+        });
+        addSubscription(observable, new SubscriberCallBack<>(new ApiCallback<BaseBean>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onFailure(int code, String message, Exception e) {
+                showToast(message);
+            }
+
+            @Override
+            public void onSuccess(BaseBean data) {
+                if (data.status == 0) {
+                    showToast("预定成功");
+                    updateConfirmRentInfo();
+                }
+            }
+        }));
+    }
+
+    private void rentLocker() {
+        if (mPoisBean == null)
+            return;
+        PoiBody body = new PoiBody(mPoisBean.getLockerId(), mPoisBean.getOwnerId());
+        Observable<BaseBean> observable = HttpManager.getInstance().getUserApi().rentLocker(body)
+                .flatMap(new Func1<String, Observable<BaseBean>>() {
+            @Override
+            public Observable<BaseBean> call(String s) {
+                String lockerId = JSONUtils.getString(s, "_id", "");
+                if (!TextUtils.isEmpty(lockerId)) {
+                    Map<String, String> commonParam = BaiduConfig.getCommonParam();
+                    commonParam.put(BdKeyConstant.KEY_ID, String.valueOf(mPoisBean.getId()));
+                    commonParam.put(BdKeyConstant.KEY_RENT_STATE, String.valueOf(RentState
+                            .RENT_RESERVE));
+                    commonParam.put(BdKeyConstant.KEY_RENT_STATE, String.valueOf(RentState
+                            .RENT_RESERVE));
+                    commonParam.put(BdKeyConstant.KEY_RESERVE_START_TIME, String.valueOf(System
+                            .currentTimeMillis()));
+                    UserInfo userInfo = UserInfoManager.getInstance().getUserInfo();
+                    if (userInfo != null) {
+                        commonParam.put(BdKeyConstant.KEY_TENANT_ID, userInfo._id);
+                        commonParam.put(BdKeyConstant.KEY_TENANT_PHONE, userInfo.cellphone);
+                        commonParam.put(BdKeyConstant.KEY_TENANT_NAME, userInfo.name);
+                    }
+                    return HttpManager.getInstance().getBaiduLBSApi().updatePoi(commonParam);
+                }
+                return Observable.error(new ApiException("预定失败"));
+            }
+        });
+        addSubscription(observable, new SubscriberCallBack<>(new ApiCallback<BaseBean>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onFailure(int code, String message, Exception e) {
+                showToast(message);
+            }
+
+            @Override
+            public void onSuccess(BaseBean data) {
+                if (data.status == 0) {
+                    showToast("预定成功");
+                    updateConfirmRentInfo();
+                }
+            }
+        }));
+
+
+    }
+
+
+    private void updateConfirmRentInfo() {
+        mReserveBtn.setText("确认租用");
     }
 
 

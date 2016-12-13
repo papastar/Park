@@ -67,13 +67,6 @@
         </activity>
         <activity android:name=".ui.activity.AddLockActivity">
         </activity>
-
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote">
-        </service>
-
         <activity android:name=".ui.activity.UserInfoActivity">
         </activity>
         <activity android:name=".ui.activity.LockersActivity">
@@ -81,9 +74,7 @@
         <activity android:name=".ui.activity.LockerMapActivity">
         </activity>
         <activity
-            android:name=".ui.activity.ReserveLockerActivity"
-            android:label="@string/title_activity_reserve_locker"
-            android:theme="@style/AppTheme">
+            android:name=".ui.activity.ReserveLockerActivity">
         </activity>
         <activity android:name=".ui.activity.RechargeActivity">
         </activity>
@@ -93,6 +84,17 @@
         </activity>
         <activity android:name=".ui.activity.RentInfoActivity">
         </activity>
+
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"/>
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote">
+        </service>
     </application>
 
 </manifest>

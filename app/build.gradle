@@ -70,7 +70,7 @@ android {
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     def outputFile = output.outputFile
-                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                    if (outputFile != null && outputFile.name.endsWith('release.apk')) {
                         // 输出apk名称为Elephant_v1.0_2016-10-11_fir.apk
                         //def fileName = "UPark_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
                         def fileName = "UPark_v${defaultConfig.versionName}_${releaseTime()}.apk"

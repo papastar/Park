@@ -153,6 +153,7 @@ public class LockerLBSListResponse {
         private String tenantId;
         private String tenantName;
         private String tenantPhone;
+        private String reserveStartTime;
         private List<Double> location;
         private List<Double> gcj_location;
 
@@ -402,6 +403,14 @@ public class LockerLBSListResponse {
 
         public void setGcj_location(List<Double> gcj_location) {
             this.gcj_location = gcj_location;
+        }
+
+        public String getReserveStartTime() {
+            return reserveStartTime;
+        }
+
+        public void setReserveStartTime(String reserveStartTime) {
+            this.reserveStartTime = reserveStartTime;
         }
     }
 }

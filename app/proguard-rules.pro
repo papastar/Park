@@ -119,3 +119,12 @@
 -keepclasseswithmembernames class * {
     @butterknife.* <methods>;
 }
+
+#ormlite
+-keep public class com.litesuits.orm.LiteOrm { *; }
+-keep public class com.litesuits.orm.db.* { *; }
+-keep public class com.litesuits.orm.db.model.** { *; }
+-keep public class com.litesuits.orm.db.annotation.** { *; }
+-keep public class com.litesuits.orm.db.enums.** { *; }
+-keep public class com.litesuits.orm.log.* { *; }
+-keep public class com.litesuits.orm.db.assit.* { *; }

@@ -18,6 +18,7 @@ package com.papa.park.api;
 import com.papa.park.entity.bean.CodeBean;
 import com.papa.park.entity.bean.UserInfo;
 import com.papa.park.entity.body.LoginBody;
+import com.papa.park.entity.body.PoiBody;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -38,5 +39,11 @@ public interface UserApi {
     @GET("user/cellphone/{cellphone}")
     Observable<UserInfo> getUserInfo(@Path("cellphone") String cellphone);
 
+
+    @POST("rentsinfo/reservation")
+    Observable<String> reserveLocker(@Body PoiBody body);
+
+    @POST("rentsinfo/begin")
+    Observable<String> rentLocker(@Body PoiBody body);
 
 }

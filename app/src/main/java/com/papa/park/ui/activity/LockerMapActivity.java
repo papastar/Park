@@ -80,7 +80,8 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
         info.ak = BaiduConfig.SERVER_AK;
         info.geoTableId = StringUtil.parseInt(BaiduConfig.GEOTABLE_ID);
         info.tags = "";
-        info.region = LocationManager.getInstance().getLocationInfo().getCityName();
+        LocationInfo locationInfo = LocationManager.getInstance().getLocationInfo();
+        info.region = locationInfo != null ? locationInfo.getCityName() : "深圳";
         CloudManager.getInstance().localSearch(info);
     }
 
