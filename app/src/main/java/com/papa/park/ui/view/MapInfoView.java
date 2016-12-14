@@ -26,7 +26,7 @@ public class MapInfoView extends RelativeLayout {
 
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.map_info_view, this);
-        mNameTv = (TextView) findViewById(R.id.name_tv);
+        mNameTv = (TextView) findViewById(R.id.locker_name_tv);
         mInfoTv = (TextView) findViewById(R.id.info_tv);
     }
 

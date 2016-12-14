@@ -3,6 +3,7 @@ package com.papa.park.ui.activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -36,15 +37,21 @@ import com.baidu.mapapi.model.LatLngBounds;
 import com.papa.libcommon.base.BaseAppCompatActivity;
 import com.papa.park.R;
 import com.papa.park.api.BaiduConfig;
+import com.papa.park.api.RentState;
 import com.papa.park.data.LocationInfo;
 import com.papa.park.data.LocationManager;
+import com.papa.park.data.UserInfoManager;
 import com.papa.park.entity.adapter.LockerPagerAdapter;
+import com.papa.park.entity.bean.UserInfo;
 import com.papa.park.ui.view.MapInfoView;
 import com.papa.park.ui.view.ZoomOutPageTransformer;
+import com.papa.park.utils.BdKeyConstant;
 import com.papa.park.utils.StringUtil;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 
@@ -76,6 +83,7 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
     }
 
     private void loadLBS() {
+
         LocalSearchInfo info = new LocalSearchInfo();
         info.ak = BaiduConfig.SERVER_AK;
         info.geoTableId = StringUtil.parseInt(BaiduConfig.GEOTABLE_ID);
@@ -172,26 +180,61 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
     public void onGetSearchResult(CloudSearchResult result, int i) {
         if (result != null && result.poiList != null
                 && result.poiList.size() > 0) {
-            mPoiInfoLinkedHashMap.clear();
-            mBaiduMap.clear();
-            BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
-            LatLng ll;
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for (CloudPoiInfo info : result.poiList) {
-                ll = new LatLng(info.latitude, info.longitude);
-                OverlayOptions oo = new MarkerOptions().icon(bd).position(ll).animateType
-                        (MarkerOptions.MarkerAnimateType.drop);
-                Marker marker = (Marker) mBaiduMap.addOverlay(oo);
-                mPoiInfoLinkedHashMap.put(marker, info);
-                builder.include(ll);
-            }
-            LatLngBounds bounds = builder.build();
-            MapStatusUpdate u = MapStatusUpdateFactory.newLatLngBounds(bounds);
-            mBaiduMap.animateMapStatus(u);
-
-            bindViewPager(result.poiList);
+            List<CloudPoiInfo> poiList = result.poiList;
+            filterList(poiList);
+            updateMap(poiList);
         }
     }
+
+    //手动过滤列表数据
+    private void filterList(List<CloudPoiInfo> infoList) {
+        for (Iterator<CloudPoiInfo> it = infoList.iterator(); it.hasNext(); ) {
+            CloudPoiInfo item = it.next();
+            if (filter(item))
+                it.remove();
+        }
+    }
+
+
+    private boolean filter(CloudPoiInfo item) {
+        UserInfo userInfo = UserInfoManager.getInstance().getUserInfo();
+        String ownerPhone = "";
+        int rentState = 0;
+        Map<String, Object> extra = item.extras;
+        if (extra != null && extra.containsKey(BdKeyConstant.KEY_OWNER_PHONE))
+            ownerPhone = (String) extra.get(BdKeyConstant.KEY_OWNER_PHONE);
+        if (extra != null && extra.containsKey(BdKeyConstant.KEY_RENT_STATE))
+            rentState = (int) extra.get(BdKeyConstant.KEY_RENT_STATE);
+        if (TextUtils.equals(userInfo.cellphone, ownerPhone)) {
+            return true;
+        } else if (rentState != RentState.RENT_PUBLISH.getState())
+            return true;
+        return false;
+
+    }
+
+
+    private void updateMap(List<CloudPoiInfo> infoList) {
+        mPoiInfoLinkedHashMap.clear();
+        mBaiduMap.clear();
+        BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
+        LatLng ll;
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (CloudPoiInfo info : infoList) {
+            ll = new LatLng(info.latitude, info.longitude);
+            OverlayOptions oo = new MarkerOptions().icon(bd).position(ll).animateType
+                    (MarkerOptions.MarkerAnimateType.drop);
+            Marker marker = (Marker) mBaiduMap.addOverlay(oo);
+            mPoiInfoLinkedHashMap.put(marker, info);
+            builder.include(ll);
+        }
+        LatLngBounds bounds = builder.build();
+        MapStatusUpdate u = MapStatusUpdateFactory.newLatLngBounds(bounds);
+        mBaiduMap.animateMapStatus(u);
+
+        bindViewPager(infoList);
+    }
+
 
     @Override
     public void onGetDetailSearchResult(DetailSearchResult detailSearchResult, int i) {

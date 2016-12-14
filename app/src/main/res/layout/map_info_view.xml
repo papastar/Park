@@ -8,7 +8,7 @@
                 android:padding="10dp">
 
     <TextView
-        android:id="@+id/name_tv"
+        android:id="@+id/locker_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -21,7 +21,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/name_tv"
+        android:layout_toRightOf="@+id/locker_name_tv"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_arrow"/>
@@ -31,7 +31,7 @@
         android:textSize="@dimen/size_24"
         tools:text="首停一小时5元，之后每小时1元"
         android:textColor="@color/color_666666"
-        android:layout_below="@+id/name_tv"
+        android:layout_below="@+id/locker_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

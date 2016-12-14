@@ -19,9 +19,9 @@ public class AccountActivity extends BaseAppCompatActivity {
 
     @Bind(R.id.toolBar)
     Toolbar mToolBar;
-    @Bind(R.id.name_tv)
+    @Bind(R.id.locker_name_tv)
     TextView mNameTv;
-    @Bind(R.id.phone_tv)
+    @Bind(R.id.locker_phone_tv)
     TextView mPhoneTv;
 
     UserInfo mUserInfo;

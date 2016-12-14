@@ -25,6 +25,7 @@ import com.papa.park.entity.bean.BaseBean;
 import com.papa.park.entity.bean.LockerLBSListResponse;
 import com.papa.park.entity.bean.UserInfo;
 import com.papa.park.ui.activity.RentConfirmActivity;
+import com.papa.park.ui.activity.RentDetailActivity;
 import com.papa.park.ui.view.LinearDividerItemDecoration;
 import com.papa.park.utils.KeyConstant;
 
@@ -70,7 +71,7 @@ public class LockerFragment extends BaseFragment {
             protected void convert(BaseViewHolder baseViewHolder, final LockerLBSListResponse
                     .PoisBean
                     contentsBean) {
-                baseViewHolder.setText(R.id.name_tv, contentsBean.getTitle());
+                baseViewHolder.setText(R.id.locker_name_tv, contentsBean.getTitle());
                 baseViewHolder.addOnClickListener(R.id.operate_tv);
                 TextView stateTv = baseViewHolder.getView(R.id.state_tv);
                 TextView infoTv = baseViewHolder.getView(R.id.info_tv);
@@ -79,7 +80,7 @@ public class LockerFragment extends BaseFragment {
                     case 0:
                     case 1:
                         stateTv.setText("可出租");
-                        infoTv.setText("");
+                        infoTv.setText(getTitle(contentsBean));
                         stateTv.setBackgroundColor(ContextCompat.getColor(mContext, R.color
                                 .colorPrimaryDark));
                         operate_tv.setText("出租");
@@ -93,7 +94,7 @@ public class LockerFragment extends BaseFragment {
                         });
                         break;
                     case 2:
-                        stateTv.setText("已出租");
+                        stateTv.setText("已发布");
                         infoTv.setText(getString(R.string.rent_price_of, contentsBean
                                 .getRentFirstHourPrice(), contentsBean.getRentPerHourPrice()));
                         stateTv.setBackgroundColor(Color.parseColor("#28a3f9"));
@@ -101,7 +102,11 @@ public class LockerFragment extends BaseFragment {
                         operate_tv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(KeyConstant.KEY_TYPE, 0);
+                                bundle.putInt(KeyConstant.KEY_DATA, contentsBean.getId());
+                                readyGoForResult(RentDetailActivity.class, 2, bundle);
+                                //readyGoForResult(RentDetailActivity.class, 1, bundle);
                             }
                         });
                         break;
@@ -114,12 +119,42 @@ public class LockerFragment extends BaseFragment {
                         operate_tv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(KeyConstant.KEY_TYPE, 0);
+                                bundle.putInt(KeyConstant.KEY_DATA, contentsBean.getId());
+                                readyGo(RentDetailActivity.class, bundle);
+                            }
+                        });
+                        break;
+                    case 4:
+                        stateTv.setText("已被租");
+                        infoTv.setText(getString(R.string.rent_price_of, contentsBean
+                                .getRentFirstHourPrice(), contentsBean.getRentPerHourPrice()));
+                        stateTv.setBackgroundColor(Color.parseColor("#52b607"));
+                        operate_tv.setText("查看详情");
+                        operate_tv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(KeyConstant.KEY_TYPE, 0);
+                                bundle.putInt(KeyConstant.KEY_DATA, contentsBean.getId());
+                                readyGo(RentDetailActivity.class, bundle);
                             }
                         });
                         break;
                 }
             }
+
+            private String getTitle(LockerLBSListResponse
+                                            .PoisBean
+                                            bean) {
+                return bean.getProvince() + bean.getCity() +
+                        bean.getDistrict
+                                () +
+                        bean.getAddress();
+
+            }
+
         };
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager
                 .VERTICAL, false));
@@ -183,7 +218,7 @@ public class LockerFragment extends BaseFragment {
                 if (data != null && data.getPois() != null) {
                     mAdapter.setNewData(data.getPois());
                 }
-                if(mAdapter.getData().isEmpty()){
+                if (mAdapter.getData().isEmpty()) {
                     showEmpty();
                 }
             }
@@ -195,6 +230,8 @@ public class LockerFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            loadData();
+        } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
             loadData();
         }
     }

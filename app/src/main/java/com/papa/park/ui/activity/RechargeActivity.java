@@ -85,7 +85,7 @@ public class RechargeActivity extends BaseAppCompatActivity {
                 getRechargeValueList()) {
             @Override
             protected void convert(BaseAdapterHelper helper, String item) {
-                TextView nameTv = helper.getView(R.id.name_tv);
+                TextView nameTv = helper.getView(R.id.locker_name_tv);
                 nameTv.setText(item);
                 if (mValueIndex == helper.getPosition()) {
                     nameTv.setBackgroundResource(R.drawable.bg_btn_normal);
@@ -110,7 +110,7 @@ public class RechargeActivity extends BaseAppCompatActivity {
                 getRechargeTypeList()) {
             @Override
             protected void convert(BaseAdapterHelper helper, String item) {
-                helper.setText(R.id.name_tv, item);
+                helper.setText(R.id.locker_name_tv, item);
                 helper.setVisible(R.id.arrow_img, mTypeIndex == helper.getPosition());
                 helper.setImageResource(R.id.logo_img, TextUtils.equals(item, getString(R.string
                         .pay_type_wechat)) ? R.drawable.img_pay_wechat : R.drawable.img_pay_alipay);

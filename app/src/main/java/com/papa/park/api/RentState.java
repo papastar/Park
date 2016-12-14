@@ -18,4 +18,9 @@ public enum RentState {
     private RentState(int state) {
         this.state = state;
     }
+
+    public int getState() {
+        return state;
+    }
+
 }

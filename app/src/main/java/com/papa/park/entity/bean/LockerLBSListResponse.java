@@ -412,5 +412,11 @@ public class LockerLBSListResponse {
         public void setReserveStartTime(String reserveStartTime) {
             this.reserveStartTime = reserveStartTime;
         }
+
+        public String getLockerAddress() {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(province).append(city).append(district).append(address);
+            return buffer.toString();
+        }
     }
 }

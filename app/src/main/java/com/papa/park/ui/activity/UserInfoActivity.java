@@ -23,7 +23,7 @@ public class UserInfoActivity extends BaseAppCompatActivity {
     Toolbar mToolBar;
     @Bind(R.id.head_img)
     ImageView mHeadImg;
-    @Bind(R.id.name_tv)
+    @Bind(R.id.locker_name_tv)
     TextView mNameTv;
     @Bind(wallet_tv)
     TextView mWalletTv;

@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.papa.libcommon.control.OnVaryViewChange;
-import com.papa.libcommon.control.VaryViewChangeControll;
+import com.papa.libcommon.control.VaryViewChangeControl;
 import com.papa.libcommon.rx.RxManager;
 import com.papa.libcommon.widget.loading.VaryViewHelperController;
 
@@ -83,7 +83,7 @@ public abstract class BaseFragment extends Fragment implements OnVaryViewChange 
         super.onViewCreated(view, savedInstanceState);
         if (null != getLoadingTargetView()) {
             mVaryViewHelperController = new VaryViewHelperController(getLoadingTargetView());
-            mVaryViewChange = new VaryViewChangeControll(mVaryViewHelperController);
+            mVaryViewChange = new VaryViewChangeControl(mVaryViewHelperController);
         }
         initViewsAndEvents();
     }

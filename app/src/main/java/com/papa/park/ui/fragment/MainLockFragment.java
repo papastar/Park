@@ -49,7 +49,7 @@ import rx.subjects.PublishSubject;
  */
 public class MainLockFragment extends BaseFragment {
 
-    @Bind(R.id.name_tv)
+    @Bind(R.id.locker_name_tv)
     TextView nameTv;
     @Bind(R.id.status_tv)
     TextView statusTv;

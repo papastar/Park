@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.papa.libcommon.control.OnVaryViewChange;
-import com.papa.libcommon.control.VaryViewChangeControll;
+import com.papa.libcommon.control.VaryViewChangeControl;
 import com.papa.libcommon.util.BaseAppManager;
 import com.papa.libcommon.util.netstatus.NetChangeObserver;
 import com.papa.libcommon.util.netstatus.NetStateReceiver;
@@ -85,7 +85,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements O
         ButterKnife.bind(this);
         if (null != getLoadingTargetView()) {
             mVaryViewHelperController = new VaryViewHelperController(getLoadingTargetView());
-            mVaryViewChange = new VaryViewChangeControll(mVaryViewHelperController);
+            mVaryViewChange = new VaryViewChangeControl(mVaryViewHelperController);
         }
     }
 

@@ -9,11 +9,11 @@ import com.papa.libcommon.widget.loading.VaryViewHelperController;
  * Date: 2016-09-30
  */
 
-public class VaryViewChangeControll implements OnVaryViewChange {
+public class VaryViewChangeControl implements OnVaryViewChange {
 
     private VaryViewHelperController mVaryViewHelperController;
 
-    public VaryViewChangeControll(VaryViewHelperController controller) {
+    public VaryViewChangeControl(VaryViewHelperController controller) {
         mVaryViewHelperController = controller;
     }
 

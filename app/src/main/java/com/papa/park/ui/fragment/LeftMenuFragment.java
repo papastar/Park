@@ -12,6 +12,7 @@ import com.papa.park.data.UserInfoManager;
 import com.papa.park.entity.bean.UserInfo;
 import com.papa.park.ui.activity.LockerMapActivity;
 import com.papa.park.ui.activity.LockersActivity;
+import com.papa.park.ui.activity.MyRentActivity;
 import com.papa.park.ui.activity.UserInfoActivity;
 import com.papa.park.utils.CircleImageTransformation;
 import com.squareup.picasso.Picasso;
@@ -27,26 +28,22 @@ import butterknife.OnClick;
 public class LeftMenuFragment extends BaseFragment {
     @Bind(R.id.head_img)
     ImageView mHeadImg;
-    @Bind(R.id.name_tv)
+    @Bind(R.id.locker_name_tv)
     TextView mNameTv;
-    @Bind(R.id.phone_tv)
+    @Bind(R.id.locker_phone_tv)
     TextView mPhoneTv;
     @Bind(R.id.order_tv)
     TextView mOrderTv;
     @Bind(R.id.wallet_tv)
     TextView mWalletTv;
-    @Bind(R.id.my_lock_tv)
-    TextView mMyLockTv;
+    @Bind(R.id.rent_locker_tv)
+    TextView mRentLockerTv;
     @Bind(R.id.lock_manager_tv)
     TextView mLockManagerTv;
-    @Bind(R.id.release_park_tv)
-    TextView mReleaseParkTv;
-    @Bind(R.id.find_park_tv)
-    TextView mFindParkTv;
-    @Bind(R.id.message_center_tv)
-    TextView mMessageCenterTv;
-    @Bind(R.id.share_park_tv)
-    TextView mShareParkTv;
+    @Bind(R.id.add_locker_tv)
+    TextView mAddLockerTv;
+    @Bind(R.id.my_rent_tv)
+    TextView mMyRentTv;
     @Bind(R.id.navigation_view)
     LinearLayout mNavigationView;
 
@@ -102,9 +99,14 @@ public class LeftMenuFragment extends BaseFragment {
         readyGo(LockersActivity.class);
     }
 
-    @OnClick(R.id.find_park_tv)
+    @OnClick(R.id.rent_locker_tv)
     void onFindLockerTv() {
         readyGo(LockerMapActivity.class);
+    }
+
+    @OnClick(R.id.my_rent_tv)
+    void onMyRentTv() {
+        readyGo(MyRentActivity.class);
     }
 
 }

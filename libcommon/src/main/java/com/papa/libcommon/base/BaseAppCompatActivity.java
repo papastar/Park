@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.papa.libcommon.control.OnVaryViewChange;
-import com.papa.libcommon.control.VaryViewChangeControll;
+import com.papa.libcommon.control.VaryViewChangeControl;
 import com.papa.libcommon.rx.RxManager;
 import com.papa.libcommon.util.BaseAppManager;
 import com.papa.libcommon.util.netstatus.NetChangeObserver;
@@ -40,10 +40,6 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
 
     protected OnVaryViewChange mVaryViewChange;
     protected RxManager mRxManager;
-    /**
-     * loading view controller
-     */
-    private VaryViewHelperController mVaryViewHelperController = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +89,9 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
         super.setContentView(layoutResID);
         ButterKnife.bind(this);
         if (null != getLoadingTargetView()) {
-            mVaryViewHelperController = new VaryViewHelperController(getLoadingTargetView());
-            mVaryViewChange = new VaryViewChangeControll(mVaryViewHelperController);
+            VaryViewHelperController varyViewHelperController = new VaryViewHelperController
+                    (getLoadingTargetView());
+            mVaryViewChange = new VaryViewChangeControl(varyViewHelperController);
         }
     }
 
@@ -255,21 +252,29 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
 
     @Override
     public void showError() {
+        if (mVaryViewChange == null)
+            return;
         mVaryViewChange.showError();
     }
 
     @Override
     public void showEmpty() {
+        if (mVaryViewChange == null)
+            return;
         mVaryViewChange.showEmpty();
     }
 
     @Override
     public void showLoading() {
+        if (mVaryViewChange == null)
+            return;
         mVaryViewChange.showLoading();
     }
 
     @Override
     public void restore() {
+        if (mVaryViewChange == null)
+            return;
         mVaryViewChange.restore();
     }
 

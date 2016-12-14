@@ -6,11 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.papa.park.ui.activity.ReserveLockerActivity">
+    tools:context="com.papa.park.ui.activity.RentDetailActivity">
 
     <include layout="@layout/common_toolbar"/>
 
     <LinearLayout
+        android:id="@+id/content_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -33,87 +34,68 @@
             tools:text="50804号车位"/>
 
         <TextView
-            android:id="@+id/time_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/size_28"
-            tools:text="发布时段:8:00-14:00"/>
-
-        <TextView
-            android:id="@+id/name_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/size_28"
+            android:id="@+id/locker_name_tv"
+            style="@style/CommonItemTextView"
             tools:text="车位主    :爬爬"/>
 
+        <TextView
+            android:id="@+id/locker_phone_tv"
+            style="@style/CommonItemTextView"
+            tools:text="车主号码:13800138000"/>
 
         <TextView
-            android:id="@+id/phone_tv"
-            android:layout_width="match_parent"
+            android:id="@+id/locker_address_tv"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/size_28"
+            android:minHeight="35dp"
+            style="@style/CommonItemTextView"
             tools:text="车主号码:13800138000"/>
 
         <TextView
             android:id="@+id/price_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/size_28"
+            style="@style/CommonItemTextView"
             tools:text="收费标准:首停一小时5元"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/divide_height"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@color/color_divide"/>
 
         <TextView
-            android:id="@+id/contact_phone_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/size_28"
+            android:id="@+id/tenant_name_tv"
+            style="@style/CommonItemTextView"
+            android:visibility="gone"
             tools:text="联系电话:13800138000"/>
 
         <TextView
-            android:id="@+id/payment_tv"
+            android:id="@+id/tenant_phone_tv"
+            style="@style/CommonItemTextView"
+            android:visibility="gone"
+            tools:text="联系电话:13800138000"/>
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="预约定金:50"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/size_28"
-            />
+            android:layout_height="@dimen/divide_height"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/color_divide"/>
+
 
         <TextView
+            android:id="@+id/rent_state_tv"
+            style="@style/CommonItemTextView"
+            tools:text="联系电话:13800138000"/>
+
+        <TextView
+            android:id="@+id/time_tv"
+            style="@style/CommonItemTextView"
+            android:visibility="gone"
+            tools:text="联系电话:13800138000"/>
+
+
+        <TextView
+            android:id="@+id/explain_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -123,7 +105,8 @@
             android:padding="10dp"
             android:text="1:确保您的账户余额不低于50元 \n2:点击提交订单，您输入的车位自动降锁,并开始计费"
             android:textColor="@color/color_888888"
-            android:textSize="@dimen/size_24"/>
+            android:textSize="@dimen/size_24"
+            android:visibility="gone"/>
 
         <View
             android:layout_width="match_parent"
@@ -135,7 +118,7 @@
 
 
     <Button
-        android:id="@+id/reserve_btn"
+        android:id="@+id/operate_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:layout_marginLeft="10dp"

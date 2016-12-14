@@ -80,8 +80,8 @@ public class VaryViewHelperController {
             textView.setText(helper.getContext().getResources().getString(R.string.common_empty_msg));
         }
 
-        ImageView imageView = (ImageView) layout.findViewById(R.id.message_icon);
-        imageView.setImageResource(R.drawable.ic_error);
+//        ImageView imageView = (ImageView) layout.findViewById(R.id.message_icon);
+//        imageView.setImageResource(R.drawable.ic_error);
 
         if (null != onClickListener) {
             layout.setOnClickListener(onClickListener);

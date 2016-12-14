@@ -57,7 +57,7 @@ public class SearchLockActivity extends BaseFrameActivity<SearchLockPresenter, S
         mAdapter = new QuickAdapter<BleBean>(this, R.layout.scan_result_list_item) {
             @Override
             protected void convert(BaseAdapterHelper helper, BleBean item) {
-                helper.setText(R.id.name_tv, TextUtils.isEmpty(item.getDevice().getName()) ?
+                helper.setText(R.id.locker_name_tv, TextUtils.isEmpty(item.getDevice().getName()) ?
                         "未知设备" : item.getDevice().getName());
                 helper.setText(R.id.rssi_tv, String.valueOf(item.getRssi()));
             }
