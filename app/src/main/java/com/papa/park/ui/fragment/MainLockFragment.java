@@ -1,6 +1,9 @@
 package com.papa.park.ui.fragment;
 
 
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,34 +16,32 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.litesuits.bluetooth.LiteBleGattCallback;
+import com.litesuits.bluetooth.LiteBluetooth;
+import com.litesuits.bluetooth.conn.BleCharactCallback;
+import com.litesuits.bluetooth.exception.BleException;
 import com.papa.libcommon.base.BaseFragment;
+import com.papa.libcommon.util.Logger;
 import com.papa.park.R;
+import com.papa.park.app.Config;
 import com.papa.park.ble.BleUtil;
 import com.papa.park.ble.SimpleCrypto;
 import com.papa.park.ble.iBeaconClass;
 import com.papa.park.data.BleManager;
 import com.papa.park.data.DbManager;
 import com.papa.park.data.UserInfoManager;
+import com.papa.park.entity.adapter.PeriodAddressScanCallback;
 import com.papa.park.entity.database.BleData;
 import com.papa.park.ui.activity.MainActivity;
 import com.papa.park.ui.activity.SearchLockActivity;
 import com.papa.park.utils.KeyConstant;
-import com.polidea.rxandroidble.RxBleClient;
-import com.polidea.rxandroidble.RxBleConnection;
-import com.polidea.rxandroidble.RxBleDevice;
-import com.polidea.rxandroidble.RxBleDeviceServices;
-import com.polidea.rxandroidble.RxBleScanResult;
-import com.polidea.rxandroidble.utils.ConnectionSharingAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +49,8 @@ import rx.subjects.PublishSubject;
  * create an instance of this fragment.
  */
 public class MainLockFragment extends BaseFragment {
+
+    private final String TAG = "blue";
 
     @Bind(R.id.locker_name_tv)
     TextView nameTv;
@@ -72,14 +75,11 @@ public class MainLockFragment extends BaseFragment {
     @Bind(R.id.operation_container)
     LinearLayout operationContainer;
 
-
-    private RxBleDevice mRxBleDevice;
+    LiteBluetooth mLiteBluetooth;
     private BleData mBleData;
-    private RxBleClient mRxBleClient;
-    private PublishSubject<Void> disconnectTriggerSubject = PublishSubject.create();
     private boolean hasCollect = true;
-    private Observable<RxBleConnection> mConnectionObservable;
-    private UUID mUUID;
+    private final String UUID_CHART = "0000fff1-0000-1000-8000-00805f9b34fb";
+    private String UUID_SERVICE;
 
     public static MainLockFragment newInstance() {
         return new MainLockFragment();
@@ -88,7 +88,8 @@ public class MainLockFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRxBleClient = BleManager.getInstance().getRxBleClient();
+        mLiteBluetooth = BleManager.getInstance().getLiteBluetooth();
+        mLiteBluetooth.addGattCallback(mCallback);
     }
 
 
@@ -111,48 +112,29 @@ public class MainLockFragment extends BaseFragment {
 
     private void startScan(final ArrayList<BleData> list) {
         lockTv.setText("正在扫描设备");
+        PeriodAddressScanCallback callback = new PeriodAddressScanCallback(list, Config
+                .SCAN_TIME_OUT) {
+            @Override
+            public void onDeviceFound(BleData item, BluetoothDevice device, int rssi, byte[]
+                    scanRecord) {
+                mBleData = item;
+                checkBeacon(device, rssi, scanRecord);
+            }
 
-//        addSubscription(mRxBleClient.scanBleDevices(), new
-//                SubscriberCallBack<>(new ApiCallback<RxBleScanResult>() {
-//            @Override
-//            public void onCompleted() {
-//
-//            }
-//
-//            @Override
-//            public void onFailure(int code, String message) {
-//
-//            }
-//
-//            @Override
-//            public void onSuccess(RxBleScanResult data) {
-//                int index = checkLock(list, data.getBleDevice().getMacAddress());
-//                if (index >= 0) {
-//                    mBleData = list.get(index);
-//                    checkBeacon(data);
-//                }
-//            }
-//        }));
+            @Override
+            public void onScanTimeout() {
 
+            }
+        };
+        mLiteBluetooth.startLeScan(callback);
     }
 
 
-    private int checkLock(final ArrayList<BleData> list, String blueAddress) {
-
-        for (int index = 0; index < list.size(); index++) {
-            if (TextUtils.equals(list.get(index).blueAddress, blueAddress))
-                return index;
-        }
-
-        return -1;
-    }
-
-    private boolean checkBeacon(RxBleScanResult data) {
-        final iBeaconClass.iBeacon ibeacon = iBeaconClass.fromScanData(data.getBleDevice()
-                        .getBluetoothDevice(), data.getRssi(),
-                data.getScanRecord());
+    private boolean checkBeacon(BluetoothDevice device, int rssi, byte[]
+            scanRecord) {
+        final iBeaconClass.iBeacon ibeacon = iBeaconClass.fromScanData(device, rssi,
+                scanRecord);
         if (ibeacon != null) {
-//            rxManager.unSubscribe();
             String dataBlue = ibeacon.proximityUuid;
             if (dataBlue.length() >= 56
                     && dataBlue.substring(8, 24).equals(
@@ -172,7 +154,7 @@ public class MainLockFragment extends BaseFragment {
 //                            16);
 //                    connectionBlue();
 //                }
-                connect(data);
+                connect(device);
 
             } else if (dataBlue.length() >= 60
                     && (dataBlue.substring(10, 18)).equals("4a4f594f")) {
@@ -190,72 +172,44 @@ public class MainLockFragment extends BaseFragment {
 //                Message msg = new Message();
 //                msg.what = batteryInt;
 //                handler.sendMessage(msg);
-                connect(data);
+                connect(device);
             }
         }
         return false;
     }
 
-    private void connect(RxBleScanResult data) {
-        mRxBleDevice = mRxBleClient.getBleDevice(data.getBleDevice().getMacAddress());
-        mConnectionObservable = getConnectionObservable(mRxBleDevice);
-        setConnectStateChange(mRxBleDevice);
-
-        connectionBlue();
-    }
-
-
-    private void connectionBlue() {
+    private void connect(BluetoothDevice device) {
         lockTv.setText("正在连接车锁");
-//        addSubscription(mConnectionObservable, new SubscriberCallBack
-//                <>(new ApiCallback<RxBleConnection>() {
-//            @Override
-//            public void onCompleted() {
-//
-//            }
-//
-//            @Override
-//            public void onFailure(int code, String message) {
-//
-//            }
-//
-//            @Override
-//            public void onSuccess(RxBleConnection data) {
-//                lockTv.setText("车锁已连接");
-//                hasCollect = true;
-//                discovery();
-//            }
-//        }));
+        mLiteBluetooth.connect(device, false, new LiteBleGattCallback() {
+            @Override
+            public void onConnectSuccess(BluetoothGatt gatt, int status) {
+
+            }
+
+            @Override
+            public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+                UUID_SERVICE = getServiceUUID(gatt);
+
+            }
+
+            @Override
+            public void onConnectFailure(BleException exception) {
+
+            }
+        });
     }
 
-
-    private Observable<RxBleConnection> getConnectionObservable(RxBleDevice rxBleDevice) {
-        return rxBleDevice
-                .establishConnection(getContext(), false)
-                .takeUntil(disconnectTriggerSubject)
-//                .doOnUnsubscribe(this::clearSubscription)
-                .compose(new ConnectionSharingAdapter());
-    }
-
-    private void setConnectStateChange(RxBleDevice rxBleDevice) {
-        addSubscription(rxBleDevice.observeConnectionStateChanges(), new
-                Subscriber<RxBleConnection.RxBleConnectionState>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(RxBleConnection.RxBleConnectionState rxBleConnectionState) {
-
-                    }
-                });
-
+    private String getServiceUUID(BluetoothGatt gatt) {
+        List<BluetoothGattService> services = gatt.getServices();
+        for (BluetoothGattService service : services) {
+            List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
+            for (BluetoothGattCharacteristic character : characteristics) {
+                if (TextUtils.equals(character.getUuid().toString(), UUID_CHART)) {
+                    return service.getUuid().toString();
+                }
+            }
+        }
+        return null;
     }
 
 
@@ -311,58 +265,52 @@ public class MainLockFragment extends BaseFragment {
             return;
         String action = BleUtil.getCharAction("02", "F0", mBleData.key);
         final byte[] data = SimpleCrypto.hexStringToBytes(action);
-//        addSubscription(mConnectionObservable.flatMap(new Func1<RxBleConnection,
-//                Observable<byte[]>>() {
-//            @Override
-//            public Observable<byte[]> call(RxBleConnection rxBleConnection) {
-//                return rxBleConnection.writeCharacteristic(mUUID, data);
-//            }
-//        }), new SubscriberCallBack<>(new ApiCallback<byte[]>() {
-//            @Override
-//            public void onCompleted() {
-//
-//            }
-//
-//            @Override
-//            public void onFailure(int code, String message) {
-//
-//            }
-//
-//            @Override
-//            public void onSuccess(byte[] data) {
-//
-//            }
-//        }));
-
-    }
+        mLiteBluetooth.newBleConnector().withUUID(UUID.fromString(UUID_SERVICE), UUID.fromString
+                (UUID_CHART), null).writeCharacteristic(data, new BleCharactCallback() {
 
 
-    private void discovery() {
-        addSubscription(mConnectionObservable.flatMap(new Func1<RxBleConnection,
-                Observable<RxBleDeviceServices>>
-                () {
             @Override
-            public Observable<RxBleDeviceServices> call(RxBleConnection rxBleConnection) {
-                return rxBleConnection.discoverServices();
-            }
-        }).first(), new Subscriber<RxBleDeviceServices>() {
-            @Override
-            public void onCompleted() {
+            public void onSuccess(BluetoothGattCharacteristic characteristic) {
 
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onFailure(BleException exception) {
 
-            }
-
-            @Override
-            public void onNext(RxBleDeviceServices rxBleDeviceServices) {
-                for (BluetoothGattService service : rxBleDeviceServices
-                        .getBluetoothGattServices()) {
-                    mUUID = service.getUuid();
-                }
             }
         });
+
+
     }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mLiteBluetooth.removeGattCallback(mCallback);
+    }
+
+    private LiteBleGattCallback mCallback = new LiteBleGattCallback() {
+        @Override
+        public void onConnectSuccess(BluetoothGatt gatt, int status) {
+            Logger.d(TAG, "onConnectSuccess,status = ", status);
+        }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            Logger.d(TAG, "onServicesDiscovered,status = ", status);
+        }
+
+        @Override
+        public void onConnectFailure(BleException exception) {
+            Logger.d(TAG, "onConnectFailure,exception = ", exception);
+        }
+
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            super.onConnectionStateChange(gatt, status, newState);
+            Logger.d(TAG, "onConnectionStateChange,status = " + status + "newState=" + newState);
+        }
+
+    };
 }

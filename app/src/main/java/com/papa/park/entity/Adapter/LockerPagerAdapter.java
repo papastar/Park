@@ -10,7 +10,8 @@ import android.widget.TextView;
 
 import com.baidu.mapapi.cloud.CloudPoiInfo;
 import com.papa.park.R;
-import com.papa.park.ui.activity.ReserveLockerActivity;
+
+import com.papa.park.ui.activity.RentDetailActivity;
 import com.papa.park.utils.KeyConstant;
 
 import java.util.List;
@@ -67,12 +68,12 @@ public class LockerPagerAdapter extends PagerAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ReserveLockerActivity.class);
+                Intent intent = new Intent(mContext, RentDetailActivity.class);
                 intent.putExtra(KeyConstant.KEY_DATA, cloudPoiInfo.uid);
                 mContext.startActivity(intent);
             }
         });
-        TextView nameTv = (TextView) view.findViewById(R.id.name_tv);
+        TextView nameTv = (TextView) view.findViewById(R.id.locker_name_tv);
         nameTv.setText(cloudPoiInfo.title);
         TextView infoTv = (TextView) view.findViewById(R.id.info_tv);
         Map<String, Object> extras = cloudPoiInfo.extras;

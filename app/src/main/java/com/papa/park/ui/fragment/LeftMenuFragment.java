@@ -1,5 +1,6 @@
 package com.papa.park.ui.fragment;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,12 +14,15 @@ import com.papa.park.entity.bean.UserInfo;
 import com.papa.park.ui.activity.LockerMapActivity;
 import com.papa.park.ui.activity.LockersActivity;
 import com.papa.park.ui.activity.MyRentActivity;
+import com.papa.park.ui.activity.SearchLockActivity;
 import com.papa.park.ui.activity.UserInfoActivity;
 import com.papa.park.utils.CircleImageTransformation;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+
+import static com.papa.park.ui.activity.MainActivity.REQUEST_CODE_SEARCH_LOCK;
 
 /**
  * User: PAPA
@@ -107,6 +111,12 @@ public class LeftMenuFragment extends BaseFragment {
     @OnClick(R.id.my_rent_tv)
     void onMyRentTv() {
         readyGo(MyRentActivity.class);
+    }
+
+    @OnClick(R.id.add_locker_tv)
+    void addLockerTv() {
+        getActivity().startActivityForResult(new Intent(getContext(), SearchLockActivity.class),
+                REQUEST_CODE_SEARCH_LOCK);
     }
 
 }
