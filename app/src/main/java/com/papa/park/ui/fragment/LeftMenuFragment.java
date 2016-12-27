@@ -13,6 +13,7 @@ import com.papa.park.data.UserInfoManager;
 import com.papa.park.entity.bean.UserInfo;
 import com.papa.park.ui.activity.LockerMapActivity;
 import com.papa.park.ui.activity.LockersActivity;
+import com.papa.park.ui.activity.MainActivity;
 import com.papa.park.ui.activity.MyRentActivity;
 import com.papa.park.ui.activity.SearchLockActivity;
 import com.papa.park.ui.activity.UserInfoActivity;
@@ -21,8 +22,6 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-
-import static com.papa.park.ui.activity.MainActivity.REQUEST_CODE_SEARCH_LOCK;
 
 /**
  * User: PAPA
@@ -114,9 +113,9 @@ public class LeftMenuFragment extends BaseFragment {
     }
 
     @OnClick(R.id.add_locker_tv)
-    void addLockerTv() {
-        getActivity().startActivityForResult(new Intent(getContext(), SearchLockActivity.class),
-                REQUEST_CODE_SEARCH_LOCK);
+    void onAddLockTv(){
+        Intent intent = new Intent(getActivity(), SearchLockActivity.class);
+        getActivity().startActivityForResult(intent, MainActivity.REQUEST_CODE_SEARCH_LOCK);
     }
 
 }

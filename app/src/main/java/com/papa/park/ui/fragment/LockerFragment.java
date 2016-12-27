@@ -13,17 +13,15 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.papa.libcommon.base.BaseFragment;
-import com.papa.libcommon.base.ProgressDialogFragment;
 import com.papa.park.R;
 import com.papa.park.api.ApiCallback;
-import com.papa.park.api.ApiException;
 import com.papa.park.api.BaiduConfig;
 import com.papa.park.api.HttpManager;
 import com.papa.park.api.SubscriberCallBack;
 import com.papa.park.data.UserInfoManager;
-import com.papa.park.entity.bean.BaseBean;
 import com.papa.park.entity.bean.LockerLBSListResponse;
 import com.papa.park.entity.bean.UserInfo;
+import com.papa.park.entity.event.RefreshEvent;
 import com.papa.park.ui.activity.RentConfirmActivity;
 import com.papa.park.ui.activity.RentDetailActivity;
 import com.papa.park.ui.view.LinearDividerItemDecoration;
@@ -33,7 +31,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import rx.Observable;
-import rx.functions.Func1;
+import rx.functions.Action1;
 
 /**
  * User: PAPA
@@ -65,6 +63,7 @@ public class LockerFragment extends BaseFragment {
 
     @Override
     protected void initViewsAndEvents() {
+        onRefreshEvent();
         mAdapter = new BaseQuickAdapter<LockerLBSListResponse.PoisBean>(R.layout.lockers_list_item,
                 null) {
             @Override
@@ -89,7 +88,7 @@ public class LockerFragment extends BaseFragment {
                             public void onClick(View v) {
                                 Bundle bundle = new Bundle();
                                 bundle.putInt(KeyConstant.KEY_DATA, contentsBean.getId());
-                                readyGoForResult(RentConfirmActivity.class, 1, bundle);
+                                readyGo(RentConfirmActivity.class, bundle);
                             }
                         });
                         break;
@@ -105,7 +104,7 @@ public class LockerFragment extends BaseFragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putInt(KeyConstant.KEY_TYPE, 0);
                                 bundle.putInt(KeyConstant.KEY_DATA, contentsBean.getId());
-                                readyGoForResult(RentDetailActivity.class, 2, bundle);
+                                readyGo(RentDetailActivity.class, bundle);
                                 //readyGoForResult(RentDetailActivity.class, 1, bundle);
                             }
                         });
@@ -236,24 +235,12 @@ public class LockerFragment extends BaseFragment {
         }
     }
 
-    private void updateState(LockerLBSListResponse.PoisBean bean, int state) {
-        ProgressDialogFragment.showProgress(getFragmentManager());
-        Map<String, String> commonParam = BaiduConfig.getCommonParam();
-        commonParam.put("id", String.valueOf(bean.getId()));
-        commonParam.put("state", String.valueOf(state));
-        Observable<LockerLBSListResponse> observable = HttpManager.getInstance().getBaiduLBSApi()
-                .updatePoi
-                        (commonParam).flatMap(new Func1<BaseBean,
-                        Observable<LockerLBSListResponse>>() {
-                    @Override
-                    public Observable<LockerLBSListResponse> call(BaseBean baseBean) {
-                        if (baseBean.status == 0) {
-                            return HttpManager.getInstance().getBaiduLBSApi().getLocker
-                                    (BaiduConfig.getCommonParam());
-                        }
-                        return Observable.error(new ApiException(baseBean.message));
-                    }
-                });
-
+    private void onRefreshEvent() {
+        rxManager.onEvent(RefreshEvent.class, new Action1<RefreshEvent>() {
+            @Override
+            public void call(RefreshEvent rechargeEvent) {
+                loadData();
+            }
+        });
     }
 }

@@ -19,6 +19,7 @@ import com.papa.park.api.SubscriberCallBack;
 import com.papa.park.data.UserInfoManager;
 import com.papa.park.entity.bean.LockerLBSListResponse;
 import com.papa.park.entity.bean.UserInfo;
+import com.papa.park.entity.event.RefreshEvent;
 import com.papa.park.ui.view.LinearDividerItemDecoration;
 import com.papa.park.utils.BdKeyConstant;
 import com.papa.park.utils.KeyConstant;
@@ -29,6 +30,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import rx.Observable;
+import rx.functions.Action1;
 
 import static com.baidu.mapapi.BMapManager.getContext;
 
@@ -39,7 +41,6 @@ public class MyRentActivity extends BaseAppCompatActivity {
     Toolbar mToolBar;
     @Bind(R.id.recycler_view)
     RecyclerView mRecyclerView;
-
 
     BaseQuickAdapter<LockerLBSListResponse.PoisBean> mAdapter;
 
@@ -56,6 +57,7 @@ public class MyRentActivity extends BaseAppCompatActivity {
 
     @Override
     protected void initViewsAndEvents() {
+        onRefreshEvent();
         setToolbar(mToolBar, "我的租用");
         mAdapter = new BaseQuickAdapter<LockerLBSListResponse.PoisBean>(R.layout.my_rent_list_item,
                 null) {
@@ -81,6 +83,7 @@ public class MyRentActivity extends BaseAppCompatActivity {
                             public void onClick(View v) {
                                 Bundle bundle = new Bundle();
                                 bundle.putInt(KeyConstant.KEY_DATA, contentsBean.getId());
+                                bundle.putInt(KeyConstant.KEY_TYPE, 1);
                                 readyGo(RentDetailActivity.class, bundle);
                             }
                         });
@@ -95,6 +98,7 @@ public class MyRentActivity extends BaseAppCompatActivity {
                             public void onClick(View v) {
                                 Bundle bundle = new Bundle();
                                 bundle.putInt(KeyConstant.KEY_DATA, contentsBean.getId());
+                                bundle.putInt(KeyConstant.KEY_TYPE, 1);
                                 readyGo(RentDetailActivity.class, bundle);
                             }
                         });
@@ -142,6 +146,7 @@ public class MyRentActivity extends BaseAppCompatActivity {
 
             @Override
             public void onSuccess(LockerLBSListResponse data) {
+                restore();
                 if (data != null && data.getPois() != null) {
                     mAdapter.setNewData(data.getPois());
                 }
@@ -152,4 +157,13 @@ public class MyRentActivity extends BaseAppCompatActivity {
         }));
     }
 
+
+    private void onRefreshEvent() {
+        mRxManager.onEvent(RefreshEvent.class, new Action1<RefreshEvent>() {
+            @Override
+            public void call(RefreshEvent rechargeEvent) {
+                loadData();
+            }
+        });
+    }
 }

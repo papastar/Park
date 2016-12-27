@@ -46,4 +46,6 @@ public interface UserApi {
     @POST("rentsinfo/begin")
     Observable<String> rentLocker(@Body PoiBody body);
 
+    @POST("rentsinfo/end")
+    Observable<String> endRentLocker(@Body PoiBody body);
 }

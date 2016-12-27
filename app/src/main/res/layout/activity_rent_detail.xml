@@ -45,9 +45,9 @@
 
         <TextView
             android:id="@+id/locker_address_tv"
+            style="@style/CommonItemTextView"
             android:layout_height="wrap_content"
             android:minHeight="35dp"
-            style="@style/CommonItemTextView"
             tools:text="车主号码:13800138000"/>
 
         <TextView
@@ -124,6 +124,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/bg_btn_selector"
-        android:text="立即预约"/>
+        android:text="立即预约"
+        android:visibility="gone"/>
 
 </LinearLayout>

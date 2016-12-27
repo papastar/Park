@@ -32,8 +32,6 @@ import com.papa.park.data.DbManager;
 import com.papa.park.data.UserInfoManager;
 import com.papa.park.entity.adapter.PeriodAddressScanCallback;
 import com.papa.park.entity.database.BleData;
-import com.papa.park.ui.activity.MainActivity;
-import com.papa.park.ui.activity.SearchLockActivity;
 import com.papa.park.utils.KeyConstant;
 
 import java.util.ArrayList;
@@ -105,8 +103,8 @@ public class MainLockFragment extends BaseFragment {
         if (list != null && !list.isEmpty()) {
             startScan(list);
         } else {
-            Intent intent = new Intent(getActivity(), SearchLockActivity.class);
-            getActivity().startActivityForResult(intent, MainActivity.REQUEST_CODE_SEARCH_LOCK);
+//            Intent intent = new Intent(getActivity(), SearchLockActivity.class);
+//            getActivity().startActivityForResult(intent, MainActivity.REQUEST_CODE_SEARCH_LOCK);
         }
     }
 

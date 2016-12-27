@@ -3,6 +3,7 @@ package com.papa.park.ui.activity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ import com.papa.park.api.SubscriberCallBack;
 import com.papa.park.entity.bean.BaseBean;
 import com.papa.park.entity.bean.LockerLBSListResponse;
 import com.papa.park.entity.bean.LockerLBSResponse;
+import com.papa.park.entity.event.RefreshEvent;
+import com.papa.park.utils.DialogUtil;
 import com.papa.park.utils.KeyConstant;
 
 import java.util.Map;
@@ -46,8 +49,8 @@ public class RentConfirmActivity extends BaseAppCompatActivity {
 
     int mId = 0;
 
-    private int mDefaultFirst = 5;
-    private int mDefaultSecond = 1;
+    private String mDefaultFirst = "5";
+    private String mDefaultSecond = "1";
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -85,13 +88,13 @@ public class RentConfirmActivity extends BaseAppCompatActivity {
             }
 
             @Override
-            public void onFailure(int code, String message,Exception e) {
+            public void onFailure(int code, String message, Exception e) {
                 showError();
             }
 
             @Override
             public void onSuccess(LockerLBSResponse data) {
-                if (data != null && data.getPoi() != null ) {
+                if (data != null && data.getPoi() != null) {
                     updateInfo(data.getPoi());
                 }
             }
@@ -124,12 +127,28 @@ public class RentConfirmActivity extends BaseAppCompatActivity {
 
     @OnClick(R.id.first_tv)
     void onFirstClick() {
-
+        final String[] array = getResources().getStringArray(R.array
+                .first_price_array);
+        DialogUtil.showListDialog(this, "首次收费", array, new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mDefaultFirst = array[position].replace("元", "");
+                updateFirst(mDefaultFirst);
+            }
+        });
     }
 
     @OnClick(R.id.second_tv)
     void onSecondClick() {
-
+        final String[] array = getResources().getStringArray(R.array
+                .first_price_array);
+        DialogUtil.showListDialog(this, "首次收费", array, new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mDefaultSecond = array[position].replace("元", "");
+                updateSecond(mDefaultSecond);
+            }
+        });
     }
 
 
@@ -138,18 +157,18 @@ public class RentConfirmActivity extends BaseAppCompatActivity {
         Map<String, String> commonParam = BaiduConfig.getCommonParam();
         commonParam.put("id", String.valueOf(id));
         commonParam.put("rentState", String.valueOf(state));
-        commonParam.put("rentFirstHourPrice", String.valueOf(mDefaultFirst));
-        commonParam.put("rentPerHourPrice", String.valueOf(mDefaultSecond));
+        commonParam.put("rentFirstHourPrice", mDefaultFirst);
+        commonParam.put("rentPerHourPrice", mDefaultSecond);
         Observable<BaseBean> observable = HttpManager.getInstance().getBaiduLBSApi().updatePoi
                 (commonParam);
         addSubscription(observable, new SubscriberCallBack<>(new ApiCallback<BaseBean>() {
             @Override
             public void onCompleted() {
-
+                ProgressDialogFragment.dismissProgress(getSupportFragmentManager());
             }
 
             @Override
-            public void onFailure(int code, String message,Exception e) {
+            public void onFailure(int code, String message, Exception e) {
                 ProgressDialogFragment.dismissProgress(getSupportFragmentManager());
                 showToast(message);
             }
@@ -157,11 +176,10 @@ public class RentConfirmActivity extends BaseAppCompatActivity {
             @Override
             public void onSuccess(BaseBean data) {
                 if (data != null && data.status == 0) {
-                    setResult(RESULT_OK);
+                    mRxManager.post(new RefreshEvent());
                     finish();
                 }
             }
         }));
-
     }
 }

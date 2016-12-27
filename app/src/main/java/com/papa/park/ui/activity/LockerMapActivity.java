@@ -35,6 +35,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.papa.libcommon.base.BaseAppCompatActivity;
+import com.papa.libcommon.util.Logger;
 import com.papa.park.R;
 import com.papa.park.api.BaiduConfig;
 import com.papa.park.api.RentState;
@@ -215,6 +216,8 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
 
 
     private void updateMap(List<CloudPoiInfo> infoList) {
+        if (infoList.isEmpty())
+            return;
         mPoiInfoLinkedHashMap.clear();
         mBaiduMap.clear();
         BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
@@ -320,6 +323,7 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
             if (location == null || mMapView == null) {
                 return;
             }
+            Logger.d("location success");
             MyLocationData locData = new MyLocationData.Builder()
                     .accuracy(location.getRadius())
                     // 此处设置开发者获取到的方向信息，顺时针0-360
@@ -333,7 +337,9 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
                         location.getLongitude());
                 MapStatus.Builder builder = new MapStatus.Builder();
                 builder.target(ll);
-                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newLatLng(ll));
+                //               mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus
+                // (builder.build()));
             }
         }
     }
