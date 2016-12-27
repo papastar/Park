@@ -2,6 +2,7 @@ package com.papa.park.entity.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +70,10 @@ public class LockerPagerAdapter extends PagerAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, RentDetailActivity.class);
-                intent.putExtra(KeyConstant.KEY_DATA, cloudPoiInfo.uid);
+                Bundle bundle = new Bundle();
+                bundle.putInt(KeyConstant.KEY_TYPE, 1);
+                bundle.putInt(KeyConstant.KEY_DATA, cloudPoiInfo.uid);
+                intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
         });
