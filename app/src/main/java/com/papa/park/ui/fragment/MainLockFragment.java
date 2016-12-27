@@ -20,6 +20,9 @@ import com.litesuits.bluetooth.LiteBleGattCallback;
 import com.litesuits.bluetooth.LiteBluetooth;
 import com.litesuits.bluetooth.conn.BleCharactCallback;
 import com.litesuits.bluetooth.exception.BleException;
+import com.litesuits.bluetooth.exception.hanlder.BleExceptionHandler;
+import com.litesuits.bluetooth.exception.hanlder.DefaultBleExceptionHandler;
+import com.litesuits.bluetooth.utils.BluetoothUtil;
 import com.papa.libcommon.base.BaseFragment;
 import com.papa.libcommon.util.Logger;
 import com.papa.park.R;
@@ -35,6 +38,7 @@ import com.papa.park.entity.database.BleData;
 import com.papa.park.utils.KeyConstant;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,10 +78,12 @@ public class MainLockFragment extends BaseFragment {
     LinearLayout operationContainer;
 
     LiteBluetooth mLiteBluetooth;
+    BleExceptionHandler mBleExceptionHandler;
     private BleData mBleData;
     private boolean hasCollect = true;
     private final String UUID_CHART = "0000fff1-0000-1000-8000-00805f9b34fb";
     private String UUID_SERVICE;
+
 
     public static MainLockFragment newInstance() {
         return new MainLockFragment();
@@ -86,6 +92,7 @@ public class MainLockFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBleExceptionHandler = new DefaultBleExceptionHandler(getContext());
         mLiteBluetooth = BleManager.getInstance().getLiteBluetooth();
         mLiteBluetooth.addGattCallback(mCallback);
     }
@@ -115,13 +122,14 @@ public class MainLockFragment extends BaseFragment {
             @Override
             public void onDeviceFound(BleData item, BluetoothDevice device, int rssi, byte[]
                     scanRecord) {
+                Logger.d(TAG, "onDeviceFound:name=" + device.getName());
                 mBleData = item;
                 checkBeacon(device, rssi, scanRecord);
             }
 
             @Override
             public void onScanTimeout() {
-
+                Logger.d(TAG, "onScanTimeout");
             }
         };
         mLiteBluetooth.startLeScan(callback);
@@ -181,19 +189,24 @@ public class MainLockFragment extends BaseFragment {
         mLiteBluetooth.connect(device, false, new LiteBleGattCallback() {
             @Override
             public void onConnectSuccess(BluetoothGatt gatt, int status) {
-
+                Logger.d(TAG, "onConnectSuccess:status=" + status);
+                gatt.discoverServices();
             }
 
             @Override
             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+                Logger.d(TAG, "onServicesDiscovered");
+                BluetoothUtil.printServices(gatt);
                 UUID_SERVICE = getServiceUUID(gatt);
-
+                if (!TextUtils.isEmpty(UUID_SERVICE))
+                    Logger.d(TAG, "onServicesDiscovered:UUID_SERVICE=" + UUID_SERVICE);
             }
 
             @Override
             public void onConnectFailure(BleException exception) {
-
+                mBleExceptionHandler.handleException(exception);
             }
+
         });
     }
 
@@ -269,12 +282,13 @@ public class MainLockFragment extends BaseFragment {
 
             @Override
             public void onSuccess(BluetoothGattCharacteristic characteristic) {
-
+                Logger.d(TAG, "write data success:value = " + Arrays.toString(characteristic
+                        .getValue()));
             }
 
             @Override
             public void onFailure(BleException exception) {
-
+                mBleExceptionHandler.handleException(exception);
             }
         });
 
@@ -285,29 +299,33 @@ public class MainLockFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mLiteBluetooth.isConnectingOrConnected()) {
+            mLiteBluetooth.closeBluetoothGatt();
+        }
         mLiteBluetooth.removeGattCallback(mCallback);
     }
 
     private LiteBleGattCallback mCallback = new LiteBleGattCallback() {
         @Override
         public void onConnectSuccess(BluetoothGatt gatt, int status) {
-            Logger.d(TAG, "onConnectSuccess,status = ", status);
+            Logger.d(TAG, "onConnectSuccess:status = " + status);
         }
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            Logger.d(TAG, "onServicesDiscovered,status = ", status);
+            Logger.d(TAG, "onServicesDiscovered:status" + status);
         }
 
         @Override
         public void onConnectFailure(BleException exception) {
-            Logger.d(TAG, "onConnectFailure,exception = ", exception);
+            Logger.d(TAG, "onConnectFailure:exception = %s", exception);
+            mBleExceptionHandler.handleException(exception);
         }
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
-            Logger.d(TAG, "onConnectionStateChange,status = " + status + "newState=" + newState);
+            Logger.d(TAG, "onConnectionStateChange:status = " + status + ",newState=" + newState);
         }
 
     };

@@ -1,8 +1,14 @@
 package com.litesuits.bluetooth.exception.hanlder;
 
 import android.content.Context;
-import android.widget.Toast;
-import com.litesuits.bluetooth.exception.*;
+import android.util.Log;
+
+import com.litesuits.bluetooth.LiteBluetooth;
+import com.litesuits.bluetooth.exception.ConnectException;
+import com.litesuits.bluetooth.exception.GattException;
+import com.litesuits.bluetooth.exception.InitiatedException;
+import com.litesuits.bluetooth.exception.OtherException;
+import com.litesuits.bluetooth.exception.TimeoutException;
 
 /**
  * Toast exception.
@@ -19,26 +25,31 @@ public class DefaultBleExceptionHandler extends BleExceptionHandler {
 
     @Override
     protected void onConnectException(ConnectException e) {
-        Toast.makeText(context, e.getDescription(), Toast.LENGTH_LONG).show();
+        Log.e(LiteBluetooth.TAG, "onConnectException:" + e.toString());
+        //Toast.makeText(context, e.getDescription(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onGattException(GattException e) {
-        Toast.makeText(context, e.getDescription(), Toast.LENGTH_LONG).show();
+        Log.e(LiteBluetooth.TAG, "onGattException:" + e.toString());
+        //Toast.makeText(context, e.getDescription(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onTimeoutException(TimeoutException e) {
-        Toast.makeText(context, e.getDescription(), Toast.LENGTH_LONG).show();
+        Log.e(LiteBluetooth.TAG, "onTimeoutException:" + e.toString());
+        //Toast.makeText(context, e.getDescription(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onInitiatedException(InitiatedException e) {
-        Toast.makeText(context, e.getDescription(), Toast.LENGTH_LONG).show();
+        Log.e(LiteBluetooth.TAG, "onInitiatedException:" + e.toString());
+        //Toast.makeText(context, e.getDescription(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onOtherException(OtherException e) {
-        Toast.makeText(context, e.getDescription(), Toast.LENGTH_LONG).show();
+        Log.e(LiteBluetooth.TAG, "onOtherException:" + e.toString());
+        //Toast.makeText(context, e.getDescription(), Toast.LENGTH_LONG).show();
     }
 }

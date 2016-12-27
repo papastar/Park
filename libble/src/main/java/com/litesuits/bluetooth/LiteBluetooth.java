@@ -46,7 +46,7 @@ import java.util.Set;
  * @date 2015-01-16
  */
 public class LiteBluetooth {
-    private static final String TAG = LiteBluetooth.class.getSimpleName();
+    public static final String TAG = LiteBluetooth.class.getSimpleName();
     public static final int DEFAULT_SCAN_TIME = 20000;
     public static final int DEFAULT_CONN_TIME = 10000;
 
