@@ -110,7 +110,7 @@ public class BleUtil {
     }
 
     private static String to16(String data) {
-        String newdataString = "";
+        String newDataString = "";
         String[] daStrings = data.split("-");
         for (int i = 0; i < daStrings.length; i++) {
             String dt = Integer.toHexString(Integer.parseInt(daStrings[i]));
@@ -118,22 +118,67 @@ public class BleUtil {
                 dt = "0" + dt;
             }
             if (i < daStrings.length - 1) {
-                newdataString += dt + " ";
+                newDataString += dt + " ";
             } else {
-                newdataString += dt;
+                newDataString += dt;
             }
         }
 
-        return newdataString;
+        return newDataString;
     }
 
 
-    static byte[] stringToByteArray(String str) {
+    public static byte[] stringToByteArray(String str) {
         String[] str_ary = str.split(" ");
         int n = str_ary.length;
         byte[] bt_ary = new byte[n];
         for (int i = 0; i < n; i++)
             bt_ary[i] = (byte) Integer.parseInt(str_ary[i], 16);
         return bt_ary;
+    }
+
+
+    public static String getCharTaken(String type, String token, String sn) {
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yy-MM-dd-HH-mm");
+        String date = sDateFormat.format(new java.util.Date());
+        date = to16(date);
+
+        String fields = SimpleCrypto.str2HexStr("INIT:");
+        String strMd5Taken = " 10 "
+                + SimpleCrypto.str2HexStr(SimpleCrypto.MD5(token));
+        String strMd5SN = " 0B " + SimpleCrypto.str2HexStr(sn);
+
+        String dataWT = fields + strMd5Taken + strMd5SN + " " + date;
+
+        byte[] seed = "ACWLSHYOEFZGJRMX".getBytes();
+        byte[] byteAction = stringToByteArray(dataWT);
+        String encrypt = null;
+        try {
+            encrypt = SimpleCrypto.encrypt(seed, byteAction);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String sum = "00 00 34 BB BB BB BB " + encrypt;
+        return getBlue(type, sum);
+    }
+
+
+    public static String getCharKey(String type, String token, String key) {
+        byte[] Seed = stringToByteArray(SimpleCrypto.str2HexStr(SimpleCrypto
+                .MD5(token)));
+        String dataDW = SimpleCrypto.str2HexStr("KEY2:") + " 10 "
+                + SimpleCrypto.str2HexStr(SimpleCrypto.MD5(key));
+        byte[] byteAction = stringToByteArray(dataDW);
+        String encrypt = null;
+        try {
+            encrypt = SimpleCrypto.encrypt(Seed, byteAction);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String sum = "00 00 24 BB BB BB BB " + encrypt;
+
+        return getBlue(type, sum);
+
     }
 }

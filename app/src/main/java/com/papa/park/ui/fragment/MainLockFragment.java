@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
@@ -207,7 +208,32 @@ public class MainLockFragment extends BaseFragment {
                 mBleExceptionHandler.handleException(exception);
             }
 
+            @Override
+            public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic
+                    characteristic) {
+                super.onCharacteristicChanged(gatt, characteristic);
+                if (characteristic.getUuid().toString().equals(UUID_CHART)) {
+                    characteristicChanged(characteristic);
+                }
+            }
         });
+    }
+
+    private void characteristicChanged(BluetoothGattCharacteristic characteristic) {
+        Logger.d(TAG, "写入回调开始");
+        String dataString = SimpleCrypto
+                .bytesToHexString(characteristic.getValue());
+        int dataStringCount = dataString.split(" ").length;
+        Logger.d(TAG,
+                "写入回调" + dataString.split(" ")[0] + "|"
+                        + dataString.split(" ")[1] + "|"
+                        + dataString.split(" ")[2]);
+        if (dataStringCount == 3) {
+            Logger.d(TAG, "写入回调1");
+            char_display(dataString.split(" ")[0],
+                    dataString.split(" ")[1], dataString.split(" ")[2]);
+            Log.i("bbbbbbb", "写入回调2");
+        }
     }
 
     private String getServiceUUID(BluetoothGatt gatt) {
@@ -329,4 +355,255 @@ public class MainLockFragment extends BaseFragment {
         }
 
     };
+
+
+    private String n_CTLString = "";
+    private String n_isToken = "";
+    private String n_isAction = "";
+    private Boolean n_isNew = false;
+
+    private void char_display(String CTL, String isToken, String isAction) {
+        n_CTLString = CTL;
+        n_isToken = isToken;
+        n_isAction = isAction;
+
+        if (n_CTLString.equals("ff")) {
+            if (isToken.equals("22")) {
+                if (isAction.equals("ff")) {
+                    Logger.d("操作指令 " + CTL + " ：" +
+                            "Token 解析正确，写入flash正确");
+                } else if (isAction.equals("aa")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "Token 解密失败");
+                }
+            } else if (isToken.equals("0a")) {
+                Logger.d("操作指令 " + CTL + " ：" + "Toke解析正确，写入flash错误");
+            }
+        } else if (n_CTLString.equals("01")) {
+            Logger.d(TAG, "写入回调3" + n_CTLString);
+            if (isToken.equals("22")) {
+                Logger.d(TAG, "写入回调4" + isToken);
+                if (isAction.equals("aa")) {
+                    Logger.d(TAG, "写入回调5" + isAction);
+//                    Message msg = new Message();
+//                    msg.what = 3005;
+//                    handler.sendMessage(msg);
+                    Logger.d("操作指令 " + CTL + " ：" + "Key解密失败");
+
+//                    if (!isWriteOkBoolean) {
+//                        lockBoolea = true;
+//                        if (progressDialog != null) {
+//                            progressDialog.hide();
+//                            progressDialog.dismiss();
+//                            // ShowToast("初始化失败，请重新连接车锁");
+//                        }
+//
+//                        if (mBLE != null) {
+//                            mBLE.disconnect();
+//                            mBLE.close();
+//                            gattCharacteristic_oadimgidentify = null;
+//                            gattCharacteristic_oadimablock = null;
+//                        }
+//                        ISLIANJIE = false;
+//
+//                    }
+
+                } else if (isAction.equals("0f")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "Key解析正确，车锁90°");
+                } else if (isAction.equals("f0")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "Key解析正确，车锁0°");
+                }
+            }
+        } else if (n_CTLString.equals("02")) {
+            if (isToken.equals("00")) {
+                if (isAction.equals("aa")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "控制命令解密失败");
+//                    if (!isWriteOkBoolean) {
+//                        lockBoolea = true;
+//                        progressDialog.hide();
+//                        progressDialog.dismiss();
+//                        ShowToast("指令非法");
+//                    }
+                } else if (isAction.equals("0f")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "控制命令下降解析正确");
+                } else if (isAction.equals("f0")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "控制命令上升车锁正确");
+                }
+            }
+        } else if (n_CTLString.equals("0f")) {
+            if (isToken.equals("b0")) {
+                if (isAction.equals("aa")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "车锁未激活，状态不定");
+
+                } else if (isAction.equals("0f")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "控制命令下降解析正确");
+
+                } else if (isAction.equals("f0")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "控制命令下降解析正确");
+
+                }
+            } else if (isToken.equals("b1")) {
+                if (isAction.equals("aa")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "车锁已经激活，状态不定");
+                } else if (isAction.equals("0f")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "车锁已经激活，状态90°");
+                } else if (isAction.equals("f0")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "车锁已经激活，状态0°");
+                }
+            }
+        } else if (n_CTLString.equals("aa")) {
+            if (isToken.equals("ff")) {
+                if (isAction.equals("ab")) {
+                    Logger.d("操作指令 " + CTL + " ：" + "车锁被阻挡");
+                }
+            } else if (isToken.equals("00")) {
+//                Message msg = new Message();
+//                msg.what = 80002;
+//                handler.sendMessage(msg);
+                Logger.d("操作指令 " + CTL + " ：" + "车锁被认为扳动");
+            } else {
+//                Message msg = new Message();
+//                msg.what = 80001;
+//                handler.sendMessage(msg);
+                Logger.d("操作指令 " + CTL + " ：" + "车锁被阻挡");
+            }
+        }
+        n_isNew = true;
+    }
+
+
+    private void charDisplay() {
+        if (n_CTLString.equals("0f")) {
+            // n_isToken="b0";
+            if (n_isToken.equals("b0")) {
+                String result = BleUtil.getCharTaken("FF", mBleData.lockToken, mBleData.sn);
+            } else {
+                String result = BleUtil.getCharKey("01", mBleData.lockToken, mBleData.key);
+            }
+
+        } else if (n_CTLString.equals("ff")) {
+            if (n_isAction.equals("ff")) {
+                String result = BleUtil.getCharKey("01", mBleData.lockToken, mBleData.key);
+            } else {
+//                int dqz = Integer.parseInt(n_isAction);
+//                int sumz = dataSumStringArr.length;
+//                if (dqz < sumz) {
+//                    Log.i("bbbbbbb", "写 " + n_CTLString + dqz);
+//                    boolean bRet = gattCharacteristic_char1
+//                            .setValue(StringToByteArray(dataSumStringArr[dqz]));
+//                    Boolean iswrite = mBLE
+//                            .writeCharacteristic(gattCharacteristic_char1);
+//                }
+            }
+        } else if (n_CTLString.equals("01")) {
+            Logger.d(TAG, n_isAction);
+            if (n_isAction.equals("0f") || n_isAction.equals("f0")
+                    || n_isAction.equals("aa")) {
+                //isWriteOkBoolean = true;
+                Message msg = new Message();
+                IsAction = n_isAction;
+                if (n_isAction.equals("0f")) {
+                    msg.what = 30041;
+                } else if (n_isAction.equals("f0")) {
+                    msg.what = 30031;
+                }
+                if (!lockBoolea) {
+                    handler.sendMessage(msg);
+                }
+                // if (dqz >= sumz)
+                // {
+                // Read_Char3();
+                // }
+            } else {
+
+                int dqz = Integer.parseInt(n_isAction);
+                int sumz = dataSumStringArr.length;
+                if (dqz < sumz) {
+                    Log.i("bbbbbbb", "写 " + n_CTLString + dqz);
+                    boolean bRet = gattCharacteristic_char1
+                            .setValue(StringToByteArray(dataSumStringArr[dqz]));
+                    Boolean iswrite = mBLE
+                            .writeCharacteristic(gattCharacteristic_char1);
+                }
+                Log.i("hzxlelp3", n_isAction + "||" + sumz);
+            }
+        } else if (n_CTLString.equals("02")) {
+            if (n_isAction.equals("f0") || n_isAction.equals("0f")
+                    || n_isAction.equals("aa")) {
+                numberout = 0;
+                isclike = false;
+                if (listerTimer != null)
+                    listerTimer.cancel();
+                listerTimer = null;
+
+                // actionHandler.removeCallbacks(actionRunnable);
+                // actionRunnable=null;
+
+            } else {
+
+                int dqz = Integer.parseInt(n_isAction);
+                int sumz = dataSumStringArr.length;
+                if (dqz < sumz) {
+                    Log.i("bbbbbbb", "写 " + n_CTLString + dqz);
+                    boolean bRet = gattCharacteristic_char1
+                            .setValue(StringToByteArray(dataSumStringArr[dqz]));
+                    Boolean iswrite = mBLE
+                            .writeCharacteristic(gattCharacteristic_char1);
+                }
+            }
+
+        } else if (n_CTLString.equals("03")) {
+            // lockmain_lockofforob.setEnabled(true);
+            if (n_isAction.equals("f0") || n_isAction.equals("0f")) {
+                // isclike = true;
+                if (!lockBoolea) {
+                    Message msg = new Message();
+                    if (n_isAction.equals("0f")) {
+                        msg.what = 30041;
+                    } else if (n_isAction.equals("f0")) {
+                        msg.what = 30031;
+                    }
+                    handler.sendMessage(msg);
+                }
+            }
+            actionHandler.removeCallbacks(actionRunnable);
+            actionRunnable = null;
+            numberout = 0;
+            isclike = false;
+            if (listerTimer != null)
+                listerTimer.cancel();
+            listerTimer = null;
+            if (n_isAction.equals("aa")) {
+                Message msgMessage = new Message();
+                msgMessage.what = 70001;
+                handler.sendMessage(msgMessage);
+            }
+        }
+    }
+
+
+    private void writeBlueData(String data) {
+        mLiteBluetooth.newBleConnector().withUUID(UUID.fromString(UUID_SERVICE), UUID.fromString
+                (UUID_CHART), null).writeCharacteristic(BleUtil.stringToByteArray(data), new
+                BleCharactCallback() {
+            @Override
+            public void onSuccess(BluetoothGattCharacteristic characteristic) {
+
+            }
+
+            @Override
+            public void onFailure(BleException exception) {
+
+            }
+        });
+    }
+
+    /**
+     *
+     * @param status 0已降下，1已升起
+     */
+    private void updateLockerStatus(int status){
+
+    }
+
+
 }
