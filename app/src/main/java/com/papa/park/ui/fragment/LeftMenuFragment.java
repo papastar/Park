@@ -15,6 +15,7 @@ import com.papa.park.ui.activity.LockerMapActivity;
 import com.papa.park.ui.activity.LockersActivity;
 import com.papa.park.ui.activity.MainActivity;
 import com.papa.park.ui.activity.MyRentActivity;
+import com.papa.park.ui.activity.MyWalletActivity;
 import com.papa.park.ui.activity.SearchLockActivity;
 import com.papa.park.ui.activity.UserInfoActivity;
 import com.papa.park.utils.CircleImageTransformation;
@@ -22,6 +23,9 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+
+import static com.papa.park.R.id.my_locker_tv;
+import static com.papa.park.R.id.my_rent_tv;
 
 /**
  * User: PAPA
@@ -39,13 +43,13 @@ public class LeftMenuFragment extends BaseFragment {
     TextView mOrderTv;
     @Bind(R.id.wallet_tv)
     TextView mWalletTv;
-    @Bind(R.id.rent_locker_tv)
+    @Bind(my_locker_tv)
     TextView mRentLockerTv;
     @Bind(R.id.lock_manager_tv)
     TextView mLockManagerTv;
     @Bind(R.id.add_locker_tv)
     TextView mAddLockerTv;
-    @Bind(R.id.my_rent_tv)
+    @Bind(my_rent_tv)
     TextView mMyRentTv;
     @Bind(R.id.navigation_view)
     LinearLayout mNavigationView;
@@ -102,18 +106,23 @@ public class LeftMenuFragment extends BaseFragment {
         readyGo(LockersActivity.class);
     }
 
-    @OnClick(R.id.rent_locker_tv)
+    @OnClick(R.id.my_rent_tv)
     void onFindLockerTv() {
         readyGo(LockerMapActivity.class);
     }
 
-    @OnClick(R.id.my_rent_tv)
+    @OnClick(R.id.wallet_tv)
+    void onMyWalletTv() {
+        readyGo(MyWalletActivity.class);
+    }
+
+    @OnClick(R.id.my_locker_tv)
     void onMyRentTv() {
         readyGo(MyRentActivity.class);
     }
 
     @OnClick(R.id.add_locker_tv)
-    void onAddLockTv(){
+    void onAddLockTv() {
         Intent intent = new Intent(getActivity(), SearchLockActivity.class);
         getActivity().startActivityForResult(intent, MainActivity.REQUEST_CODE_SEARCH_LOCK);
     }

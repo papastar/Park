@@ -26,6 +26,7 @@ import com.litesuits.bluetooth.exception.hanlder.DefaultBleExceptionHandler;
 import com.litesuits.bluetooth.utils.BluetoothUtil;
 import com.papa.libcommon.base.BaseFragment;
 import com.papa.libcommon.util.Logger;
+import com.papa.libcommon.util.ToastUtils;
 import com.papa.park.R;
 import com.papa.park.app.Config;
 import com.papa.park.ble.BleUtil;
@@ -54,7 +55,7 @@ import butterknife.OnClick;
 public class MainLockFragment extends BaseFragment {
 
     private final String TAG = "blue";
-
+    private final String UUID_CHART = "0000fff1-0000-1000-8000-00805f9b34fb";
     @Bind(R.id.locker_name_tv)
     TextView nameTv;
     @Bind(R.id.status_tv)
@@ -77,13 +78,35 @@ public class MainLockFragment extends BaseFragment {
     Button lockListBtn;
     @Bind(R.id.operation_container)
     LinearLayout operationContainer;
-
     LiteBluetooth mLiteBluetooth;
     BleExceptionHandler mBleExceptionHandler;
     private BleData mBleData;
     private boolean hasCollect = true;
-    private final String UUID_CHART = "0000fff1-0000-1000-8000-00805f9b34fb";
     private String UUID_SERVICE;
+    private LiteBleGattCallback mCallback = new LiteBleGattCallback() {
+        @Override
+        public void onConnectSuccess(BluetoothGatt gatt, int status) {
+            Logger.d(TAG, "onConnectSuccess:status = " + status);
+        }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            Logger.d(TAG, "onServicesDiscovered:status" + status);
+        }
+
+        @Override
+        public void onConnectFailure(BleException exception) {
+            Logger.d(TAG, "onConnectFailure:exception = %s", exception);
+            mBleExceptionHandler.handleException(exception);
+        }
+
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            super.onConnectionStateChange(gatt, status, newState);
+            Logger.d(TAG, "onConnectionStateChange:status = " + status + ",newState=" + newState);
+        }
+
+    };
 
 
     public static MainLockFragment newInstance() {
@@ -97,7 +120,6 @@ public class MainLockFragment extends BaseFragment {
         mLiteBluetooth = BleManager.getInstance().getLiteBluetooth();
         mLiteBluetooth.addGattCallback(mCallback);
     }
-
 
     @Override
     protected void initViewsAndEvents() {
@@ -135,7 +157,6 @@ public class MainLockFragment extends BaseFragment {
         };
         mLiteBluetooth.startLeScan(callback);
     }
-
 
     private boolean checkBeacon(BluetoothDevice device, int rssi, byte[]
             scanRecord) {
@@ -230,11 +251,12 @@ public class MainLockFragment extends BaseFragment {
                         + dataString.split(" ")[2]);
         if (dataStringCount == 3) {
             Logger.d(TAG, "写入回调1");
-            char_display(dataString.split(" ")[0],
+            writeCharacteristic(dataString.split(" ")[0],
                     dataString.split(" ")[1], dataString.split(" ")[2]);
-            Log.i("bbbbbbb", "写入回调2");
+            Logger.d(TAG, "写入回调2");
         }
     }
+
 
     private String getServiceUUID(BluetoothGatt gatt) {
         List<BluetoothGattService> services = gatt.getServices();
@@ -248,7 +270,6 @@ public class MainLockFragment extends BaseFragment {
         }
         return null;
     }
-
 
     /**
      * 更新电池信息
@@ -321,7 +342,6 @@ public class MainLockFragment extends BaseFragment {
 
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -331,43 +351,17 @@ public class MainLockFragment extends BaseFragment {
         mLiteBluetooth.removeGattCallback(mCallback);
     }
 
-    private LiteBleGattCallback mCallback = new LiteBleGattCallback() {
-        @Override
-        public void onConnectSuccess(BluetoothGatt gatt, int status) {
-            Logger.d(TAG, "onConnectSuccess:status = " + status);
-        }
+    private void writeCharacteristic(String CTL, String isToken, String isAction) {
+        logWriteCharacteristic(CTL, isToken, isAction);
+        writeCharacteristicAction(CTL, isToken, isAction);
+    }
 
-        @Override
-        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            Logger.d(TAG, "onServicesDiscovered:status" + status);
-        }
+    private void logWriteCharacteristic(String CTL, String isToken, String isAction) {
+//        n_CTLString = CTL;
+//        n_isToken = isToken;
+//        n_isAction = isAction;
 
-        @Override
-        public void onConnectFailure(BleException exception) {
-            Logger.d(TAG, "onConnectFailure:exception = %s", exception);
-            mBleExceptionHandler.handleException(exception);
-        }
-
-        @Override
-        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            super.onConnectionStateChange(gatt, status, newState);
-            Logger.d(TAG, "onConnectionStateChange:status = " + status + ",newState=" + newState);
-        }
-
-    };
-
-
-    private String n_CTLString = "";
-    private String n_isToken = "";
-    private String n_isAction = "";
-    private Boolean n_isNew = false;
-
-    private void char_display(String CTL, String isToken, String isAction) {
-        n_CTLString = CTL;
-        n_isToken = isToken;
-        n_isAction = isAction;
-
-        if (n_CTLString.equals("ff")) {
+        if (CTL.equals("ff")) {
             if (isToken.equals("22")) {
                 if (isAction.equals("ff")) {
                     Logger.d("操作指令 " + CTL + " ：" +
@@ -378,8 +372,8 @@ public class MainLockFragment extends BaseFragment {
             } else if (isToken.equals("0a")) {
                 Logger.d("操作指令 " + CTL + " ：" + "Toke解析正确，写入flash错误");
             }
-        } else if (n_CTLString.equals("01")) {
-            Logger.d(TAG, "写入回调3" + n_CTLString);
+        } else if (CTL.equals("01")) {
+            Logger.d(TAG, "写入回调3" + CTL);
             if (isToken.equals("22")) {
                 Logger.d(TAG, "写入回调4" + isToken);
                 if (isAction.equals("aa")) {
@@ -413,7 +407,7 @@ public class MainLockFragment extends BaseFragment {
                     Logger.d("操作指令 " + CTL + " ：" + "Key解析正确，车锁0°");
                 }
             }
-        } else if (n_CTLString.equals("02")) {
+        } else if (CTL.equals("02")) {
             if (isToken.equals("00")) {
                 if (isAction.equals("aa")) {
                     Logger.d("操作指令 " + CTL + " ：" + "控制命令解密失败");
@@ -429,7 +423,7 @@ public class MainLockFragment extends BaseFragment {
                     Logger.d("操作指令 " + CTL + " ：" + "控制命令上升车锁正确");
                 }
             }
-        } else if (n_CTLString.equals("0f")) {
+        } else if (CTL.equals("0f")) {
             if (isToken.equals("b0")) {
                 if (isAction.equals("aa")) {
                     Logger.d("操作指令 " + CTL + " ：" + "车锁未激活，状态不定");
@@ -450,7 +444,7 @@ public class MainLockFragment extends BaseFragment {
                     Logger.d("操作指令 " + CTL + " ：" + "车锁已经激活，状态0°");
                 }
             }
-        } else if (n_CTLString.equals("aa")) {
+        } else if (CTL.equals("aa")) {
             if (isToken.equals("ff")) {
                 if (isAction.equals("ab")) {
                     Logger.d("操作指令 " + CTL + " ：" + "车锁被阻挡");
@@ -467,22 +461,25 @@ public class MainLockFragment extends BaseFragment {
                 Logger.d("操作指令 " + CTL + " ：" + "车锁被阻挡");
             }
         }
-        n_isNew = true;
+
     }
 
 
-    private void charDisplay() {
-        if (n_CTLString.equals("0f")) {
+    private void writeCharacteristicAction(String CTL, String isToken, String isAction) {
+        if (CTL.equals("0f")) {
             // n_isToken="b0";
-            if (n_isToken.equals("b0")) {
+            if (isToken.equals("b0")) {
                 String result = BleUtil.getCharTaken("FF", mBleData.lockToken, mBleData.sn);
+                writeBlueData(result);
             } else {
                 String result = BleUtil.getCharKey("01", mBleData.lockToken, mBleData.key);
+                writeBlueData(result);
             }
 
-        } else if (n_CTLString.equals("ff")) {
-            if (n_isAction.equals("ff")) {
+        } else if (CTL.equals("ff")) {
+            if (isAction.equals("ff")) {
                 String result = BleUtil.getCharKey("01", mBleData.lockToken, mBleData.key);
+                writeBlueData(result);
             } else {
 //                int dqz = Integer.parseInt(n_isAction);
 //                int sumz = dataSumStringArr.length;
@@ -494,88 +491,91 @@ public class MainLockFragment extends BaseFragment {
 //                            .writeCharacteristic(gattCharacteristic_char1);
 //                }
             }
-        } else if (n_CTLString.equals("01")) {
-            Logger.d(TAG, n_isAction);
-            if (n_isAction.equals("0f") || n_isAction.equals("f0")
-                    || n_isAction.equals("aa")) {
+        } else if (CTL.equals("01")) {
+            Logger.d(TAG, isAction);
+            if (isAction.equals("0f") || isAction.equals("f0")
+                    || isAction.equals("aa")) {
                 //isWriteOkBoolean = true;
-                Message msg = new Message();
-                IsAction = n_isAction;
-                if (n_isAction.equals("0f")) {
-                    msg.what = 30041;
-                } else if (n_isAction.equals("f0")) {
-                    msg.what = 30031;
+                //Message msg = new Message();
+
+                if (isAction.equals("0f")) {
+                    updateLockerStatus(1);
+                } else if (isAction.equals("f0")) {
+                    updateLockerStatus(0);
                 }
-                if (!lockBoolea) {
-                    handler.sendMessage(msg);
-                }
-                // if (dqz >= sumz)
-                // {
-                // Read_Char3();
-                // }
+//                if (!lockBoolea) {
+//                    handler.sendMessage(msg);
+//                }
+//                // if (dqz >= sumz)
+//                // {
+//                // Read_Char3();
+//                // }
             } else {
 
-                int dqz = Integer.parseInt(n_isAction);
-                int sumz = dataSumStringArr.length;
-                if (dqz < sumz) {
-                    Log.i("bbbbbbb", "写 " + n_CTLString + dqz);
-                    boolean bRet = gattCharacteristic_char1
-                            .setValue(StringToByteArray(dataSumStringArr[dqz]));
-                    Boolean iswrite = mBLE
-                            .writeCharacteristic(gattCharacteristic_char1);
-                }
-                Log.i("hzxlelp3", n_isAction + "||" + sumz);
+                int dqz = Integer.parseInt(isAction);
+//                int sumz = dataSumStringArr.length;
+//                if (dqz < sumz) {
+//                    Log.i("bbbbbbb", "写 " + n_CTLString + dqz);
+//                    boolean bRet = gattCharacteristic_char1
+//                            .setValue(StringToByteArray(dataSumStringArr[dqz]));
+//                    Boolean iswrite = mBLE
+//                            .writeCharacteristic(gattCharacteristic_char1);
+//                }
+//                Log.i("hzxlelp3", n_isAction + "||" + sumz);
             }
-        } else if (n_CTLString.equals("02")) {
-            if (n_isAction.equals("f0") || n_isAction.equals("0f")
-                    || n_isAction.equals("aa")) {
-                numberout = 0;
-                isclike = false;
-                if (listerTimer != null)
-                    listerTimer.cancel();
-                listerTimer = null;
+        } else if (CTL.equals("02")) {
+            if (isAction.equals("f0") || isAction.equals("0f")
+                    || isAction.equals("aa")) {
+//                numberout = 0;
+//                isclike = false;
+//                if (listerTimer != null)
+//                    listerTimer.cancel();
+//                listerTimer = null;
 
                 // actionHandler.removeCallbacks(actionRunnable);
                 // actionRunnable=null;
 
             } else {
 
-                int dqz = Integer.parseInt(n_isAction);
-                int sumz = dataSumStringArr.length;
-                if (dqz < sumz) {
-                    Log.i("bbbbbbb", "写 " + n_CTLString + dqz);
-                    boolean bRet = gattCharacteristic_char1
-                            .setValue(StringToByteArray(dataSumStringArr[dqz]));
-                    Boolean iswrite = mBLE
-                            .writeCharacteristic(gattCharacteristic_char1);
-                }
+//                int dqz = Integer.parseInt(n_isAction);
+//                int sumz = dataSumStringArr.length;
+//                if (dqz < sumz) {
+//                    Log.i("bbbbbbb", "写 " + n_CTLString + dqz);
+//                    boolean bRet = gattCharacteristic_char1
+//                            .setValue(StringToByteArray(dataSumStringArr[dqz]));
+//                    Boolean iswrite = mBLE
+//                            .writeCharacteristic(gattCharacteristic_char1);
+//                }
             }
 
-        } else if (n_CTLString.equals("03")) {
+        } else if (CTL.equals("03")) {
             // lockmain_lockofforob.setEnabled(true);
-            if (n_isAction.equals("f0") || n_isAction.equals("0f")) {
+            if (isAction.equals("f0") || isAction.equals("0f")) {
                 // isclike = true;
-                if (!lockBoolea) {
-                    Message msg = new Message();
-                    if (n_isAction.equals("0f")) {
-                        msg.what = 30041;
-                    } else if (n_isAction.equals("f0")) {
-                        msg.what = 30031;
-                    }
-                    handler.sendMessage(msg);
+                //if (!lockBoolea) {
+                Message msg = new Message();
+                if (isAction.equals("0f")) {
+                    updateLockerStatus(1);
+                    //msg.what = 30041;
+                } else if (isAction.equals("f0")) {
+                    updateLockerStatus(0);
+                    //msg.what = 30031;
                 }
+                //handler.sendMessage(msg);
+                //}
             }
-            actionHandler.removeCallbacks(actionRunnable);
-            actionRunnable = null;
-            numberout = 0;
-            isclike = false;
-            if (listerTimer != null)
-                listerTimer.cancel();
-            listerTimer = null;
-            if (n_isAction.equals("aa")) {
-                Message msgMessage = new Message();
-                msgMessage.what = 70001;
-                handler.sendMessage(msgMessage);
+//            actionHandler.removeCallbacks(actionRunnable);
+//            actionRunnable = null;
+//            numberout = 0;
+//            isclike = false;
+//            if (listerTimer != null)
+//                listerTimer.cancel();
+//            listerTimer = null;
+            if (isAction.equals("aa")) {
+                ToastUtils.getInstance().showToast("请重试");
+//                Message msgMessage = new Message();
+//                msgMessage.what = 70001;
+//                handler.sendMessage(msgMessage);
             }
         }
     }
@@ -585,25 +585,28 @@ public class MainLockFragment extends BaseFragment {
         mLiteBluetooth.newBleConnector().withUUID(UUID.fromString(UUID_SERVICE), UUID.fromString
                 (UUID_CHART), null).writeCharacteristic(BleUtil.stringToByteArray(data), new
                 BleCharactCallback() {
-            @Override
-            public void onSuccess(BluetoothGattCharacteristic characteristic) {
+                    @Override
+                    public void onSuccess(BluetoothGattCharacteristic characteristic) {
 
-            }
+                    }
 
-            @Override
-            public void onFailure(BleException exception) {
+                    @Override
+                    public void onFailure(BleException exception) {
 
-            }
-        });
+                    }
+                });
     }
 
     /**
-     *
      * @param status 0已降下，1已升起
      */
-    private void updateLockerStatus(int status){
-
+    private void updateLockerStatus(int status) {
+        if (status == 1) {
+            lockImg.setImageResource(R.drawable.lock_down_selector);
+            lockTv.setText("车位锁已升起");
+        } else {
+            lockImg.setImageResource(R.drawable.lock_up_selector);
+            lockTv.setText("车位锁已下降");
+        }
     }
-
-
 }

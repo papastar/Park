@@ -23,9 +23,6 @@
     <string name="rent_price_of_divide">首停一小时%1$s元\n之后每小时%2$s元</string>
 
 
-
-
-
     <array name="first_price_array">
         <item>1元</item>
         <item>5元</item>

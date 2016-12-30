@@ -96,6 +96,8 @@
 
         <activity android:name=".ui.activity.MyRentActivity">
         </activity>
+        <activity android:name=".ui.activity.MyWalletActivity">
+        </activity>
     </application>
 
 </manifest>
