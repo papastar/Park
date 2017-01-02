@@ -15,12 +15,16 @@
  */
 package com.litesuits.bluetooth.conn;
 
-import android.bluetooth.*;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattService;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+
 import com.litesuits.bluetooth.LiteBluetooth;
-import com.litesuits.bluetooth.exception.BleException;
 import com.litesuits.bluetooth.exception.GattException;
 import com.litesuits.bluetooth.exception.InitiatedException;
 import com.litesuits.bluetooth.exception.OtherException;
@@ -61,19 +65,20 @@ public class LiteBleConnector {
     private BluetoothGattDescriptor descriptor;
     private LiteBluetooth liteBluetooth;
     private int timeOutMillis = 30000;
-    private Handler handler = new MyHanlder();
+    private Handler handler ;
+//            = new Handler();
 
-    private class MyHanlder extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            BleCallback call = (BleCallback) msg.obj;
-            if (call != null) {
-                liteBluetooth.removeGattCallback(call.getBluetoothGattCallback());
-                call.onFailure(BleException.TIMEOUT_EXCEPTION);
-            }
-            msg.obj = null;
-        }
-    }
+//    private class MyHanlder extends Handler {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            BleCallback call = (BleCallback) msg.obj;
+//            if (call != null) {
+//                liteBluetooth.removeGattCallback(call.getBluetoothGattCallback());
+//                call.onFailure(BleException.TIMEOUT_EXCEPTION);
+//            }
+//            msg.obj = null;
+//        }
+//    }
 
     public LiteBleConnector(LiteBluetooth liteBluetooth) {
         this.liteBluetooth = liteBluetooth;

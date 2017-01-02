@@ -16,12 +16,19 @@
 package com.litesuits.bluetooth;
 
 import android.app.Activity;
-import android.bluetooth.*;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
 import com.litesuits.bluetooth.conn.LiteBleConnector;
 import com.litesuits.bluetooth.exception.BleException;
 import com.litesuits.bluetooth.exception.ConnectException;
@@ -31,7 +38,9 @@ import com.litesuits.bluetooth.scan.PeriodScanCallback;
 import com.litesuits.bluetooth.utils.BluetoothUtil;
 
 import java.lang.reflect.Method;
-import java.util.LinkedHashSet;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -62,7 +71,8 @@ public class LiteBluetooth {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothGatt bluetoothGatt;
     private Handler handler = new Handler(Looper.getMainLooper());
-    private Set<BluetoothGattCallback> callbackList = new LinkedHashSet<BluetoothGattCallback>();
+    private Set<BluetoothGattCallback> callbackList = Collections.synchronizedSet(new
+            HashSet<BluetoothGattCallback>());
 
     public LiteBluetooth(Context context) {
         this.context = context = context.getApplicationContext();
@@ -100,7 +110,14 @@ public class LiteBluetooth {
     }
 
     public boolean removeGattCallback(BluetoothGattCallback callback) {
-        return callbackList.remove(callback);
+        for (Iterator<BluetoothGattCallback> it = callbackList.iterator(); it.hasNext(); ) {
+            BluetoothGattCallback item = (BluetoothGattCallback) it.next();
+            if (item == callback) {
+                it.remove();
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -175,7 +192,8 @@ public class LiteBluetooth {
     /**
      * Note: Be Sure Call This On Main(UI) Thread!
      * <p/>
-     * Try to scan specified device. Connect to GATT Server hosted by this device. Caller acts as GATT client.
+     * Try to scan specified device. Connect to GATT Server hosted by this device. Caller acts as
+     * GATT client.
      * The callback is used to deliver results to Caller, such as connection status as well
      * as any further GATT client operations.
      *
@@ -185,7 +203,8 @@ public class LiteBluetooth {
      *                    device becomes available (true).
      * @param callback    GATT callback handler that will receive asynchronous callbacks.
      */
-    public boolean scanAndConnect(String mac, final boolean autoConnect, final LiteBleGattCallback callback) {
+    public boolean scanAndConnect(String mac, final boolean autoConnect, final
+    LiteBleGattCallback callback) {
         if (mac == null || mac.split(":").length != 6) {
             throw new IllegalArgumentException("Illegal MAC ! ");
         }
@@ -212,11 +231,13 @@ public class LiteBluetooth {
     }
 
     /**
-     * Clears the device cache. After uploading new hello4 the DFU target will have other services than before.
+     * Clears the device cache. After uploading new hello4 the DFU target will have other
+     * services than before.
      */
     public boolean refreshDeviceCache() {
         /*
-         * There is a refresh() method in BluetoothGatt class but for now it's hidden. We will call it using reflections.
+         * There is a refresh() method in BluetoothGatt class but for now it's hidden. We will
+         * call it using reflections.
 		 */
         try {
             final Method refresh = BluetoothGatt.class.getMethod("refresh");
@@ -328,7 +349,8 @@ public class LiteBluetooth {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (BleLog.isPrint) {
                 BleLog.i(TAG, "onConnectionStateChange  status: " + status
-                        + " ,newState: " + newState + "  ,thread: " + Thread.currentThread().getId());
+                        + " ,newState: " + newState + "  ,thread: " + Thread.currentThread()
+                        .getId());
             }
             if (newState == BluetoothGatt.STATE_CONNECTED) {
                 connectionState = STATE_CONNECTED;
@@ -353,35 +375,40 @@ public class LiteBluetooth {
         }
 
         @Override
-        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic
+                characteristic, int status) {
             for (BluetoothGattCallback call : callbackList) {
                 call.onCharacteristicRead(gatt, characteristic, status);
             }
         }
 
         @Override
-        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic
+                characteristic, int status) {
             for (BluetoothGattCallback call : callbackList) {
                 call.onCharacteristicWrite(gatt, characteristic, status);
             }
         }
 
         @Override
-        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic
+                characteristic) {
             for (BluetoothGattCallback call : callbackList) {
                 call.onCharacteristicChanged(gatt, characteristic);
             }
         }
 
         @Override
-        public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+        public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int
+                status) {
             for (BluetoothGattCallback call : callbackList) {
                 call.onDescriptorRead(gatt, descriptor, status);
             }
         }
 
         @Override
-        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int
+                status) {
             for (BluetoothGattCallback call : callbackList) {
                 call.onDescriptorWrite(gatt, descriptor, status);
             }

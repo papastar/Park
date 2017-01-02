@@ -31,3 +31,9 @@ http://lbsyun.baidu.com/index.php?title=androidsdk/guide/basicmap
 wxpay.conf.app_id=wx2d6b9ac0c2ced49c
 wxpay.conf.mch_id=1416474802
 wxpay.conf.api_secret=654991884ca18d4f253542848814968c
+
+
+onConnectException:ConnectException{gattStatus=62, bluetoothGatt=android.bluetooth.BluetoothGatt@13dfb777} BleException{code=201, description='Gatt Exception Occurred! '}
+
+
+01-02 22:42:14.828 11534-11556/com.ansai.uparking E/LiteBluetooth: onInitiatedException:BleException{code=101, description='Initiated Exception Occurred! '}

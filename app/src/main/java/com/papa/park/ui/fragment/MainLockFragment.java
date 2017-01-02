@@ -4,6 +4,7 @@ package com.papa.park.ui.fragment;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 import com.litesuits.bluetooth.LiteBleGattCallback;
 import com.litesuits.bluetooth.LiteBluetooth;
 import com.litesuits.bluetooth.conn.BleCharactCallback;
+import com.litesuits.bluetooth.conn.BleDescriptorCallback;
+import com.litesuits.bluetooth.conn.LiteBleConnector;
 import com.litesuits.bluetooth.exception.BleException;
 import com.litesuits.bluetooth.exception.hanlder.BleExceptionHandler;
 import com.litesuits.bluetooth.exception.hanlder.DefaultBleExceptionHandler;
@@ -54,8 +57,9 @@ import butterknife.OnClick;
  */
 public class MainLockFragment extends BaseFragment {
 
-    private final String TAG = "blue";
+    private final String TAG = "XXXX";
     private final String UUID_CHART = "0000fff1-0000-1000-8000-00805f9b34fb";
+    private final String UUID_DESCRIPTOR = "00002902-0000-1000-8000-00805f9b34fb";
     @Bind(R.id.locker_name_tv)
     TextView nameTv;
     @Bind(R.id.status_tv)
@@ -80,6 +84,7 @@ public class MainLockFragment extends BaseFragment {
     LinearLayout operationContainer;
     LiteBluetooth mLiteBluetooth;
     BleExceptionHandler mBleExceptionHandler;
+    LiteBleConnector mLiteBleConnector;
     private BleData mBleData;
     private boolean hasCollect = true;
     private String UUID_SERVICE;
@@ -96,7 +101,7 @@ public class MainLockFragment extends BaseFragment {
 
         @Override
         public void onConnectFailure(BleException exception) {
-            Logger.d(TAG, "onConnectFailure:exception = %s", exception);
+            Logger.d(TAG, "onConnectFailure:exception = " + exception.toString());
             mBleExceptionHandler.handleException(exception);
         }
 
@@ -220,8 +225,15 @@ public class MainLockFragment extends BaseFragment {
                 Logger.d(TAG, "onServicesDiscovered");
                 BluetoothUtil.printServices(gatt);
                 UUID_SERVICE = getServiceUUID(gatt);
-                if (!TextUtils.isEmpty(UUID_SERVICE))
+
+                if (!TextUtils.isEmpty(UUID_SERVICE)) {
+                    mLiteBleConnector = mLiteBluetooth.newBleConnector().withUUIDString
+                            (UUID_SERVICE,
+                                    UUID_CHART, UUID_DESCRIPTOR);
+                    setDescriptorNotification();
                     Logger.d(TAG, "onServicesDiscovered:UUID_SERVICE=" + UUID_SERVICE);
+                }
+
             }
 
             @Override
@@ -237,8 +249,62 @@ public class MainLockFragment extends BaseFragment {
                     characteristicChanged(characteristic);
                 }
             }
+
+            @Override
+            public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                super.onConnectionStateChange(gatt, status, newState);
+            }
+
+            @Override
+            public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic
+                    characteristic, int status) {
+                super.onCharacteristicRead(gatt, characteristic, status);
+            }
+
+            @Override
+            public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic
+                    characteristic, int status) {
+                super.onCharacteristicWrite(gatt, characteristic, status);
+            }
         });
     }
+
+    private void setDescriptorNotification() {
+        LiteBleConnector connector = mLiteBleConnector;
+
+        connector.withUUIDString(UUID_SERVICE, UUID_CHART, null)
+                .enableCharacteristicNotification(new BleCharactCallback() {
+                    @Override
+                    public void onSuccess(BluetoothGattCharacteristic characteristic) {
+                        Logger.d(TAG, "Notification characteristic Success, DATA: " + Arrays
+                                .toString(characteristic.getValue()));
+                    }
+
+                    @Override
+                    public void onFailure(BleException exception) {
+                        Logger.d(TAG, "Notification characteristic failure: " + exception);
+                        mBleExceptionHandler.handleException(exception);
+                    }
+                });
+
+
+        connector.withUUIDString(UUID_SERVICE, UUID_CHART, UUID_DESCRIPTOR)
+                .enableDescriptorNotification(new BleDescriptorCallback() {
+                    @Override
+                    public void onSuccess(BluetoothGattDescriptor descriptor) {
+                        Logger.d(TAG,
+                                "Notification descriptor Success, DATA: " + Arrays.toString
+                                        (descriptor.getValue()));
+                    }
+
+                    @Override
+                    public void onFailure(BleException exception) {
+                        Logger.d(TAG, "Notification descriptor failure : " + exception);
+                        mBleExceptionHandler.handleException(exception);
+                    }
+                });
+    }
+
 
     private void characteristicChanged(BluetoothGattCharacteristic characteristic) {
         Logger.d(TAG, "写入回调开始");
@@ -582,17 +648,17 @@ public class MainLockFragment extends BaseFragment {
 
 
     private void writeBlueData(String data) {
-        mLiteBluetooth.newBleConnector().withUUID(UUID.fromString(UUID_SERVICE), UUID.fromString
+        mLiteBleConnector.withUUID(UUID.fromString(UUID_SERVICE), UUID.fromString
                 (UUID_CHART), null).writeCharacteristic(BleUtil.stringToByteArray(data), new
                 BleCharactCallback() {
                     @Override
                     public void onSuccess(BluetoothGattCharacteristic characteristic) {
-
+                        Logger.d(TAG, "writeBlueData success");
                     }
 
                     @Override
                     public void onFailure(BleException exception) {
-
+                        mBleExceptionHandler.handleException(exception);
                     }
                 });
     }
