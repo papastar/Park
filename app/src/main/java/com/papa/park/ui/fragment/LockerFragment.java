@@ -236,7 +236,7 @@ public class LockerFragment extends BaseFragment {
     }
 
     private void onRefreshEvent() {
-        rxManager.onEvent(RefreshEvent.class, new Action1<RefreshEvent>() {
+        mRxManager.onEvent(RefreshEvent.class, new Action1<RefreshEvent>() {
             @Override
             public void call(RefreshEvent rechargeEvent) {
                 loadData();

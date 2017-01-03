@@ -81,8 +81,7 @@
         </activity>
         <activity android:name=".ui.activity.AccountActivity">
         </activity>
-        <activity android:name=".ui.activity.RentInfoActivity">
-        </activity>
+
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
@@ -98,6 +97,21 @@
         </activity>
         <activity android:name=".ui.activity.MyWalletActivity">
         </activity>
+
+        <receiver android:name=".ui.activity.BlueToothReceiver" >
+            <intent-filter>
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" >
+                </action>
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" >
+                </action>
+                <action android:name="android.bluetooth.device.action.FOUND" >
+                </action>
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECT_REQUESTED" >
+                </action>
+
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

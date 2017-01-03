@@ -53,7 +53,7 @@ public abstract class BaseFragment extends Fragment implements OnVaryViewChange 
     private boolean isFirstResume = true;
     private boolean isFirstVisible = true;
     private boolean isFirstInvisible = true;
-    protected RxManager rxManager;
+    protected RxManager mRxManager;
 
     @Override
     public void onAttach(Context context) {
@@ -64,7 +64,7 @@ public abstract class BaseFragment extends Fragment implements OnVaryViewChange 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        rxManager = new RxManager();
+        mRxManager = new RxManager();
     }
 
     @Override
@@ -90,14 +90,14 @@ public abstract class BaseFragment extends Fragment implements OnVaryViewChange 
 
 
     protected <T> void addSubscription(Observable<T> observable, Subscriber<T> subscriber) {
-        rxManager.addSubscription(observable.subscribeOn(Schedulers.io())
+        mRxManager.addSubscription(observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        rxManager.unSubscribe();
+        mRxManager.unSubscribe();
     }
 
     @Override

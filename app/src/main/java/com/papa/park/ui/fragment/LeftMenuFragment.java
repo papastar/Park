@@ -24,8 +24,8 @@ import com.squareup.picasso.Picasso;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-import static com.papa.park.R.id.my_locker_tv;
 import static com.papa.park.R.id.my_rent_tv;
+import static com.papa.park.R.id.rent_locker_tv;
 
 /**
  * User: PAPA
@@ -43,7 +43,7 @@ public class LeftMenuFragment extends BaseFragment {
     TextView mOrderTv;
     @Bind(R.id.wallet_tv)
     TextView mWalletTv;
-    @Bind(my_locker_tv)
+    @Bind(rent_locker_tv)
     TextView mRentLockerTv;
     @Bind(R.id.lock_manager_tv)
     TextView mLockManagerTv;
@@ -108,7 +108,7 @@ public class LeftMenuFragment extends BaseFragment {
 
     @OnClick(R.id.my_rent_tv)
     void onFindLockerTv() {
-        readyGo(LockerMapActivity.class);
+        readyGo(MyRentActivity.class);
     }
 
     @OnClick(R.id.wallet_tv)
@@ -116,9 +116,9 @@ public class LeftMenuFragment extends BaseFragment {
         readyGo(MyWalletActivity.class);
     }
 
-    @OnClick(R.id.my_locker_tv)
+    @OnClick(R.id.rent_locker_tv)
     void onMyRentTv() {
-        readyGo(MyRentActivity.class);
+        readyGo(LockerMapActivity.class);
     }
 
     @OnClick(R.id.add_locker_tv)

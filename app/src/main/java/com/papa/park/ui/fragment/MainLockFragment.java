@@ -40,6 +40,7 @@ import com.papa.park.data.DbManager;
 import com.papa.park.data.UserInfoManager;
 import com.papa.park.entity.adapter.PeriodAddressScanCallback;
 import com.papa.park.entity.database.BleData;
+import com.papa.park.entity.event.BluetoothConnectEvent;
 import com.papa.park.utils.KeyConstant;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import rx.functions.Action1;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -128,6 +130,7 @@ public class MainLockFragment extends BaseFragment {
 
     @Override
     protected void initViewsAndEvents() {
+        onConnectEvent();
         setUnbindInfo();
         queryLockers();
     }
@@ -674,5 +677,15 @@ public class MainLockFragment extends BaseFragment {
             lockImg.setImageResource(R.drawable.lock_up_selector);
             lockTv.setText("车位锁已下降");
         }
+    }
+
+
+    private void onConnectEvent() {
+        mRxManager.onEvent(BluetoothConnectEvent.class, new Action1<BluetoothConnectEvent>() {
+            @Override
+            public void call(BluetoothConnectEvent event) {
+                //updateUserInfo();
+            }
+        });
     }
 }
