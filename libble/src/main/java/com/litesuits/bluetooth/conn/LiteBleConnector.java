@@ -25,6 +25,7 @@ import android.os.Looper;
 import android.os.Message;
 
 import com.litesuits.bluetooth.LiteBluetooth;
+import com.litesuits.bluetooth.exception.BleException;
 import com.litesuits.bluetooth.exception.GattException;
 import com.litesuits.bluetooth.exception.InitiatedException;
 import com.litesuits.bluetooth.exception.OtherException;
@@ -48,10 +49,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class LiteBleConnector {
     private static final String TAG = LiteBleConnector.class.getSimpleName();
-    public static String HEART_RATE_MEASUREMENT = "00002a37-0000-1000-8000-00805f9b34fb";
-    public static String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
-    public final static UUID UUID_HEART_RATE_MEASUREMENT = UUID.fromString(HEART_RATE_MEASUREMENT);
-
     private static final int MSG_WRIATE_CHA = 1;
     private static final int MSG_WRIATE_DES = 2;
     private static final int MSG_READ_CHA = 3;
@@ -59,35 +56,27 @@ public class LiteBleConnector {
     private static final int MSG_READ_RSSI = 5;
     private static final int MSG_NOTIY_CHA = 6;
     private static final int MSG_NOTIY_DES = 7;
+    public static String HEART_RATE_MEASUREMENT = "00002a37-0000-1000-8000-00805f9b34fb";
+    public final static UUID UUID_HEART_RATE_MEASUREMENT = UUID.fromString(HEART_RATE_MEASUREMENT);
+    public static String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
     private BluetoothGatt bluetoothGatt;
     private BluetoothGattService service;
     private BluetoothGattCharacteristic characteristic;
     private BluetoothGattDescriptor descriptor;
     private LiteBluetooth liteBluetooth;
     private int timeOutMillis = 30000;
-    private Handler handler ;
+    private Handler handler;
 //            = new Handler();
-
-//    private class MyHanlder extends Handler {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            BleCallback call = (BleCallback) msg.obj;
-//            if (call != null) {
-//                liteBluetooth.removeGattCallback(call.getBluetoothGattCallback());
-//                call.onFailure(BleException.TIMEOUT_EXCEPTION);
-//            }
-//            msg.obj = null;
-//        }
-//    }
 
     public LiteBleConnector(LiteBluetooth liteBluetooth) {
         this.liteBluetooth = liteBluetooth;
         this.bluetoothGatt = liteBluetooth.getBluetoothGatt();
-        this.handler = new Handler(Looper.getMainLooper());
+        this.handler = new MyHandler(Looper.getMainLooper());
     }
 
     public LiteBleConnector(LiteBluetooth liteBluetooth, BluetoothGattService service,
-                            BluetoothGattCharacteristic characteristic, BluetoothGattDescriptor descriptor) {
+                            BluetoothGattCharacteristic characteristic, BluetoothGattDescriptor
+                                    descriptor) {
         this(liteBluetooth);
         this.service = service;
         this.characteristic = characteristic;
@@ -119,15 +108,14 @@ public class LiteBleConnector {
         return this;
     }
 
-    public LiteBleConnector withUUIDString(String serviceUUID, String charactUUID, String descriptorUUID) {
+    public LiteBleConnector withUUIDString(String serviceUUID, String charactUUID, String
+            descriptorUUID) {
         return withUUID(formUUID(serviceUUID), formUUID(charactUUID), formUUID(descriptorUUID));
     }
 
     private UUID formUUID(String uuid) {
         return uuid == null ? null : UUID.fromString(uuid);
     }
-
-    // _____________________ main operation _____________________
 
     /**
      * write data to characteristic
@@ -136,6 +124,8 @@ public class LiteBleConnector {
         return writeCharacteristic(getCharacteristic(), data, bleCallback);
     }
 
+    // _____________________ main operation _____________________
+
     /**
      * write data to specified characteristic
      */
@@ -143,7 +133,7 @@ public class LiteBleConnector {
                                        final BleCharactCallback bleCallback) {
         if (BleLog.isPrint) {
             BleLog.i(TAG, charact.getUuid() + " characteristic write bytes: "
-                          + Arrays.toString(data) + " ,hex: " + HexUtil.encodeHexStr(data));
+                    + Arrays.toString(data) + " ,hex: " + HexUtil.encodeHexStr(data));
         }
         handleCharacteristicWriteCallback(bleCallback);
         charact.setValue(data);
@@ -160,10 +150,11 @@ public class LiteBleConnector {
     /**
      * write data to specified descriptor
      */
-    public boolean writeDescriptor(BluetoothGattDescriptor descriptor, byte[] data, BleDescriptorCallback bleCallback) {
+    public boolean writeDescriptor(BluetoothGattDescriptor descriptor, byte[] data,
+                                   BleDescriptorCallback bleCallback) {
         if (BleLog.isPrint) {
             BleLog.i(TAG, descriptor.getUuid() + " descriptor write bytes: "
-                          + Arrays.toString(data) + " ,hex: " + HexUtil.encodeHexStr(data));
+                    + Arrays.toString(data) + " ,hex: " + HexUtil.encodeHexStr(data));
         }
         handleDescriptorWriteCallback(bleCallback);
         descriptor.setValue(data);
@@ -180,13 +171,15 @@ public class LiteBleConnector {
     /**
      * read data from specified characteristic
      */
-    public boolean readCharacteristic(BluetoothGattCharacteristic charact, BleCharactCallback bleCallback) {
+    public boolean readCharacteristic(BluetoothGattCharacteristic charact, BleCharactCallback
+            bleCallback) {
         if ((characteristic.getProperties() | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
             // If there is an active notification on a characteristic, clear
             // it first so it doesn't update the data field on the user interface.
             setCharacteristicNotification(getBluetoothGatt(), charact, false);
             handleCharacteristicReadCallback(bleCallback);
-            return handleAfterInitialed(getBluetoothGatt().readCharacteristic(charact), bleCallback);
+            return handleAfterInitialed(getBluetoothGatt().readCharacteristic(charact),
+                    bleCallback);
         } else {
             if (bleCallback != null) {
                 bleCallback.onFailure(new OtherException("Characteristic [is not] readable!"));
@@ -205,7 +198,8 @@ public class LiteBleConnector {
     /**
      * read data from specify descriptor
      */
-    public boolean readDescriptor(BluetoothGattDescriptor descriptor, BleDescriptorCallback bleCallback) {
+    public boolean readDescriptor(BluetoothGattDescriptor descriptor, BleDescriptorCallback
+            bleCallback) {
         handleDescriptorReadCallback(bleCallback);
         return handleAfterInitialed(getBluetoothGatt().readDescriptor(descriptor), bleCallback);
     }
@@ -235,7 +229,8 @@ public class LiteBleConnector {
             return setCharacteristicNotification(getBluetoothGatt(), charact, true);
         } else {
             if (bleCallback != null) {
-                bleCallback.onFailure(new OtherException("Characteristic [not supports] readable!"));
+                bleCallback.onFailure(new OtherException("Characteristic [not supports] " +
+                        "readable!"));
             }
             return false;
         }
@@ -251,7 +246,8 @@ public class LiteBleConnector {
     /**
      * enable characteristic notification
      */
-    public boolean enableDescriptorNotification(BluetoothGattDescriptor descriptor, BleDescriptorCallback bleCallback) {
+    public boolean enableDescriptorNotification(BluetoothGattDescriptor descriptor,
+                                                BleDescriptorCallback bleCallback) {
         handleDescriptorNotificationCallback(bleCallback);
         return setDescriptorNotification(getBluetoothGatt(), descriptor, true);
     }
@@ -281,7 +277,6 @@ public class LiteBleConnector {
         return setNotification(getBluetoothGatt(), getCharacteristic(), getDescriptor(), enable);
     }
 
-
     /**
      * Enable or disable notifications/indications for a given characteristic and descriptor.
      */
@@ -289,18 +284,17 @@ public class LiteBleConnector {
                                    BluetoothGattCharacteristic characteristic,
                                    BluetoothGattDescriptor descriptor, boolean enable) {
         return setCharacteristicNotification(gatt, characteristic, enable)
-               && setDescriptorNotification(gatt, descriptor, enable);
+                && setDescriptorNotification(gatt, descriptor, enable);
     }
-
 
     /**
      * Enable or disable notifications/indications for a given characteristic.
-     *
+     * <p>
      * <p>Once notifications are enabled for a characteristic, a
      * {@link BluetoothGattCallback#onCharacteristicChanged} callback will be
      * triggered if the remote device indicates that the given characteristic
      * has changed.
-     *
+     * <p>
      * <p>Requires {@link android.Manifest.permission#BLUETOOTH} permission.
      *
      * @param characteristic The characteristic for which to enable notifications
@@ -315,7 +309,8 @@ public class LiteBleConnector {
             boolean success = gatt.setCharacteristicNotification(characteristic, enable);
             // This is specific to Heart Rate Measurement.
             if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
-                BleLog.i(TAG, "Heart Rate Measurement set [descriptor] notification value: " + enable);
+                BleLog.i(TAG, "Heart Rate Measurement set [descriptor] notification value: " +
+                        enable);
                 BluetoothGattDescriptor descriptor = characteristic
                         .getDescriptor(UUID.fromString(CLIENT_CHARACTERISTIC_CONFIG));
                 descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
@@ -328,10 +323,10 @@ public class LiteBleConnector {
 
     /**
      * Write the value of a given descriptor to the associated remote device.
-     *
+     * <p>
      * <p>A {@link BluetoothGattCallback#onDescriptorWrite} callback is
      * triggered to report the result of the write operation.
-     *
+     * <p>
      * <p>Requires {@link android.Manifest.permission#BLUETOOTH} permission.
      *
      * @return true, if the write operation was initiated successfully
@@ -351,14 +346,14 @@ public class LiteBleConnector {
         return false;
     }
 
-
     // _____________________ handle call back _____________________
     private void handleCharacteristicWriteCallback(final BleCharactCallback bleCallback) {
         if (bleCallback != null) {
             listenAndTimer(bleCallback, MSG_WRIATE_CHA, new BluetoothGattCallback() {
                 @Override
                 public void onCharacteristicWrite(BluetoothGatt gatt,
-                                                  BluetoothGattCharacteristic characteristic, int status) {
+                                                  BluetoothGattCharacteristic characteristic, int
+                                                          status) {
                     handler.removeMessages(MSG_WRIATE_CHA, this);
                     if (status == BluetoothGatt.GATT_SUCCESS) {
                         bleCallback.onSuccess(characteristic);
@@ -369,7 +364,6 @@ public class LiteBleConnector {
             });
         }
     }
-
 
     private void handleDescriptorWriteCallback(final BleDescriptorCallback bleCallback) {
         if (bleCallback != null) {
@@ -395,7 +389,8 @@ public class LiteBleConnector {
 
                 @Override
                 public void onCharacteristicRead(BluetoothGatt gatt,
-                                                 BluetoothGattCharacteristic characteristic, int status) {
+                                                 BluetoothGattCharacteristic characteristic, int
+                                                         status) {
                     if (!msgRemoved.getAndSet(true)) {
                         handler.removeMessages(MSG_READ_CHA, this);
                     }
@@ -452,7 +447,8 @@ public class LiteBleConnector {
                 AtomicBoolean msgRemoved = new AtomicBoolean(false);
 
                 @Override
-                public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+                public void onCharacteristicChanged(BluetoothGatt gatt,
+                                                    BluetoothGattCharacteristic characteristic) {
                     if (!msgRemoved.getAndSet(true)) {
                         handler.removeMessages(MSG_NOTIY_CHA, this);
                     }
@@ -466,7 +462,8 @@ public class LiteBleConnector {
         if (bleCallback != null) {
             listenAndTimer(bleCallback, MSG_NOTIY_DES, new BluetoothGattCallback() {
                 @Override
-                public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+                public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor
+                        descriptor, int status) {
                     handler.removeMessages(MSG_NOTIY_DES, this);
                     if (status == BluetoothGatt.GATT_SUCCESS) {
                         bleCallback.onSuccess(descriptor);
@@ -481,7 +478,8 @@ public class LiteBleConnector {
     /**
      * listen bluetooth gatt callback, and send a delayed message.
      */
-    private void listenAndTimer(final BleCallback bleCallback, int what, BluetoothGattCallback callback) {
+    private void listenAndTimer(final BleCallback bleCallback, int what, BluetoothGattCallback
+            callback) {
         bleCallback.setBluetoothGattCallback(callback);
         liteBluetooth.addGattCallback(callback);
         Message msg = handler.obtainMessage(what, bleCallback);
@@ -532,5 +530,21 @@ public class LiteBleConnector {
     public LiteBleConnector setTimeOutMillis(int timeOutMillis) {
         this.timeOutMillis = timeOutMillis;
         return this;
+    }
+
+    private class MyHandler extends Handler {
+        public MyHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            BleCallback call = (BleCallback) msg.obj;
+            if (call != null) {
+                liteBluetooth.removeGattCallback(call.getBluetoothGattCallback());
+                call.onFailure(BleException.TIMEOUT_EXCEPTION);
+            }
+            msg.obj = null;
+        }
     }
 }
