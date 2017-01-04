@@ -685,6 +685,7 @@ public class MainLockFragment extends BaseFragment {
             @Override
             public void call(BluetoothConnectEvent event) {
                 //updateUserInfo();
+                queryLockers();
             }
         });
     }

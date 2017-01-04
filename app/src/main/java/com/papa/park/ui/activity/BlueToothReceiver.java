@@ -24,7 +24,7 @@ public class BlueToothReceiver extends BroadcastReceiver {
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         // Toast.makeText(context, "蓝牙状态改变广播 !", Toast.LENGTH_LONG).show();
 
-        Logger.d("接收到蓝牙状态改变广播！！");
+        Logger.d("接收到蓝牙状态改变广播！action=" + action);
         if (BluetoothDevice.ACTION_FOUND.equals(action)) {
             // Toast.makeText(context, device.getName() + " 设备已发现！！",
             // Toast.LENGTH_LONG).show();
@@ -55,7 +55,6 @@ public class BlueToothReceiver extends BroadcastReceiver {
         }
 
     }
-
 
 
 }

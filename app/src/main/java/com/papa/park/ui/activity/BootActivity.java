@@ -6,6 +6,7 @@ import android.view.View;
 import com.papa.libcommon.base.BaseAppCompatActivity;
 import com.papa.libcommon.util.AppUtils;
 import com.papa.park.R;
+import com.papa.park.data.BleManager;
 import com.papa.park.data.LocationManager;
 import com.papa.park.data.UserInfoManager;
 
@@ -36,6 +37,7 @@ public class BootActivity extends BaseAppCompatActivity {
 
     @Override
     protected void initViewsAndEvents() {
+        BleManager.getInstance().getLiteBluetooth().enableBluetooth();
         LocationManager.getInstance().startLocation();
         AppUtils.runOnUIDelayed(mRunnable, 2000);
     }
