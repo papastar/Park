@@ -4,7 +4,6 @@ package com.papa.park.ui.fragment;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import com.litesuits.bluetooth.LiteBleGattCallback;
 import com.litesuits.bluetooth.LiteBluetooth;
 import com.litesuits.bluetooth.conn.BleCharactCallback;
-import com.litesuits.bluetooth.conn.BleDescriptorCallback;
 import com.litesuits.bluetooth.conn.LiteBleConnector;
 import com.litesuits.bluetooth.exception.BleException;
 import com.litesuits.bluetooth.exception.hanlder.BleExceptionHandler;
@@ -274,38 +272,37 @@ public class MainLockFragment extends BaseFragment {
 
     private void setDescriptorNotification() {
         LiteBleConnector connector = mLiteBleConnector;
+        connector.withUUIDString(UUID_SERVICE, UUID_CHART, null).setCharacteristicNotification
+                (true);
+//                .enableCharacteristicNotification(new BleCharactCallback() {
+//                    @Override
+//                    public void onSuccess(BluetoothGattCharacteristic characteristic) {
+//                        Logger.d(TAG, "Notification characteristic Success, DATA: " + Arrays
+//                                .toString(characteristic.getValue()));
+//                    }
+//
+//                    @Override
+//                    public void onFailure(BleException exception) {
+//                        Logger.d(TAG, "Notification characteristic failure: " + exception);
+//                        mBleExceptionHandler.handleException(exception);
+//                    }
+//                });
 
-        connector.withUUIDString(UUID_SERVICE, UUID_CHART, null)
-                .enableCharacteristicNotification(new BleCharactCallback() {
-                    @Override
-                    public void onSuccess(BluetoothGattCharacteristic characteristic) {
-                        Logger.d(TAG, "Notification characteristic Success, DATA: " + Arrays
-                                .toString(characteristic.getValue()));
-                    }
-
-                    @Override
-                    public void onFailure(BleException exception) {
-                        Logger.d(TAG, "Notification characteristic failure: " + exception);
-                        mBleExceptionHandler.handleException(exception);
-                    }
-                });
-
-
-        connector.withUUIDString(UUID_SERVICE, UUID_CHART, UUID_DESCRIPTOR)
-                .enableDescriptorNotification(new BleDescriptorCallback() {
-                    @Override
-                    public void onSuccess(BluetoothGattDescriptor descriptor) {
-                        Logger.d(TAG,
-                                "Notification descriptor Success, DATA: " + Arrays.toString
-                                        (descriptor.getValue()));
-                    }
-
-                    @Override
-                    public void onFailure(BleException exception) {
-                        Logger.d(TAG, "Notification descriptor failure : " + exception);
-                        mBleExceptionHandler.handleException(exception);
-                    }
-                });
+//        connector.withUUIDString(UUID_SERVICE, UUID_CHART, UUID_DESCRIPTOR)
+//                .enableDescriptorNotification(new BleDescriptorCallback() {
+//                    @Override
+//                    public void onSuccess(BluetoothGattDescriptor descriptor) {
+//                        Logger.d(TAG,
+//                                "Notification descriptor Success, DATA: " + Arrays.toString
+//                                        (descriptor.getValue()));
+//                    }
+//
+//                    @Override
+//                    public void onFailure(BleException exception) {
+//                        Logger.d(TAG, "Notification descriptor failure : " + exception);
+//                        mBleExceptionHandler.handleException(exception);
+//                    }
+//                });
     }
 
 
