@@ -7,7 +7,7 @@ import android.bluetooth.BluetoothGatt;
  * @date 2015-11-21
  */
 public class ConnectException extends BleException {
-    private BluetoothGatt bluetoothGatt;
+    private BluetoothGatt  bluetoothGatt;
     private int gattStatus;
 
     public ConnectException(BluetoothGatt bluetoothGatt, int gattStatus) {
