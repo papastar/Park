@@ -23,6 +23,7 @@ import android.bluetooth.BluetoothGattService;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import com.litesuits.bluetooth.LiteBluetooth;
 import com.litesuits.bluetooth.exception.BleException;
@@ -35,6 +36,7 @@ import com.litesuits.bluetooth.utils.HexUtil;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 
 /**
  * Ble Device Connector.
@@ -211,6 +213,29 @@ public class LiteBleConnector {
         handleRSSIReadCallback(bleCallback);
         return handleAfterInitialed(getBluetoothGatt().readRemoteRssi(), bleCallback);
     }
+
+    public void setCharacteristicNotification(boolean enabled) {
+
+        if (enabled) {
+            bluetoothGatt.setCharacteristicNotification(characteristic, true);
+            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString
+                    (CLIENT_CHARACTERISTIC_CONFIG));
+            if (descriptor != null) {
+                descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                bluetoothGatt.writeDescriptor(descriptor);
+            }
+            Log.d(TAG, characteristic.getUuid() + "设置回调成功");
+        } else {
+            Log.i(TAG, "Disable Notification");
+            bluetoothGatt.setCharacteristicNotification(characteristic, false);
+            BluetoothGattDescriptor descriptor = characteristic.getDescriptor
+                    (UUID.fromString
+                            (CLIENT_CHARACTERISTIC_CONFIG));
+            descriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+            bluetoothGatt.writeDescriptor(descriptor);
+        }
+    }
+
 
     /**
      * enable characteristic notification
