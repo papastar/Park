@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gif="http://schemas.android.com/apk/res/com.joyotime.uber"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee" >
+
+    <TextView
+        android:id="@+id/auto_rssi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dip"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#000000"
+        android:textSize="60dip" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/main_bg" >
+
+        <ImageView
+            android:id="@+id/auto_goback"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/top_icon_goback" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="自动感应"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="#cccccc" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/auto_text"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="状态"
+        android:textColor="#000000"
+        android:textSize="20dip" />
+
+</RelativeLayout>

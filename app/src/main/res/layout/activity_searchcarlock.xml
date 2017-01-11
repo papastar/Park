@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0f0f0" >
+
+    <com.joyotime.qparking.view.SearchDevicesView
+        android:id="@+id/searchlock_device_view"
+        android:layout_width="match_parent"
+        android:layout_height="280dip"
+        android:layout_marginTop="50dip"
+        android:background="#f0f0f0" >
+    </com.joyotime.qparking.view.SearchDevicesView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="310dip"
+        android:background="#f0f0f0" >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dip"
+            android:gravity="center_vertical"
+            android:text="搜索结果"
+            android:textSize="18sp"
+            android:textColor="#4D4D4D"
+            />
+    </RelativeLayout>
+
+    <com.joyotime.qparking.widget.ZrcListView
+        android:id="@+id/zListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="300dip"
+        android:layout_marginBottom="10dip" >
+    </com.joyotime.qparking.widget.ZrcListView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentTop="true"
+        android:background="@color/main_bg" >
+
+        <ImageView
+            android:id="@+id/search_goback"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/top_icon_goback" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="搜索车锁"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="#cccccc" />
+    </RelativeLayout>
+
+</RelativeLayout>

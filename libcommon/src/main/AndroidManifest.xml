@@ -1,4 +1,4 @@
-<manifest package="com.papa.libcommon"
+<manifest package="com.ansai.libcommon"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application android:allowBackup="true"

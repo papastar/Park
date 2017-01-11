@@ -1,0 +1,126 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sp="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0f0f0" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.0px"
+        android:layout_marginTop="100dip"
+        android:background="@drawable/shape_line" />
+
+    <com.joyotime.qparking.widget.SwipeListView
+        android:id="@+id/lockmanage_listviewone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="101dip"
+        android:background="#fff4f7f9"
+        android:cacheColorHint="#00000000"
+        android:divider="#fff4f7f9"
+        android:dividerHeight="10dp"
+        sp:right_width="120dp" />
+
+    <com.joyotime.qparking.widget.SwipeListView
+        android:id="@+id/lockmanage_listviewtwo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="101dip"
+        android:background="#fff4f7f9"
+        android:cacheColorHint="#00000000"
+        android:divider="#dddbdb"
+        android:dividerHeight="1dp"
+        android:visibility="gone"
+        sp:right_width="120dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_marginTop="50dip"
+        android:background="#ffffff"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/lockmanage_ll_share"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:onClick="true"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/lockmanage_tv_share"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:gravity="center"
+                android:text="分享车锁"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/lockmanage_iv_share"
+                android:layout_width="match_parent"
+                android:layout_height="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#ffb600"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1.0px"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_line" />
+
+        <LinearLayout
+            android:id="@+id/lockmanage_ll_mylock"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:onClick="true"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/lockmanage_tv_mylock"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:gravity="center"
+                android:text="我的车锁"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/lockmanage_iv_mylock"
+                android:layout_width="match_parent"
+                android:layout_height="5dip"
+                android:layout_marginTop="5dip"
+                android:background="#ffb600" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/main_bg" >
+
+        <ImageView
+            android:id="@+id/lockmanage_goback"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/top_icon_goback" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="车锁管理"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

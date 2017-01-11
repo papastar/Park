@@ -1,0 +1,213 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="50dip"
+        android:background="@color/info_panel_bg"
+        android:scrollbarThumbVertical="@drawable/scrollbar_handle_vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:isScrollContainer="true"
+            android:orientation="vertical"
+            android:paddingBottom="10.0dip" >
+
+            <!-- 第一个白框BEGIN -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_bg"
+                android:gravity="center_vertical"
+                android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="60.0dip"
+                    android:orientation="horizontal"
+                    android:paddingLeft="12dip"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="24dp" >
+
+                    <com.joyotime.qparking.view.CircleImageView
+                        android:id="@+id/usersetting_headimg"
+                        android:layout_width="60dip"
+                        android:layout_height="60dip"
+                        android:layout_gravity="top"
+                        android:paddingTop="4.0dip"
+                        android:src="@drawable/ic_launcher"
+                        android:clickable="true"
+                        app:border_color="@color/dark"
+                        app:border_width="2dp" />
+
+                    <LinearLayout
+                        android:id="@+id/usersetting_ll_top"
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dip"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/usersetting_headimg"
+                        android:layout_marginLeft="24dip"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/usersetting_username"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="default"
+                            android:textColor="@android:color/black"
+                            android:textSize="18.0sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="20dip"
+                        android:layout_alignLeft="@+id/usersetting_headimg"
+                        android:layout_alignTop="@id/usersetting_ll_top"
+                        android:layout_marginLeft="70.0dip"
+                        android:layout_marginTop="35dip"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:visibility="gone" >
+
+                        <TextView
+                            android:id="@+id/usersetting_address"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="default"
+                            android:textColor="@color/gray"
+                            android:textSize="14.0sp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+
+                <LinearLayout
+                    android:id="@+id/usersetting_bind_phone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50.0dip"
+                    android:background="@drawable/btn_setting_p"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="80dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12.0dip"
+                        android:text="手机号"
+                        android:textColor="#ff545454"
+                        android:textSize="18.0sp" />
+
+                    <TextView
+                        android:id="@+id/usersetting_phonenum"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="25.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="right"
+                        android:text="未绑定"
+                        android:textColor="#000000"
+                        android:textSize="14.0sp" />
+
+                    <ImageView
+                        android:layout_width="12.0dip"
+                        android:layout_height="12.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:src="@drawable/into_icon" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+
+                <LinearLayout
+                    android:id="@+id/usersetting_bind_wechat"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50.0dip"
+                    android:background="@drawable/btn_setting_p"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="80dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12.0dip"
+                        android:text="微信"
+                        android:textColor="#ff545454"
+                        android:textSize="18.0sp" />
+
+                    <TextView
+                        android:id="@+id/usersetting_wechat"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="25.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="right"
+                        android:text="未绑定"
+                        android:textColor="#000000"
+                        android:textSize="14.0sp" />
+
+                    <ImageView
+                        android:layout_width="12.0dip"
+                        android:layout_height="12.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:src="@drawable/into_icon" />
+                </LinearLayout>
+            </LinearLayout>
+            
+            <!-- 第一个白框end -->
+        </LinearLayout>
+    </ScrollView>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="12dp"  >
+
+        <include layout="@layout/info_bottom" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/main_bg" >
+
+        <ImageView
+            android:id="@+id/usersetting_goback"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dip"
+            android:layout_marginLeft="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/top_icon_goback" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="设置"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

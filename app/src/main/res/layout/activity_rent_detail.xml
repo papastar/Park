@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.papa.park.ui.activity.RentDetailActivity">
+    tools:context="com.ansai.uparking.ui.activity.RentDetailActivity">
 
     <include layout="@layout/common_toolbar"/>
 

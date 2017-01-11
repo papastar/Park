@@ -1,0 +1,431 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/main_bg" >
+
+        <ImageView
+            android:id="@+id/locksetting_goback"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/top_icon_goback" />
+
+        <TextView
+            android:id="@+id/locksetting_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="添加车锁信息"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/locksetting_btn_share"
+            android:layout_width="50dip"
+            android:layout_height="42dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dip"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/btn_top"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingRight="10dp"
+            android:text="保 存"
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0"
+        android:background="@color/info_panel_bg"
+        android:scrollbarThumbVertical="@drawable/scrollbar_handle_vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:isScrollContainer="true"
+            android:orientation="vertical"
+            android:paddingBottom="10.0dip" >
+
+            <!-- 第一个白框BEGIN -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10.0dip"
+                android:background="@drawable/shape_bg"
+                android:gravity="center_vertical"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="45.0dip"
+                    android:background="@drawable/btn_setting_p"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:text="车锁名称"
+                        android:textColor="#ff545454"
+                        android:textSize="16.0sp" />
+
+                    <TextView
+                        android:id="@+id/locksetting_lockname"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="25.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="right"
+                        android:text="default"
+                        android:textColor="#000000"
+                        android:textSize="14.0sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line"
+                    android:visibility="gone"
+                     />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="45.0dip"
+                    android:background="@drawable/btn_setting_p"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:text="车锁S/N码"
+                        android:textColor="#ff545454"
+                        android:textSize="16.0sp" />
+
+                    <TextView
+                        android:id="@+id/locksetting_sncode"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="25.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="right"
+                        android:text="default"
+                        android:textColor="#000000"
+                        android:textSize="14.0sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line"
+                   android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="45.0dip"
+                    android:background="@drawable/btn_setting_p"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:text="蓝牙地址"
+                        android:textColor="#ff545454"
+                        android:textSize="16.0sp" />
+
+                    <TextView
+                        android:id="@+id/locksetting_blueaddress"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="25.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="right"
+                        android:text="default"
+                        android:textColor="#000000"
+                        android:textSize="14.0sp" />
+                </LinearLayout>
+            </LinearLayout>
+            <!-- 第一个白框end -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15.0dip"
+                android:background="@drawable/shape_bg"
+                android:gravity="center_vertical"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="45.0dip"
+                    android:background="@drawable/btn_setting_p"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:text="当前地址"
+                        android:textColor="#ff545454"
+                        android:textSize="16.0sp" />
+
+                    <TextView
+                        android:id="@+id/locksetting_parkingAddress"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="25.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="#000000"
+                        android:textSize="14.0sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+
+                <LinearLayout
+                    android:id="@+id/locksetting_ll_parkingname"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45.0dip"
+                    android:background="@drawable/btn_setting_p"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:text="停车场"
+                        android:textColor="#ff545454"
+                        android:textSize="16.0sp" />
+
+                    <TextView
+                        android:id="@+id/locksetting_tv_parkingname"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="25.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="#000000"
+                        android:textSize="14.0sp" />
+
+                    <EditText
+                        android:id="@+id/locksetting_et_parkingname"
+                        android:layout_width="0dip"
+                        android:layout_height="45dip"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_weight="1.0"
+                        android:background="@drawable/all_edit"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:hint="请输入停车场名称"
+                        android:imeOptions="actionNone"
+                        android:saveEnabled="true"
+                        android:singleLine="true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/locksetting_iv_parkingname"
+                        android:layout_width="12.0dip"
+                        android:layout_height="12.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:src="@drawable/into_icon" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+
+                <LinearLayout
+                    android:id="@+id/locksetting_ll_lcokaddress"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45.0dip"
+                    android:background="@drawable/btn_setting_p"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:text="车位编号"
+                        android:textColor="#ff545454"
+                        android:textSize="16.0sp" />
+
+                    <TextView
+                        android:id="@+id/locksetting_tv_lcokaddress"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="25.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="#000000"
+                        android:textSize="14.0sp" />
+
+                    <EditText
+                        android:id="@+id/locksetting_et_lcokaddress"
+                        android:layout_width="0dip"
+                        android:layout_height="45dip"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_weight="1.0"
+                        android:background="@drawable/all_edit"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:hint="请输入车位编号"
+                        android:imeOptions="actionNone"
+                        android:saveEnabled="true"
+                        android:singleLine="true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/locksetting_iv_lcokaddress"
+                        android:layout_width="12.0dip"
+                        android:layout_height="12.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:src="@drawable/into_icon" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15.0dip"
+                android:background="@drawable/shape_bg"
+                android:gravity="center_vertical"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/locksetting_ll_note"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45.0dip"
+                    android:background="@drawable/btn_setting_p"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:text="备注"
+                        android:textColor="#ff545454"
+                        android:textSize="16.0sp" />
+
+                    <TextView
+                        android:id="@+id/locksetting_tv_note"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="25.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="#000000"
+                        android:textSize="14.0sp" />
+
+                    <EditText
+                        android:id="@+id/locksetting_et_note"
+                        android:layout_width="0dip"
+                        android:layout_height="45dip"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_weight="1.0"
+                        android:background="@drawable/all_edit"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:hint="请输入备注"
+                        android:imeOptions="actionNone"
+                        android:saveEnabled="true"
+                        android:singleLine="true"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/locksetting_iv_note"
+                        android:layout_width="12.0dip"
+                        android:layout_height="12.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:src="@drawable/into_icon" />
+
+                    <TextView
+                        android:id="@+id/locksetting_tv_mlong"
+                        android:layout_width="0dip"
+                        android:layout_height="0dip" />
+
+                    <TextView
+                        android:id="@+id/locksetting_tv_mlat"
+                        android:layout_width="0dip"
+                        android:layout_height="0dip" />
+
+                    <TextView
+                        android:id="@+id/locksetting_tv_mcityname"
+                        android:layout_width="0dip"
+                        android:layout_height="0dip" />
+                    <TextView
+                        android:id="@+id/locksetting_tv_mcitycode"
+                        android:layout_width="0dip"
+                        android:layout_height="0dip" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/locksetting_btn_save"
+                android:layout_width="fill_parent"
+                android:layout_height="45.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:layout_marginTop="15.0dip"
+                android:background="@drawable/btn_lockopen"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="0.0dip"
+                    android:layout_height="45dip"
+                    android:layout_weight="1.0"
+                    android:gravity="center"
+                    android:paddingLeft="0dip"
+                    android:text="共   享"
+                    android:textColor="@android:color/white"
+                    android:textSize="16.0sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

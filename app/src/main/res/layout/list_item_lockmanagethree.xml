@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:zhy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="45dip"
+    android:background="#f0f0f0"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dip"
+        android:background="@drawable/selector_bt_item"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/lmo_item_leftthree"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:background="@drawable/selector_bt_item"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp" >
+
+            <com.joyotime.qparking.view.RoundImageView
+                android:id="@+id/lmo_iv_iconthree"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher"
+                zhy:borderRadius="5dp"
+                zhy:type="round" />
+
+            <LinearLayout
+                android:id="@+id/lmo_ll_topthree"
+                android:layout_width="wrap_content"
+                android:layout_height="35dip"
+                android:layout_alignLeft="@id/lmo_iv_icon"
+                android:layout_marginLeft="60dip"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/lmo_tv_locktitlethree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(手机号码)"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            
+
+            <com.joyotime.qparking.view.RoundImageView
+                android:id="@+id/lmo_iv_iconcellthree"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="55dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/gen_icon_phone"
+                zhy:borderRadius="10dp"
+                zhy:type="round" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="25dip"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="45dp"
+                android:layout_marginTop="5dip"
+                android:background="@drawable/shape_line" />
+
+            <ImageView
+                android:id="@+id/lmo_iv_icondeletethree"
+                android:layout_width="35.0dip"
+                android:layout_height="35.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="0dip"
+                android:src="@drawable/gen_icon_delete" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1.0px"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:background="@drawable/shape_line" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/lmo_item_rightthree"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="#00B2EE"
+        android:onClick="true" >
+
+        <TextView
+            android:id="@+id/lmo_item_right_txtthree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableLeft="@drawable/icon_nolink"
+            android:gravity="center"
+            android:text="导航"
+            android:textColor="#000000"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/lmo_item_keyid_txtthree"
+            android:layout_width="0dip"
+            android:layout_height="0dip"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/lmo_item_mlong_txtthree"
+            android:layout_width="0dip"
+            android:layout_height="0dip"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/lmo_item_mlat_txtthree"
+            android:layout_width="0dip"
+            android:layout_height="0dip"
+            android:text="" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -9,7 +9,7 @@
              android:fitsSystemWindows="true">
 
     <fragment
-        class="com.papa.park.ui.fragment.LeftMenuFragment"
+        class="com.ansai.uparking.ui.fragment.LeftMenuFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag="LeftMenuFragment"/>

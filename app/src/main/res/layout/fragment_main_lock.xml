@@ -2,7 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.papa.park.ui.fragment.MainLockFragment">
+                tools:context="com.ansai.uparking.ui.fragment.MainLockFragment">
 
 
     <RelativeLayout

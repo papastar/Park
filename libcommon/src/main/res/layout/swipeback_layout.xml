@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<com.papa.libcommon.widget.swipeback.SwipeBackLayout
+<com.ansai.libcommon.widget.swipeback.SwipeBackLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipe"
     android:layout_width="match_parent"

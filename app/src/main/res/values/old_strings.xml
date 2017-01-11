@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="app_title">U停车车锁</string>
+    <string name="ble_not_supported">你的手机不支持BLE</string>
+    <string name="label_data">Data:</string>
+    <string name="label_device_address">设备地址:</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string>
+    <string name="connected">已连接</string>
+    <string name="disconnected">已断开连接</string>
+    <string name="title_devices">BLE 设备扫描</string>
+    <string name="error_bluetooth_not_supported">你的手机不支持蓝牙</string>
+    <string name="unknown_device">未知设备</string>
+    <string name="unknown_characteristic">未知特征值</string>
+    <string name="unknown_service">未知服务</string>
+    <string name="scan_text">请将二维码放入框内</string>
+
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+    <string name="device_rssi">rssi信号</string>
+    <string name="text_detail">detail</string>
+    <string name="errcode_success">发送成功</string>
+    <string name="errcode_cancel">发送取消</string>
+    <string name="errcode_deny">发送被拒绝</string>
+    <string name="errcode_unknown">发送返回</string>
+    
+    <string name="cur_image">最近更新包:</string>
+    <string name="no_image">没有更新包</string>
+    <string name="new_image">数据包:</string>
+    <string name="no_image_sel">文件不存在</string>
+    <string name="load_image_a">数据包 A</string>
+    <string name="load_image_b">数据包 B</string>
+    <string name="load_image_c">自定义</string>
+    <string name="idle">空闲</string>
+    <string name="start_prog">开始更新</string>
+    <string name="title_oad">更新固件(OAD)</string>
+    <string name="prog_ogoing">请勿关闭,正在更新车锁软件!!!</string>
+    <string name="btn_txt_confirm">确认</string>
+    <string name="cancel">取消</string>
+    
+    <string name="tab_one">我的车锁</string>
+    <string name="tab_two">分享车锁</string>
+    <!--<string name="get_code">获取验证码</string>-->
+
+</resources>

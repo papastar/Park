@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.papa.park.ui.activity.LockersActivity">
+    tools:context="com.ansai.uparking.ui.activity.LockersActivity">
 
     <include layout="@layout/common_toolbar"/>
 
 
     <fragment
-        class="com.papa.park.ui.fragment.LockerFragment"
+        class="com.ansai.uparking.ui.fragment.LockerFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag="com.papa.park.ui.fragment.LockerFragment"/>

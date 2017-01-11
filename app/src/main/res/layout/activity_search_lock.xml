@@ -7,11 +7,11 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.papa.park.ui.activity.SearchLockActivity">
+    tools:context="com.ansai.uparking.ui.activity.SearchLockActivity">
 
     <include layout="@layout/common_toolbar"/>
 
-    <com.papa.park.ui.view.SearchDeviceView
+    <com.ansai.uparking.ui.view.SearchDeviceView
         android:id="@+id/scan_view"
         android:layout_width="180dp"
         android:layout_height="180dp"
