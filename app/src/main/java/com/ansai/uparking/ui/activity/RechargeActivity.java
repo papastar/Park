@@ -172,7 +172,7 @@ public class RechargeActivity extends BaseAppCompatActivity {
         //map.put("cashnum", mRechargeValueAdapter.getItem(mValueIndex).replace("元", ""));
         map.put("cashnum", mRechargeValueAdapter.getItem(mValueIndex)
                 .replace("元", ""));
-        map.put("test", BuildConfig.DEBUG ? "true" : "false");
+        map.put("test", BuildConfig.DEV_MODE ? "true" : "false");
         map.put("userId", UserInfoManager.getInstance().getUserInfo()._id);
 
         PayApi api = HttpManager.getInstance().getApi(PayApi.class, HttpManager.PAY_URL);

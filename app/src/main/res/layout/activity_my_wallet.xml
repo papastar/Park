@@ -52,6 +52,19 @@
         android:textColor="@color/color_333333"
         android:textSize="@dimen/size_32"/>
 
+    <TextView
+        android:id="@+id/recharge_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:background="@drawable/bg_bottom_side"
+        android:drawableRight="@drawable/ic_arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="充值"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/size_32"/>
+
 
     <TextView
         android:id="@+id/trading_record_tv"

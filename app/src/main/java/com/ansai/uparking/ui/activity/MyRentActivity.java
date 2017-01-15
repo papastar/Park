@@ -70,6 +70,7 @@ public class MyRentActivity extends BaseAppCompatActivity {
                 TextView stateTv = baseViewHolder.getView(R.id.state_tv);
                 TextView infoTv = baseViewHolder.getView(R.id.info_tv);
                 TextView operate_tv = baseViewHolder.getView(R.id.operate_tv);
+                TextView control_tv = baseViewHolder.getView(R.id.control_tv);
                 switch (contentsBean.getRentState()) {
                     case 3:
                         stateTv.setText("已预定");
@@ -87,6 +88,7 @@ public class MyRentActivity extends BaseAppCompatActivity {
                                 readyGo(RentDetailActivity.class, bundle);
                             }
                         });
+                        control_tv.setVisibility(View.GONE);
                         break;
                     case 4:
                         stateTv.setText("已租");
@@ -100,6 +102,13 @@ public class MyRentActivity extends BaseAppCompatActivity {
                                 bundle.putInt(KeyConstant.KEY_DATA, contentsBean.getId());
                                 bundle.putInt(KeyConstant.KEY_TYPE, 1);
                                 readyGo(RentDetailActivity.class, bundle);
+                            }
+                        });
+                        control_tv.setVisibility(View.VISIBLE);
+                        control_tv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
                             }
                         });
                         break;

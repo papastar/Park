@@ -130,7 +130,7 @@ public class LockerMapActivity extends BaseAppCompatActivity implements CloudLis
                 .fromResource(R.drawable.icon_gcoding);
         mBaiduMap
                 .setMyLocationConfigeration(new MyLocationConfiguration(
-                        MyLocationConfiguration.LocationMode.COMPASS, true, null));
+                        MyLocationConfiguration.LocationMode.FOLLOWING, true, null));
 
 
         // 定位初始化

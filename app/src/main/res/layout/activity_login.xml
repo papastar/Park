@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/allFlipper"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<ViewFlipper android:id="@+id/allFlipper"
+             xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
     <!-- 启动等待界面 -->
+    <RelativeLayout
+        android:id="@+id/splashLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/default_start"
+        android:visibility="gone">
+    </RelativeLayout>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#eeeeee" >
+        android:background="#eeeeee">
 
         <RelativeLayout
             android:id="@+id/login_img"
             android:layout_width="match_parent"
             android:layout_height="150dip"
             android:layout_marginTop="50dip"
-            android:background="@drawable/login_img" >
+            android:background="@drawable/login_img">
         </RelativeLayout>
 
         <LinearLayout
@@ -25,12 +32,12 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/login_img"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1.0px"
-                android:background="@drawable/shape_line" />
+                android:background="@drawable/shape_line"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -38,7 +45,7 @@
                 android:layout_marginTop="20.0dip"
                 android:background="@drawable/shape_bg"
                 android:gravity="center_vertical"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <EditText
                     android:id="@+id/login_et_phonenumber"
@@ -49,25 +56,26 @@
                     android:background="@drawable/all_edit"
                     android:hint="请输入手机号码"
                     android:maxLength="11"
+                    android:textColor="@color/color_333333"
                     android:phoneNumber="true"
                     android:saveEnabled="true"
                     android:singleLine="true"
                     android:textColorHint="#c2c2c2"
-                    android:textSize="17sp" >
+                    android:textSize="17sp">
                 </EditText>
             </LinearLayout>
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1.0px"
-                android:background="@drawable/shape_line" />
+                android:background="@drawable/shape_line"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_bg"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/login_et_yanzhengma"
@@ -79,12 +87,13 @@
                     android:layout_weight="2"
                     android:background="@drawable/all_edit"
                     android:hint="请输入验证码"
+                    android:textColor="@color/color_333333"
                     android:maxLength="6"
                     android:phoneNumber="true"
                     android:saveEnabled="true"
                     android:singleLine="true"
                     android:textColorHint="#c2c2c2"
-                    android:textSize="17sp" />
+                    android:textSize="17sp"/>
 
                 <Button
                     android:id="@+id/login_btn_getyanzhengma"
@@ -96,19 +105,19 @@
                     android:gravity="center_vertical"
                     android:text="@string/get_code"
                     android:textColor="#1d67c7"
-                    android:textSize="17sp" />
+                    android:textSize="17sp"/>
             </LinearLayout>
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1.0px"
-                android:background="@drawable/shape_line" />
+                android:background="@drawable/shape_line"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -116,7 +125,7 @@
                     android:layout_marginLeft="10dip"
                     android:layout_marginTop="5dip"
                     android:text="阅读并同意"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/login_deal"
@@ -126,7 +135,7 @@
                     android:layout_marginTop="5dip"
                     android:text="《用户使用协议》"
                     android:textColor="#1d67c7"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -134,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dip"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/login_btn_signin"
@@ -148,7 +157,7 @@
                     android:onClick="false"
                     android:text="一键登陆"
                     android:textColor="#ffffff"
-                    android:textSize="19sp" />
+                    android:textSize="19sp"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -156,7 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
-            android:background="@drawable/banner_new" >
+            android:background="@color/colorPrimary">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -164,17 +173,9 @@
                 android:layout_centerInParent="true"
                 android:text="登陆"
                 android:textColor="#ffffff"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
         </RelativeLayout>
     </RelativeLayout>
 
-
-    <RelativeLayout
-        android:id="@+id/splashLayout"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent"
-        android:background="@drawable/default_start" >
-    </RelativeLayout>
 
 </ViewFlipper>

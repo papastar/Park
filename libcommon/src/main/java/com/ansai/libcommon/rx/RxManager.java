@@ -1,7 +1,11 @@
 package com.ansai.libcommon.rx;
 
+import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -19,6 +23,10 @@ public class RxManager {
         mCompositeSubscription.add(subscription);
     }
 
+    public <T> void addSubscription(Observable<T> observable, Subscriber<T> subscriber) {
+        addSubscription(observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber));
+    }
 
     public void unSubscribe() {
         if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions())

@@ -61,5 +61,21 @@
         android:textSize="@dimen/size_32"
         tools:text="出租"/>
 
+    <TextView
+        android:id="@+id/control_tv"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/operate_tv"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_board"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/size_32"
+        tools:text="控制车锁"/>
+
 
 </RelativeLayout>

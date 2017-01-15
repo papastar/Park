@@ -23,7 +23,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPatch;
+
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -224,7 +225,7 @@ public class BindingPhone extends Activity {
 
 		String url = AppSetting.URL_STRING + "user";
 
-		HttpPatch put = new HttpPatch(url);
+		HttpPost put = new HttpPost(url);
 		StringEntity postingString = null;
 		try {
 			postingString = new StringEntity(json);

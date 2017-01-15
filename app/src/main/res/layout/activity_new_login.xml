@@ -9,7 +9,16 @@
     android:orientation="vertical"
     tools:context="com.ansai.uparking.ui.activity.LoginActivity">
 
-    <include layout="@layout/common_toolbar"/>
+
+
+    <TextView
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:text="@string/login_in"
+        android:layout_width="match_parent"
+        android:textSize="@dimen/size_32"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"/>
 
     <ImageView
         android:layout_width="match_parent"

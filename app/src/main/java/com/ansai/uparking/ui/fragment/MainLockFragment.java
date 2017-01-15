@@ -121,14 +121,14 @@ public class MainLockFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        onConnectEvent();
         mBleExceptionHandler = new DefaultBleExceptionHandler(getContext());
         mLiteBluetooth = BleManager.getInstance().getLiteBluetooth();
-        mLiteBluetooth.addGattCallback(mCallback);
+        //mLiteBluetooth.addGattCallback(mCallback);
     }
 
     @Override
     protected void initViewsAndEvents() {
-        onConnectEvent();
         setUnbindInfo();
         queryLockers();
     }
@@ -414,7 +414,7 @@ public class MainLockFragment extends BaseFragment {
         if (mLiteBluetooth.isConnectingOrConnected()) {
             mLiteBluetooth.closeBluetoothGatt();
         }
-        mLiteBluetooth.removeGattCallback(mCallback);
+        //mLiteBluetooth.removeGattCallback(mCallback);
     }
 
     private void writeCharacteristic(String CTL, String isToken, String isAction) {

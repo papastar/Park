@@ -111,7 +111,7 @@ public class LiteBluetooth {
 
     public boolean removeGattCallback(BluetoothGattCallback callback) {
         for (Iterator<BluetoothGattCallback> it = callbackList.iterator(); it.hasNext(); ) {
-            BluetoothGattCallback item = (BluetoothGattCallback) it.next();
+            BluetoothGattCallback item = it.next();
             if (item == callback) {
                 it.remove();
                 return true;

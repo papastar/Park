@@ -21,7 +21,15 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import com.ansai.libcommon.rx.RxManager;
 import com.ansai.uparking.R;
+import com.ansai.uparking.api.ApiCallback;
+import com.ansai.uparking.api.BaiduConfig;
+import com.ansai.uparking.api.HttpManager;
+import com.ansai.uparking.api.SubscriberCallBack;
+import com.ansai.uparking.data.UserInfoManager;
+import com.ansai.uparking.entity.bean.BaseBean;
+import com.ansai.uparking.entity.bean.UserInfo;
 import com.joyotime.qparking.db.AppSetting;
 import com.joyotime.qparking.db.MethodDate;
 import com.joyotime.qparking.http.ConnectionChangeReceiver;
@@ -31,7 +39,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPatch;
+
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -40,6 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -97,10 +106,13 @@ public class LockSetting extends Activity {
 	private static Dialog progressDialog = null;
 	Context context = null;
 
+	RxManager mRxManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		mRxManager = new RxManager();
 		setContentView(R.layout.activity_locksetting);
 		context = this;
 
@@ -521,6 +533,7 @@ public class LockSetting extends Activity {
 						if (db.InstarBlueDBLocal(lockid, bluename, bluetooth, note, key, sn, LockTaKen,
 								LockMain._OpenID, "1", "1", Login.m_Longitude, Login.m_Latitude, lcokaddress,
 								Login.m_cityname, parkingname, Login.m_addressde, Login.m_citycode, "")) {
+							saveBdData(parkingname);
 							db.InstarVersion(hardware, software, LockMain._OpenID, sn);
 							ShowToast("添加成功");
 							Intent data = new Intent();
@@ -586,6 +599,49 @@ public class LockSetting extends Activity {
 			progressDialog.dismiss();
 		}
 	}
+
+
+
+	private void saveBdData(String parkingName){
+		Map<String, String> commonParam = BaiduConfig.getCommonParam();
+		commonParam.put("title", parkingName);
+		commonParam.put("address", Login.m_addressde);
+		commonParam.put("tags", "车位");
+		commonParam.put("latitude", Login.m_Latitude);
+		commonParam.put("longitude", Login.m_Longitude);
+		commonParam.put("coord_type", "3");
+		commonParam.put("lockerParkName", parkingName);
+		commonParam.put("lockerId", lockid);
+		commonParam.put("lockerBlueAddress", bluetooth);
+		commonParam.put("lockerBlueName", bluename);
+		commonParam.put("lockerKey",key);
+		commonParam.put("lockerSn", sn);
+		commonParam.put("lockerToken", LockTaKen);
+		UserInfo userInfo = UserInfoManager.getInstance().getUserInfo();
+		commonParam.put("ownerId", userInfo._id);
+		commonParam.put("ownerName", userInfo.name);
+		commonParam.put("ownerPhone", userInfo.cellphone);
+		commonParam.put("rentState", String.valueOf(0));
+		mRxManager.addSubscription(HttpManager.getInstance().getBaiduLBSApi().creatPoi(commonParam),new SubscriberCallBack<BaseBean>(new ApiCallback<BaseBean>() {
+			@Override
+			public void onCompleted() {
+
+			}
+
+			@Override
+			public void onFailure(int code, String message, Exception e) {
+
+			}
+
+			@Override
+			public void onSuccess(BaseBean data) {
+
+			}
+		}));
+
+	}
+
+
 
 	public static String UnicodeToString(String str) {
 		Pattern pattern = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");
@@ -682,7 +738,7 @@ public class LockSetting extends Activity {
 			e1.printStackTrace();
 		}
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpPatch post = new HttpPatch(AppSetting.URL_STRING + "lockers/sn/" + isSN);
+		HttpPost post = new HttpPost(AppSetting.URL_STRING + "lockers/sn/" + isSN);
 		StringEntity postingString = new StringEntity(jsondt.toString());// json传递
 		post.setEntity(postingString);
 		post.addHeader("Authorization", LockMain._Token);
@@ -758,6 +814,7 @@ public class LockSetting extends Activity {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+		//mRxManager.unSubscribe();
 		_key = 0;
 	}
 

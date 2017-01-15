@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.ansai.uparking.R;
 import com.nineoldandroids.view.ViewHelper;
@@ -33,7 +33,7 @@ public class DragLayout extends FrameLayout
 	private int mainLeft;
 	private Context context;
 	private ImageView iv_shadow;
-	private RelativeLayout vg_left;
+	private LinearLayout vg_left;
 	private MyRelativeLayout vg_main;
 	private Status status = Status.Close;
 
@@ -190,7 +190,7 @@ public class DragLayout extends FrameLayout
 			LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 			addView(iv_shadow, 1, lp);
 		}
-		vg_left = (RelativeLayout) getChildAt(0);
+		vg_left = (LinearLayout) getChildAt(0);
 		vg_main = (MyRelativeLayout) getChildAt(isShowShadow ? 2 : 1);
 		vg_main.setDragLayout(this);
 		vg_left.setClickable(true);

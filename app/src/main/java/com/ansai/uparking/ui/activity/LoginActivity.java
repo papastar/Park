@@ -2,8 +2,6 @@ package com.ansai.uparking.ui.activity;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,6 +20,7 @@ import com.ansai.uparking.mvp.model.LoginModel;
 import com.ansai.uparking.mvp.presenter.LoginPresenter;
 import com.ansai.uparking.utils.KeyboardUtils;
 import com.ansai.uparking.utils.RegexUtils;
+import com.joyotime.qparking.LockMain;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -31,8 +30,8 @@ import static com.ansai.uparking.R.id.login_btn;
 public class LoginActivity extends BaseFrameActivity<LoginPresenter, LoginModel> implements
         LoginContract.View {
 
-    @Bind(R.id.toolBar)
-    Toolbar mToolBar;
+//    @Bind(R.id.toolBar)
+//    Toolbar mToolBar;
     @Bind(R.id.phone_edit)
     EditText mPhoneEdit;
     @Bind(R.id.code_btn)
@@ -59,7 +58,7 @@ public class LoginActivity extends BaseFrameActivity<LoginPresenter, LoginModel>
 
     @Override
     protected void initViewsAndEvents() {
-        setToolBar(mToolBar);
+        //setToolBar(mToolBar);
         mPhoneEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -103,14 +102,9 @@ public class LoginActivity extends BaseFrameActivity<LoginPresenter, LoginModel>
         });
     }
 
-    private void setToolBar(Toolbar toolBar) {
-        toolBar.setTitle(R.string.login_in);
-        setSupportActionBar(toolBar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
+
+
+
 
     @OnClick(R.id.code_btn)
     void onCodeBtnClick() {
@@ -187,7 +181,8 @@ public class LoginActivity extends BaseFrameActivity<LoginPresenter, LoginModel>
 
     @Override
     public void onGetAndSaveLockComplete() {
-        readyGo(MainActivity.class);
+        readyGo(LockMain.class);
+        //readyGo(MainActivity.class);
         finish();
     }
 
